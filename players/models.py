@@ -1,5 +1,6 @@
 from django.db import models
 import teams.models
+from django_countries.fields import CountryField
 
 # Create your models here.
 class Player(models.Model):
@@ -13,7 +14,8 @@ class Player(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     birth_date = models.DateField()
-    nationality = models.CharField(max_length=50)
+    # nationality = models.CharField(max_length=50)
+    nationality = CountryField(blank=False, null=False)
     position = models.CharField(max_length=3, choices=POSITION_CHOICES)
     team = models.ForeignKey(teams.models.Team, on_delete=models.CASCADE)
     photo = models.ImageField(upload_to='players/', blank=True, null=True)
