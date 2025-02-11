@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ player.first_name }} {{ player.last_name }}</title>
+</head>
+<body>
+    <h1>{{ player.first_name }} {{ player.last_name }}</h1>
+    <p>Data de Nascimento: {{ player.birth_date }}</p>
+    <p>Nacionalidade: {{ player.nationality }}</p>
+    <p>Posição: {{ player.get_position_display }}</p>
+    <p>Time: {{ player.team.name }}</p>
+    {% if player.photo %}
+        <img src="{{ player.photo.url }}" alt="Foto de {{ player.first_name }}">
+    {% endif %}
+    <br>
+    <a href="{% url 'player_update' player.pk %}">Editar</a>
+    <a href="{% url 'player_delete' player.pk %}">Deletar</a>
+    <a href="{% url 'player_list' %}">Voltar para a lista</a>
+</body>
+</html>

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% if form.instance.pk %}Editar{% else %}Adicionar{% endif %} Jogador</title>
+</head>
+<body>
+    <h1>{% if form.instance.pk %}Editar{% else %}Adicionar{% endif %} Jogador</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Salvar</button>
+    </form>
+    <a href="{% url 'player_list' %}">Voltar para a lista</a>
+</body>
+</html>
