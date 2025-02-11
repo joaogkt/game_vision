@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'players',
     'teams',
     'django_countries',
+    'core',
 ]
 
 MIDDLEWARE = [

@@ -1,6 +1,7 @@
 from django.db import models
 import teams.models
 from django_countries.fields import CountryField
+from datetime import date
 
 # Create your models here.
 class Player(models.Model):
@@ -22,3 +23,9 @@ class Player(models.Model):
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
+    
+    def age(self):
+        today = date.today()
+        return today.year - self.birth_date.year - (
+            (today.month, today.day) < (self.birth_date.month, self.birth_date.day)
+        )

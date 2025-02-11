@@ -1,21 +1,40 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Lista de Times</title>
-</head>
-<body>
-    <h1>Times de Futebol</h1>
-    <a href="{% url 'team_create' %}">Adicionar Novo Time</a>
-    <ul>
-        {% for team in teams %}
-            <li>
-                {{ team.name }} - {{ team.city }} ({{ team.country }})
-                <a href="{% url 'team_update' team.pk %}">Editar</a> |
-                <a href="{% url 'team_delete' team.pk %}">Deletar</a>
-            </li>
-        {% empty %}
-            <li>Nenhum time cadastrado ainda.</li>
-        {% endfor %}
-    </ul>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block title %}Lista de Times{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <h1 class="text-center mb-4">Times de Futebol</h1>
+  <div class="d-flex justify-content-end mb-3">
+    <a href="{% url 'team_create' %}" class="btn btn-success">Adicionar Novo Time</a>
+  </div>
+  <table class="table table-striped table-bordered">
+    <thead class="table-dark">
+      <tr>
+        <th>Nome</th>
+        <th>Cidade</th>
+        <th>Pais</th>
+        <th class="text-center">Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for team in teams %}
+      <tr>
+        <td>{{ team.name }}</td>
+        <td>{{ team.city }}</td>
+        <td>{{ team.country }}</td>
+        <td class="text-center">
+          <a href="{% url 'team_update' team.pk %}" class="btn btn-info btn-sm">Detalhes</a>
+          <a href="{% url 'team_update' team.pk %}" class="btn btn-warning btn-sm">Editar</a>
+          <a href="{% url 'team_delete' team.pk %}" class="btn btn-danger btn-sm">Excluir</a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="6" class="text-center">Nenhum time cadastrado.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
