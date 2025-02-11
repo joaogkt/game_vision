@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cadastro de Time</title>
+</head>
+<body>
+    <h1>{{ form.instance.pk|yesno:"Editar Time,Novo Time" }}</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Salvar</button>
+    </form>
+    <a href="{% url 'team_list' %}">Voltar para Lista</a>
+</body>
+</html>

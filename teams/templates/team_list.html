@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lista de Times</title>
+</head>
+<body>
+    <h1>Times de Futebol</h1>
+    <a href="{% url 'team_create' %}">Adicionar Novo Time</a>
+    <ul>
+        {% for team in teams %}
+            <li>
+                {{ team.name }} - {{ team.city }} ({{ team.country }})
+                <a href="{% url 'team_update' team.pk %}">Editar</a> |
+                <a href="{% url 'team_delete' team.pk %}">Deletar</a>
+            </li>
+        {% empty %}
+            <li>Nenhum time cadastrado ainda.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
