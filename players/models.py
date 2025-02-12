@@ -2,6 +2,9 @@ from django.db import models
 import teams.models
 from django_countries.fields import CountryField
 from datetime import date
+import os
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
 
 # Create your models here.
 class Player(models.Model):
@@ -29,3 +32,21 @@ class Player(models.Model):
         return today.year - self.birth_date.year - (
             (today.month, today.day) < (self.birth_date.month, self.birth_date.day)
         )
+        
+    def save(self, *args, **kwargs):
+        try:
+            old_instance = Player.objects.get(pk=self.pk)
+            if old_instance.photo and old_instance.photo != self.photo:
+                if os.path.isfile(old_instance.photo.path):
+                    os.remove(old_instance.photo.path)
+        except Player.DoesNotExist:
+            pass 
+
+        super().save(*args, **kwargs)
+
+
+@receiver(post_delete, sender=Player)
+def delete_photo_on_player_delete(sender, instance, **kwargs):
+    if instance.photo:
+        if os.path.isfile(instance.photo.path):
+            os.remove(instance.photo.path)
