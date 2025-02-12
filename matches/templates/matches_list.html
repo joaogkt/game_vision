@@ -24,9 +24,9 @@
         <td>{{ match.tipo_competicao }}</td>
         <td>{{ match.local }}</td>
         <td class="text-center">
-          <a href="{% url 'player_detail' player.id %}" class="btn btn-info btn-sm">Detalhes</a>
-          <a href="{% url 'player_update' player.id %}" class="btn btn-warning btn-sm">Editar</a>
-          <a href="{% url 'player_delete' player.id %}" class="btn btn-danger btn-sm">Excluir</a>
+          <a href="{% url 'matches_detail' match.id %}" class="btn btn-info btn-sm">Detalhes</a>
+          <a href="{% url 'matches_update' match.id %}" class="btn btn-warning btn-sm">Editar</a>
+          <a href="{% url 'matches_delete' match.id %}" class="btn btn-danger btn-sm">Excluir</a>
         </td>
       </tr>
       {% empty %}

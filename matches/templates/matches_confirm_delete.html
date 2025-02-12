@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Deletar Partida</title>
+</head>
+<body>
+    <h1>Você tem certeza que deseja deletar {{ matches.time_casa }} {{ matches.placar_casa }} x {{ matches.placar_fora }} {{ matches.time_fora }}?</h1>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Sim, deletar</button>
+    </form>
+    <a href="{% url 'matches_list' %}">Cancelar</a>
+</body>
+</html>

@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .forms import MatchesForm
 from .models import Matches
 
@@ -16,3 +16,15 @@ def matches_create(request):
     else:
         form = MatchesForm()
     return render(request, 'matches_form.html', {'form': form})
+
+
+def matches_detail(request, pk):
+    matches = get_object_or_404(Matches, pk=pk)
+    return render(request, 'matches_detail.html', {'matches': matches})
+
+def matches_delete(request, pk):
+    matches = get_object_or_404(Matches, pk=pk)
+    if request.method == "POST":
+        matches.delete()
+        return redirect('matches_list')
+    return render(request, 'matches_confirm_delete.html', {'matches': matches})

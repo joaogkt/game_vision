@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}Detalhes de {{ matches.time_casa }} {{ matches.placar_casa }} x {{ matches.placar_fora }} {{ matches.time_fora }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow-lg">
+        <div class="row g-0">
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h2 class="card-title">{{ matches.time_casa }} {{ matches.placar_casa }} x {{ matches.placar_fora }} {{ matches.time_fora }}</h2>
+                    <p class="card-text"><strong>Competição:</strong> {{ matches.tipo_competicao }}</p>
+                    <p class="card-text"><strong>Local:</strong> {{ match.local }}</p>
+
+                    <div class="mt-4 d-flex">
+                        <a href="{% url 'player_update' player.pk %}" class="btn btn-warning me-2">Editar</a>
+                        <a href="{% url 'player_delete' player.pk %}" class="btn btn-danger me-2">Excluir</a>
+                        <a href="{% url 'matches_list' %}" class="btn btn-secondary">Voltar para a lista</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -9,22 +9,26 @@
         </h2>
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            <div class="mb-3">
-                <label for="id_time_casa" class="form-label">Time Casa</label>
-                {{ form.time_casa|add_class:"form-select" }}
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="id_time_casa" class="form-label">Time Casa</label>
+                    {{ form.time_casa|add_class:"form-select" }}
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="id_placar_casa" class="form-label">Placar Casa</label>
+                    {{ form.placar_casa|add_class:"form-control" }}
+                </div>
             </div>
-            <div class="mb-3">
-                <label for="id_placar_casa" class="form-label">Placar Casa</label>
-                {{ form.placar_casa|add_class:"form-control" }}
-            </div>
-            <div class="mb-3">
+            <div class="row">
+            <div class="col-md-6 mb-3">
                 <label for="id_time_fora" class="form-label">Time Fora</label>
                 {{ form.time_fora|add_class:"form-select" }}
             </div>
-            <div class="mb-3">
+            <div class="col-md-6 mb-3">
                 <label for="id_placar_casa" class="form-label">Placar fora</label>
                 {{ form.placar_fora|add_class:"form-control" }}
             </div>
+        </div>
             <div class="mb-3">
                 <label for="id_tipo_competicao" class="form-label">Tipo Competição</label>
                 {{ form.tipo_competicao|add_class:"form-control" }}
