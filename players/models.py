@@ -18,7 +18,6 @@ class Player(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     birth_date = models.DateField()
-    # nationality = models.CharField(max_length=50)
     nationality = CountryField(blank=False, null=False)
     position = models.CharField(max_length=3, choices=POSITION_CHOICES)
     team = models.ForeignKey(teams.models.Team, on_delete=models.CASCADE)
