@@ -1,45 +1,60 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block title %}Detalhes de {{ player.first_name }} {{ player.last_name }}{% endblock %}
 
 {% block content %}
-<div class="container d-flex flex-column justify-content-start align-items-center min-vh-100 mt-4">
-    <div class="card shadow-lg p-4 w-75 border-0 rounded-4 h-100">
-        <div class="row g-4 align-items-center">
-            <!-- Foto do jogador -->
-            <div class="col-md-4 text-center">
-                {% if player.photo %}
-                    <img src="{{ player.photo.url }}" class="img-fluid rounded-4 shadow-sm" alt="Foto de {{ player.first_name }}">
-                {% else %}
-                    <img src="https://via.placeholder.com/300x400?text=Sem+Foto" class="img-fluid rounded-4 shadow-sm" alt="Sem foto disponível">
-                {% endif %}
-            </div>
+<style>
+  .details-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 0;
+  }
+  .card-details {
+    width: 100%;
+    max-width: 900px;
+    padding: 40px;
+    border-radius: 20px;
+  }
+  .player-photo {
+    width: 250px;
+    height: auto;
+    border-radius: 15px;
+  }
+  .player-info p {
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+  }
+</style>
 
-            <!-- Informações do jogador -->
-            <div class="col-md-8">
-                <div class="card-body">
-                    <h2 class="card-title fw-bold">{{ player.first_name }} {{ player.last_name }}</h2>
-                    <hr class="my-3">
-                    <p class="card-text fs-5"><strong>🎂 Data de Nascimento:</strong> {{ player.birth_date|date:"d/m/Y" }}</p>
-                    <p class="card-text fs-5"><strong>📅 Idade:</strong> {{ player.age }} anos</p>
-                    <p class="card-text fs-5"><strong>🌍 Nacionalidade:</strong> {{ player.nationality.name }}</p>
-                    <p class="card-text fs-5"><strong>⚽ Posição:</strong> {{ player.get_position_display }}</p>
-
-                    <h4 class="mt-4 fw-bold">🏟️ Time</h4>
-                    <p class="card-text fs-5"><strong>🔹 Nome:</strong> {{ player.team.name }}</p>
-                    <p class="card-text fs-5"><strong>📍 Cidade:</strong> {{ player.team.city }}</p>
-                    <p class="card-text fs-5"><strong>🌎 País:</strong> {{ player.team.country.name }}</p>
-                    <p class="card-text fs-5"><strong>🏆 Fundação:</strong> {{ player.team.founded_year }}</p>
-
-                    <!-- Botões de ação -->
-                    <div class="mt-4 d-flex justify-content-center gap-3">
-                        <a href="{% url 'player_update' player.pk %}" class="btn btn-warning px-4">✏️ Editar</a>
-                        <a href="{% url 'player_delete' player.pk %}" class="btn btn-danger px-4">🗑️ Excluir</a>
-                        <a href="{% url 'player_list' %}" class="btn btn-secondary px-4">🔙 Voltar</a>
-                    </div>
-                </div>
-            </div>
+<div class="container details-container">
+  <div class="card shadow-lg card-details">
+    <div class="row g-4 align-items-center">
+      <div class="col-md-5 text-center">
+        {% if player.photo %}
+          <img src="{{ player.photo.url }}" class="img-fluid player-photo shadow-sm" alt="Foto de {{ player.first_name }}">
+        {% else %}
+          <img src="https://via.placeholder.com/250x350?text=Sem+Foto" class="img-fluid player-photo shadow-sm" alt="Sem foto disponível">
+        {% endif %}
+      </div>
+      <div class="col-md-7 player-info">
+        <h2 class="fw-bold mb-3 text-center">{{ player.first_name }} {{ player.last_name }}</h2>
+        <p><strong>🎂 Data de Nascimento:</strong> {{ player.birth_date|date:"d/m/Y" }}</p>
+        <p><strong>📅 Idade:</strong> {{ player.age }} anos</p>
+        <p><strong>🌍 Nacionalidade:</strong> {{ player.nationality.name }}</p>
+        <p><strong>⚽ Posição:</strong> {{ player.get_position_display }}</p>
+        <h4 class="mt-4 fw-bold text-center">🏟️ Time</h4>
+        <p><strong>🔹 Nome:</strong> {{ player.team.name }}</p>
+        <p><strong>📍 Cidade:</strong> {{ player.team.city }}</p>
+        <p><strong>🌎 País:</strong> {{ player.team.country.name }}</p>
+        <p><strong>🏆 Fundação:</strong> {{ player.team.founded_year }}</p>
+        <div class="mt-4 d-flex justify-content-center gap-2 flex-wrap">
+          <a href="{% url 'player_update' player.pk %}" class="btn btn-warning">✏️ Editar</a>
+          <a href="{% url 'player_delete' player.pk %}" class="btn btn-danger">🗑️ Excluir</a>
+          <a href="{% url 'player_list' %}" class="btn btn-secondary">🔙 Voltar</a>
         </div>
+      </div>
     </div>
+  </div>
 </div>
 {% endblock %}

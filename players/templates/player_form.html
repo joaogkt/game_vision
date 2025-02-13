@@ -2,56 +2,78 @@
 {% load widget_tweaks %}
 
 {% block content %}
-<div class="container mt-5">
-    <div class="card shadow-lg p-4">
-        <h2 class="mb-4 text-center">
-            {% if form.instance.pk %}Editar Jogador{% else %}Adicionar Jogador{% endif %}
-        </h2>
-        <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            <div class="mb-3">
-                <label for="id_first_name" class="form-label">Primeiro Nome</label>
-                {{ form.first_name|add_class:"form-control" }}
-            </div>
-            <div class="mb-3">
-                <label for="id_last_name" class="form-label">Sobrenome</label>
-                {{ form.last_name|add_class:"form-control" }}
-            </div>
-            <div class="mb-3">
-                <label for="id_birth_date" class="form-label">Data de Nascimento</label>
-                {{ form.birth_date|add_class:"form-control" }}
-            </div>
-            <div class="mb-3">
-                <label for="id_nationality" class="form-label">Nacionalidade</label>
-                {{ form.nationality|add_class:"form-select" }}
-            </div>
-            <div class="mb-3">
-                <label for="id_position" class="form-label">Posição</label>
-                {{ form.position|add_class:"form-select" }}
-            </div>
-            <div class="mb-3">
-                <label for="id_team" class="form-label">Time</label>
-                {{ form.team|add_class:"form-select" }}
-            </div>
+<style>
+  /* Container que centraliza o card e adiciona espaçamento vertical */
+  .form-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 40px 0;
+  }
+  /* Card com largura máxima definida */
+  .card-form {
+    width: 100%;
+    max-width: 700px; /* Card mais compacto */
+  }
+</style>
 
-                 <div class="mb-3">
-                    <label for="id_photo" class="form-label">Foto</label>
-                    <input type="file" name="photo" class="form-control" id="id_photo">
-                </div>
-
-                {% if form.instance.photo %}
-                <div class="mt-2">
-                    <img src="{{ form.instance.photo.url }}" alt="Foto de {{ form.instance.first_name }}" class="img-thumbnail" width="150">
-                </div>
-                {% endif %}
-                <button type="submit" class="btn btn-primary w-100">Salvar</button>
-
-            </div>
-        </form>
-        <div class="mt-3 text-center">
-            <a href="{% url 'player_list' %}" class="btn btn-link">Voltar para a Lista</a>
+<div class="container form-container">
+  <div class="card card-form shadow-lg p-4">
+    <h2 class="mb-4 text-center">
+      {% if form.instance.pk %}Editar Jogador{% else %}Adicionar Jogador{% endif %}
+    </h2>
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <label for="id_first_name" class="form-label">Primeiro Nome</label>
+          {{ form.first_name|add_class:"form-control" }}
         </div>
+        <div class="col-md-6">
+          <label for="id_last_name" class="form-label">Sobrenome</label>
+          {{ form.last_name|add_class:"form-control" }}
+        </div>
+      </div>
+      
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <label for="id_birth_date" class="form-label">Data de Nascimento</label>
+          {{ form.birth_date|add_class:"form-control" }}
+        </div>
+        <div class="col-md-6">
+          <label for="id_nationality" class="form-label">Nacionalidade</label>
+          {{ form.nationality|add_class:"form-select" }}
+        </div>
+      </div>
+      
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <label for="id_position" class="form-label">Posição</label>
+          {{ form.position|add_class:"form-select" }}
+        </div>
+        <div class="col-md-6">
+          <label for="id_team" class="form-label">Time</label>
+          {{ form.team|add_class:"form-select" }}
+        </div>
+      </div>
+      
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <label for="id_photo" class="form-label">Foto</label>
+          <input type="file" name="photo" class="form-control" id="id_photo">
+        </div>
+        <div class="col-md-6 d-flex align-items-center justify-content-center">
+          {% if form.instance.photo %}
+            <img src="{{ form.instance.photo.url }}" alt="Foto de {{ form.instance.first_name }}" class="img-thumbnail" width="150">
+          {% endif %}
+        </div>
+      </div>
+      
+      <button type="submit" class="btn btn-primary w-100">Salvar</button>
+    </form>
+    <div class="mt-3 text-center">
+      <a href="{% url 'player_list' %}" class="btn btn-link">Voltar para a Lista</a>
     </div>
+  </div>
 </div>
 {% endblock %}
-

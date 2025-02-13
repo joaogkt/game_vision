@@ -1,8 +1,32 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block title %}Lista de Jogadores{% endblock %}
 
 {% block content %}
+<style>
+  /* Permitir scroll e ajustar altura */
+  html, body {
+    height: auto !important;
+    overflow: hidden;
+  }
+  body {
+    background: url("{% static 'img/soccer-bg.jpg' %}") no-repeat center center fixed !important;
+    background-size: cover !important;
+  }
+  /* Tornar o container .hero transparente e ajustar seu layout */
+  .hero {
+    background: transparent !important;
+    height: auto !important;
+    min-height: 100vh !important;
+    display: block !important;
+    padding: 80px 0 !important;
+  }
+  /* Desabilitar o overlay */
+  .hero-overlay {
+    display: none !important;
+  }
+</style>
+
 <div class="container mt-5">
   <h1 class="text-center mb-4">Lista de Jogadores</h1>
   <div class="d-flex justify-content-end mb-3">
@@ -42,25 +66,3 @@
   </table>
 </div>
 {% endblock %}
-<!-- 
-
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Lista de Jogadores</title>
-</head>
-<body>
-    <h1>Lista de Jogadores</h1>
-    <a href="{% url 'player_create' %}">Adicionar Novo Jogador</a>
-    <ul>
-        {% for player in players %}
-            <li>
-                <a href="{% url 'player_detail' player.pk %}">{{ player.first_name }} {{ player.last_name }}</a>
-                (<a href="{% url 'player_update' player.pk %}">Editar</a>, 
-                <a href="{% url 'player_delete' player.pk %}">Deletar</a>)
-            </li>
-        {% endfor %}
-    </ul>
-</body>
-</html>
- -->

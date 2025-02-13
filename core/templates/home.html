@@ -12,32 +12,12 @@
     overflow: hidden;
   }
 
-  .hero {
-    position: relative;
-    background: url("{% static 'img/soccer-bg.jpg' %}") no-repeat center center/cover;
-    height: calc(100vh - 56px);
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    text-align: center;
-    margin: 0;
-    padding: 0;
-  }
-  .hero-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.6);
-  }
 
   .hero-content {
     position: relative;
     z-index: 2;
-    max-width: 80%;
+    max-width: 100%;
+    margin-bottom: 150px;
   }
 
   .btn-custom {
@@ -56,8 +36,7 @@
   }
 </style>
 
-<div class="hero">
-  <div class="hero-overlay"></div>
+  
   <div class="hero-content">
     <h1 class="display-3 fw-bold">Bem-vindo ao <span class="text-warning">Game Vision!</span></h1>
     <p class="lead">Acompanhe o desempenho dos jogadores e times como nunca antes.</p>
@@ -70,6 +49,5 @@
       <a class="btn btn-custom" href="{% url 'player_stats_list' %}">Ver Estatísticas</a>
     </div>
   </div>
-</div>
 
 {% endblock %}

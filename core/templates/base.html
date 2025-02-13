@@ -40,8 +40,60 @@
   </nav>
 
   <div class="conteudo">
+    <style>
+    html, body {
+      height: auto !important;
+      overflow: hidden;
+    }
+
+    body {
+    background: url("{% static 'img/soccer-bg.jpg' %}") no-repeat center center fixed !important;
+    background-size: cover !important;
+    }
+    
+      .hero {
+        position: relative;
+        height: calc(100vh - 56px);
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        text-align: center;
+        margin: 0;
+        padding: 0;
+      }
+
+      /* .hero-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+    } */
+
+      .btn-custom {
+        background: #007bff;
+        color: white;
+        padding: 12px 20px;
+        font-size: 18px;
+        margin: 10px;
+        border-radius: 30px;
+        transition: 0.3s ease-in-out;
+      }
+    
+      .btn-custom:hover {
+        background: #0056b3;
+        transform: scale(1.1);
+      }
+    </style>
+    
+    <div class="hero">
+    <div class="hero-overlay"></div>
     {% block content %}
     {% endblock %}
+  </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
