@@ -1,16 +1,76 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}Game Vision{% endblock %}
 
 {% block content %}
-  <div class="jumbotron text-center">
-    <h1 class="display-4">Bem-vindo ao Game Vision!</h1>
-    <p class="lead">Gerencie e analise o desempenho de jogadores e times com facilidade.</p>
-    <hr class="my-4">
-    <p>Utilize as opções do menu para navegar pelo sistema.</p>
-    <a class="btn btn-primary btn-lg" href="{% url 'player_list' %}" role="button">Ver Jogadores</a>
-    <a class="btn btn-primary btn-lg" href="{% url 'team_list' %}" role="button">Ver Times</a>
-    <a class="btn btn-primary btn-lg" href="{% url 'matches_list' %}" role="button">Ver Partidas</a>
+<style>
+  html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+  }
 
+  .hero {
+    position: relative;
+    background: url("{% static 'img/soccer-bg.jpg' %}") no-repeat center center/cover;
+    height: calc(100vh - 56px); /* Subtrai a altura da navbar */
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+  }
+  /* Overlay para escurecer a imagem */
+  .hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 80%;
+  }
+
+  .btn-custom {
+    background: #007bff;
+    color: white;
+    padding: 12px 20px;
+    font-size: 18px;
+    margin: 10px;
+    border-radius: 30px;
+    transition: 0.3s ease-in-out;
+  }
+
+  .btn-custom:hover {
+    background: #0056b3;
+    transform: scale(1.1);
+  }
+</style>
+
+<div class="hero">
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <h1 class="display-3 fw-bold">Bem-vindo ao <span class="text-warning">Game Vision!</span></h1>
+    <p class="lead">Acompanhe o desempenho dos jogadores e times como nunca antes.</p>
+    <hr class="my-4" style="border-color: white;">
+    <p class="fs-5">Explore estatísticas detalhadas e tome decisões estratégicas com dados precisos.</p>
+    <div class="d-flex flex-wrap justify-content-center">
+      <a class="btn btn-custom" href="{% url 'team_list' %}">Ver Times</a>
+      <a class="btn btn-custom" href="{% url 'player_list' %}">Ver Jogadores</a>
+      <a class="btn btn-custom" href="{% url 'matches_list' %}">Ver Partidas</a>
+      <a class="btn btn-custom" href="{% url 'player_stats_list' %}">Ver Estatísticas</a>
+    </div>
   </div>
+</div>
+
 {% endblock %}
