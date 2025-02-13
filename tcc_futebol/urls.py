@@ -9,6 +9,7 @@ urlpatterns = [
     path('players/', include('players.urls')),
     path('teams/', include('teams.urls')),
     path('matches/', include('matches.urls')),
+    path('stats/', include('player_stats.urls')),
     path('', include('core.urls'))
 ]
 

@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'core',
     'widget_tweaks',
     'matches',
+    'player_stats',
 ]
 
 MIDDLEWARE = [

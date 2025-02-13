@@ -28,3 +28,15 @@ def matches_delete(request, pk):
         matches.delete()
         return redirect('matches_list')
     return render(request, 'matches_confirm_delete.html', {'matches': matches})
+
+def matches_update(request, pk):
+    match = get_object_or_404(Matches, pk=pk)
+    if request.method == 'POST':
+        form = MatchesForm(request.POST, instance=match)
+        if form.is_valid():
+            form.save()
+            return redirect('matches_detail', pk=match.pk)
+    else:
+        form = MatchesForm(instance=match)
+
+    return render(request, 'matches_form.html', {'form': form})
