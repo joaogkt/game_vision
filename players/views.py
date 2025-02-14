@@ -21,6 +21,7 @@ def player_create(request):
         form = PlayerForm()
     return render(request, 'player_form.html', {'form': form})
 
+
 def player_update(request, pk):
     player = get_object_or_404(Player, pk=pk)
     old_photo = player.photo.path if player.photo else None
@@ -28,30 +29,12 @@ def player_update(request, pk):
     if request.method == 'POST':
         form = PlayerForm(request.POST, request.FILES, instance=player)
         if form.is_valid():
-            # if form.cleaned_data.get('remove_photo'):
-            #     if old_photo and os.path.isfile(old_photo):
-            #         os.remove(old_photo)
-            #     player.photo = None
-
-            # elif 'photo' in request.FILES:
-            #     if old_photo and os.path.isfile(old_photo):
-            #         os.remove(old_photo)
-
             form.save()
             return redirect('player_detail', pk=player.pk)
     else:
         form = PlayerForm(instance=player)
 
     return render(request, 'player_form.html', {'form': form})
-    # player = get_object_or_404(Player, pk=pk)
-    # if request.method == "POST":
-    #     form = PlayerForm(request.POST, request.FILES, instance=player)
-    #     if form.is_valid():
-    #         form.save()
-    #         return redirect('player_detail', pk=pk)
-    # else:
-    #     form = PlayerForm(instance=player)
-    # return render(request, 'player_form.html', {'form': form})
 
 def player_delete(request, pk):
     player = get_object_or_404(Player, pk=pk)
