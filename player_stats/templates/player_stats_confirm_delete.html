@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Deletar Estatisticas de Jogador</title>
+</head>
+<body>
+    <h1>Você tem certeza que deseja deletar {{ player_stats.jogador }} {{ player_stats.jogo }}?</h1>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Sim, deletar</button>
+    </form>
+    <a href="{% url 'player_stats_list' %}">Cancelar</a>
+</body>
+</html>
