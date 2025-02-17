@@ -3,13 +3,13 @@
 
 {% block content %}
 <div class="container mt-5">
-    <div class="card shadow-lg p-4">
+    <div class="card card-form shadow-lg p-4">
         <h2 class="mb-4 text-center">
-            {% if form.instance.pk %}Editar Jogador{% else %}Adicionar Time{% endif %}
+            {% if form.instance.pk %}Editar Time{% else %}Adicionar Time{% endif %}
         </h2>
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            <div class="mb-3">
+            <div class="row mb-3">
                 <label for="id_first_name" class="form-label">Nome do clube</label>
                 {{ form.name|add_class:"form-control" }}
             </div>
