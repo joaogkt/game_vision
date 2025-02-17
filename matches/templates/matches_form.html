@@ -38,12 +38,12 @@
                 {{ form.local|add_class:"form-control" }}
             </div>
             <button type="submit" class="btn btn-primary w-100">Salvar</button>
-
+            <div class="mt-3 text-center">
+                <a href="{% url 'matches_list' %}" class="btn btn-link">Voltar para a Lista</a>
+            </div>
             </div>
         </form>
-        <div class="mt-3 text-center">
-            <a href="{% url 'matches_list' %}" class="btn btn-link">Voltar para a Lista</a>
-        </div>
+
     </div>
 </div>
 {% endblock %}

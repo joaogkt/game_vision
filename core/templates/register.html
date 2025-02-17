@@ -88,22 +88,6 @@
       display: block;
     }
 
-    .btn-custom {
-      background: #28a745;
-      color: white;
-      padding: 12px 20px;
-      font-size: 18px;
-      margin: 10px auto;
-      border-radius: 30px;
-      transition: 0.3s ease-in-out;
-      display: block;
-    }
-
-    .btn-custom:hover {
-      background: #218838;
-      transform: scale(1.1);
-    }
-
     input[type="button"]:hover {
       background: #0056b3;
       transform: scale(1.05);
@@ -120,27 +104,111 @@
     }
     </style>
 
+<div class="conteudo">
+    <style>
+    html, body {
+      height: auto !important;
+      overflow: hidden;
+    }
+
+    body {
+      background: url("{% static 'img/soccer-bg.jpg' %}") no-repeat center center fixed !important;
+      background-size: cover !important;
+    }
+
+    .hero {
+      position: relative;
+      height: calc(100vh - 56px);
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 100%;
+      margin-top: 50px; 
+    }
+
+    .btn-custom {
+      background: #28a745;
+      color: white;
+      padding: 12px 20px;
+      font-size: 18px;
+      margin: 10px auto;
+      border-radius: 30px;
+      transition: 0.3s ease-in-out;
+      display: block;
+    }
+
+    .btn-custom:hover {
+      background: #218838;
+      transform: scale(1.1);
+    }
+
+    input[type="email"], input[type="password"], input[type="text"] {
+      padding: 10px;
+      margin: 10px 0;
+      border: 2px solid #28a745;
+      border-radius: 8px;
+      width: 100%;
+      max-width: 400px;
+      box-sizing: border-box;
+      transition: 0.3s;
+      display: block;
+    }
+
+    input:focus {
+      border-color: #218838;
+      box-shadow: 0 0 8px rgba(33, 136, 56, 0.6);
+      outline: none;
+    }
+
+    a {
+      color: white;
+      text-decoration: none;
+      margin-top: 10px;
+    }
+
+    a:hover {
+      color: #28a745;
+    }
+    </style>
+
     <div class="hero">
     <div class="hero-overlay"></div>
 
     <div class="hero-content ">
-        <h1 class="display-3 fw-bold">Login <span class="text-warning">Game Vision!</span></h1>
-        <p class="lead">Acompanhe o desempenho dos jogadores e times como nunca antes.</p>
+        <h1 class="display-3 fw-bold">Crie sua conta no <span class="text-warning">Game Vision!</span></h1>
+        <p class="lead">Monitore o desempenho de jogadores e equipes com facilidade.</p>
       <hr class="my-4" style="border-color: white;">
       <div style="display: flex; flex-direction: column; align-items: center;">
-        <form method="post" style="width: 100%; max-width: 400px;">
-        <label for="email">Email: </label>
-        <input type="email" class="email" id="email" name="email" required>
-        <label for="password">Password: </label>
-        <input type="password" name="password" id="password" required>
-        <!-- <input type="button" value="Entrar" style="margin: 10px auto; display: block;"> -->
-        <button type="submit" class="btn btn-custom">Entrar</button>
+        <form method="post" style="width: 100%; max-width: 400px; text-align: center;">
+          {% csrf_token %}
+          <label for="username">Nome de Usuário:</label>
+          <input type="text" id="username" name="username" required>
 
-        <!-- <button type="submit">Entrar</button> -->
-        <a href="#">Não tem conta ainda? Registre-se</a>
-      </form>
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" required>
+
+          <label for="password">Senha:</label>
+          <input type="password" id="password" name="password" required>
+
+          <label for="confirm_password">Confirme sua Senha:</label>
+          <input type="password" id="confirm_password" name="confirm_password" required>
+
+          <button type="submit" class="btn btn-custom">Registrar</button>
+          <a href="/login">Já tem uma conta? Faça login</a>
+        </form>
       </div>
     </div>
     </div>
     </div>
 </body>
+</html>
