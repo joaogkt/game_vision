@@ -1,13 +1,18 @@
 from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
 from .models import Team
 from .forms import TeamForm
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
+
+@login_required(login_url='login')
 def team_list(request):
     teams = Team.objects.all()
     return render(request, 'team_list.html', {'teams': teams})
 
+
+@login_required(login_url='login')
 def team_create(request):
     if request.method == 'POST':
         form = TeamForm(request.POST, request.FILES)
@@ -18,6 +23,7 @@ def team_create(request):
         form = TeamForm()
     return render(request, 'team_form.html', {'form': form})
 
+@login_required(login_url='login')
 def team_update(request, pk):
     team = get_object_or_404(Team, pk=pk)
     if request.method == 'POST':
@@ -29,6 +35,8 @@ def team_update(request, pk):
         form = TeamForm(instance=team)
     return render(request, 'team_form.html', {'form': form})
 
+
+@login_required(login_url='login')
 def team_delete(request, pk):
     team = get_object_or_404(Team, pk=pk)
     if request.method == 'POST':

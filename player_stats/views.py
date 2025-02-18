@@ -1,12 +1,16 @@
 from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
 from .models import PlayerStats
 from .forms import PlayerStatsForm
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
+
+@login_required(login_url='login')
 def player_stats_list(request):
     player_stats = PlayerStats.objects.all()
     return render(request, 'player_stats_list.html', {'players': player_stats})
 
+@login_required(login_url='login')
 def player_stats_create(request):
     if request.method == "POST":
         form = PlayerStatsForm(request.POST)
@@ -18,6 +22,7 @@ def player_stats_create(request):
     return render(request, 'player_stats_form.html', {'form': form})
 
 
+@login_required(login_url='login')
 def player_stats_update(request, pk):
     player_stats = get_object_or_404(PlayerStats, pk=pk)
 
@@ -31,11 +36,13 @@ def player_stats_update(request, pk):
     return render(request, 'player_stats_form.html', {'form': form})
 
 
+@login_required(login_url='login')
 def player_stats_detail(request, pk):
     player_stat = get_object_or_404(PlayerStats, pk=pk)
     return render(request, 'player_stats_detail.html', {'player_stat': player_stat})
 
 
+@login_required(login_url='login')
 def player_stats_delete(request, pk):
     player_stats = get_object_or_404(PlayerStats, pk=pk)
     if request.method == "POST":

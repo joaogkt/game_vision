@@ -58,7 +58,7 @@
       transform: scale(1.1);
     }
 
-    input[type="email"], input[type="password"] {
+    input[type="text"], input[type="password"] {
       padding: 10px;
       margin: 10px 0;
       border: 2px solid #007bff;
@@ -70,7 +70,7 @@
       display: block;
     }
 
-    input[type="email"]:focus, input[type="password"]:focus {
+    input[type="text"]:focus, input[type="password"]:focus {
       border-color: #0056b3;
       box-shadow: 0 0 8px rgba(0, 91, 179, 0.6);
       outline: none;
@@ -128,16 +128,28 @@
         <p class="lead">Acompanhe o desempenho dos jogadores e times como nunca antes.</p>
       <hr class="my-4" style="border-color: white;">
       <div style="display: flex; flex-direction: column; align-items: center;">
+          {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+          {% endif %}
+
+
         <form method="post" style="width: 100%; max-width: 400px;">
-        <label for="email">Email: </label>
-        <input type="email" class="email" id="email" name="email" required>
+          {% csrf_token %}
+        <label for="text">Nome de Usuário: </label>
+        <input type="text" class="username" id="username" name="username" required>
         <label for="password">Password: </label>
         <input type="password" name="password" id="password" required>
         <!-- <input type="button" value="Entrar" style="margin: 10px auto; display: block;"> -->
         <button type="submit" class="btn btn-custom">Entrar</button>
 
         <!-- <button type="submit">Entrar</button> -->
-        <a href="#">Não tem conta ainda? Registre-se</a>
+        <a href="/accounts/register">Não tem conta ainda? Registre-se</a>
       </form>
       </div>
     </div>

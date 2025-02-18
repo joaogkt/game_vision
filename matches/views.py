@@ -1,12 +1,15 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import MatchesForm
 from .models import Matches
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
+@login_required(login_url='login')
 def matches_list(request):
     matches = Matches.objects.all()
     return render(request, 'matches_list.html', {'matches': matches})
 
+@login_required(login_url='login')
 def matches_create(request):
     if request.method == "POST":
         form = MatchesForm(request.POST)
@@ -17,11 +20,13 @@ def matches_create(request):
         form = MatchesForm()
     return render(request, 'matches_form.html', {'form': form})
 
-
+@login_required(login_url='login')
 def matches_detail(request, pk):
     matches = get_object_or_404(Matches, pk=pk)
     return render(request, 'matches_detail.html', {'matches': matches})
 
+
+@login_required(login_url='login')
 def matches_delete(request, pk):
     matches = get_object_or_404(Matches, pk=pk)
     if request.method == "POST":
@@ -29,6 +34,8 @@ def matches_delete(request, pk):
         return redirect('matches_list')
     return render(request, 'matches_confirm_delete.html', {'matches': matches})
 
+
+@login_required(login_url='login')
 def matches_update(request, pk):
     match = get_object_or_404(Matches, pk=pk)
     if request.method == 'POST':
