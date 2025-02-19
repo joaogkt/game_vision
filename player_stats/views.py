@@ -4,13 +4,16 @@ from .forms import PlayerStatsForm
 from django.contrib.auth.decorators import login_required
 from players.models import Player
 from .models import PlayerDesempenhoGeral
-from django.db.models import Sum, Count
+from django.db.models import Sum, Count, F
 # Create your views here.
 
 @login_required(login_url='login')
 def player_stats_list(request):
     player_stats = PlayerStats.objects.all()
     return render(request, 'player_stats_list.html', {'players': player_stats})
+
+
+
 
 @login_required(login_url='login')
 def player_stats_create(request):

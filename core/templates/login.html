@@ -128,8 +128,16 @@
         <p class="lead">Acompanhe o desempenho dos jogadores e times como nunca antes.</p>
       <hr class="my-4" style="border-color: white;">
       <div style="display: flex; flex-direction: column; align-items: center;">
+
+        {% if error_message %}
+        <div class="messages alert alert-danger">
+                <p>{{ error_message }}</p>
+        </div>
+        {% endif %}
+
           {% if messages %}
         <div class="messages">
+
             {% for message in messages %}
                 <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %}">
                     {{ message }}
