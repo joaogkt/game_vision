@@ -5,6 +5,7 @@ from datetime import date
 import os
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
+# from django.contrib.auth.models import User
 
 # Create your models here.
 class Player(models.Model):
@@ -22,6 +23,7 @@ class Player(models.Model):
     position = models.CharField(max_length=3, choices=POSITION_CHOICES)
     team = models.ForeignKey(teams.models.Team, on_delete=models.CASCADE)
     photo = models.ImageField(upload_to='players/', blank=True, null=True)
+    # usuario = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
