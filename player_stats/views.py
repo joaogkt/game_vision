@@ -7,11 +7,31 @@ from .models import PlayerDesempenhoGeral
 from django.db.models import Sum, Count, F
 # Create your views here.
 
+
 @login_required(login_url='login')
 def player_stats_list(request):
-    player_stats = PlayerStats.objects.all()
-    return render(request, 'player_stats_list.html', {'players': player_stats})
+    order = request.GET.get('order')
 
+    valid_fields = ['jogador', 'gols', 'assistencia', 'passes_certos', 'passes_errados',
+                    'desarmes', 'cartao_vermelho', 'cartao_amarelo', 'nota']
+
+    if order not in valid_fields and order not in [f'-{field}' for field in valid_fields]:
+        order = None  
+
+    if order:
+        new_order = order[1:] if order.startswith('-') else f'-{order}'
+    else:
+        new_order = 'jogador' 
+
+    player_stats = PlayerStats.objects.all()
+    if order:
+        player_stats = player_stats.order_by(order)
+
+    return render(request, 'player_stats_list.html', {
+        'players': player_stats,
+        'current_order': order,
+        'new_order': new_order
+    })
 
 
 
@@ -55,6 +75,8 @@ def player_stats_delete(request, pk):
         return redirect('player_stats_list')
     return render(request, 'player_stats_confirm_delete.html', {'player_stats': player_stats})
 
+
+
 @login_required(login_url='login')
 def desempenho_geral(request):
     jogadores = Player.objects.all()
@@ -90,11 +112,10 @@ def desempenho_geral(request):
                     'media_nota': media_nota,
                     'total_partidas': stats['total_partidas'], 
                 }
-            )
-
+            )    
             desempenho_total.append(desempenho) 
-
     return render(request, 'player_stats_total.html', {'desempenho_total': desempenho_total})
+
 
 def desempenho_graficos(request):
     return render(request, 'player_stats_graficos.html')
