@@ -117,5 +117,6 @@ def desempenho_geral(request):
     return render(request, 'player_stats_total.html', {'desempenho_total': desempenho_total})
 
 
+@login_required(login_url='login')
 def desempenho_graficos(request):
     return render(request, 'player_stats_graficos.html')
