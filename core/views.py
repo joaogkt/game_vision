@@ -17,6 +17,24 @@ def home(request):
 #     return render(request, 'register.html')
 
 
+# def user_login(request):
+#     if request.method == "POST":
+#         username = request.POST.get("username")
+#         password = request.POST.get("password")
+#         usuario = authenticate(request, username=username, password=password)
+#         if usuario is not None:
+#             login(request, usuario)           
+#             messages.success(request, "Login feito com sucesso")
+
+#             return redirect('home')
+#         else:
+
+#             form_login = AuthenticationForm()
+#     else:
+#         form_login = AuthenticationForm()
+#     return render(request, 'login.html', {'form_login': form_login})
+
+
 def user_login(request):
     if request.method == "POST":
         username = request.POST.get("username")
@@ -27,10 +45,14 @@ def user_login(request):
             return redirect('home')
         else:
             form_login = AuthenticationForm()
+            error_message = "Credenciais inválidas. Tente novamente."
+            return render(request, 'login.html', {
+                'form_login': form_login,
+                'error_message': error_message,
+            })
     else:
         form_login = AuthenticationForm()
     return render(request, 'login.html', {'form_login': form_login})
-
 
 def register(request):
     if request.method == "POST":

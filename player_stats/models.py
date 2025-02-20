@@ -18,3 +18,17 @@ class PlayerStats(models.Model):
 
     def __str__(self):
         return f"{self.jogador} - {self.jogo}"
+
+class PlayerDesempenhoGeral(models.Model):
+    jogador = models.ForeignKey(Player, on_delete=models.CASCADE)
+    total_gols = models.IntegerField(default=0)
+    total_assistencias = models.IntegerField(default=0)
+    total_passes_certos = models.IntegerField(default=0)
+    total_passes_errados = models.IntegerField(default=0)
+    total_desarmes = models.IntegerField(default=0)
+    total_cartoes_vermelhos = models.IntegerField(default=0)
+    total_cartoes_amarelos = models.IntegerField(default=0)
+    media_nota = models.FloatField(default=0.0)
+
+    def __str__(self):
+        return f"{self.jogador.nome} - Gols: {self.total_gols}"

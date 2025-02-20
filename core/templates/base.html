@@ -36,9 +36,19 @@
             <a class="nav-link" href="{% url 'player_stats_list' %}">Estatisticas</a>
           </li>
           <li class="nav-item">
-          <a href="{% url 'logout' %}" class="nav-link">Logout</a>
-        </li>
+            <a class="nav-link" href="{% url 'player_stats_total' %}">Estatisticas Geral</a>
+          </li>
+
         </ul>
+
+        {% if user.is_authenticated %}
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+              <a href="{% url 'logout' %}" class="nav-link">Logout</a>
+          </li>
+        </ul>
+      {% endif %}
+
       </div>
     </div>
   </nav>
