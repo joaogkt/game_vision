@@ -1,9 +1,102 @@
 {% extends 'base.html' %}
-{% load widget_tweaks %}
-
 {% block content %}
-{% csrf_token %}
+<h2 class="text-center">📊 Desempenho dos Jogadores</h2>
 
-Tem q fazer
+<div class="chart-container">
+    <canvas id="barChart"></canvas>
+</div>
+<div class="chart-container">
+    <canvas id="lineChart"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    var estatisticasJogadores = {{ estatisticas_jogadores|safe }};
+    var jogadores = Object.keys(estatisticasJogadores);
+    var cores = ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0", "#9966FF", "#FF9F40"];
+
+    // Dados para o gráfico de barras (Gols e Assistências)
+    var labels = jogadores;
+    var golsData = jogadores.map(jogador => estatisticasJogadores[jogador].gols);
+    var assistenciasData = jogadores.map(jogador => estatisticasJogadores[jogador].assistencias);
+    
+    var ctxBar = document.getElementById('barChart').getContext('2d');
+    new Chart(ctxBar, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: "Gols",
+                    data: golsData,
+                    backgroundColor: "rgba(255, 99, 132, 0.6)",
+                    borderColor: "rgba(255, 99, 132, 1)",
+                    borderWidth: 1
+                },
+                {
+                    label: "Assistências",
+                    data: assistenciasData,
+                    backgroundColor: "rgba(54, 162, 235, 0.6)",
+                    borderColor: "rgba(54, 162, 235, 1)",
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+
+    // Gráfico de linhas (Média de Notas e Partidas Jogadas)
+    var notasData = jogadores.map(jogador => estatisticasJogadores[jogador].notas);
+    var partidasData = jogadores.map(jogador => estatisticasJogadores[jogador].partidas);
+
+    var ctxLine = document.getElementById('lineChart').getContext('2d');
+    new Chart(ctxLine, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: "Média de Notas",
+                    data: notasData,
+                    borderColor: "rgba(255, 159, 64, 1)",
+                    backgroundColor: "rgba(255, 159, 64, 0.2)",
+                    fill: true,
+                    tension: 0.3
+                },
+                {
+                    label: "Partidas Jogadas",
+                    data: partidasData,
+                    borderColor: "rgba(75, 192, 192, 1)",
+                    backgroundColor: "rgba(75, 192, 192, 0.2)",
+                    fill: true,
+                    tension: 0.3
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+</script>
+
+<style>
+    .chart-container {
+        width: 80%;
+        margin: 20px auto;
+    }
+    h2 {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+</style>
 
 {% endblock %}
