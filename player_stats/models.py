@@ -21,6 +21,7 @@ class PlayerStats(models.Model):
 
 class PlayerDesempenhoGeral(models.Model):
     jogador = models.ForeignKey(Player, on_delete=models.CASCADE)
+    total_partidas = models.IntegerField(default=0)
     total_gols = models.IntegerField(default=0)
     total_assistencias = models.IntegerField(default=0)
     total_passes_certos = models.IntegerField(default=0)

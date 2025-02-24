@@ -4,35 +4,22 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib import messages
 from .forms import CustomUserCreationForm
 from django.contrib.auth.decorators import login_required
+from django.core.mail import EmailMessage
+
+def send_email(remetente, code):
+    email = EmailMessage(
+        'Codigo de autenticação',
+        code,
+        'game.vision.udf@gmail.com',
+        [remetente],
+        fail_silently=False,
+    )
+    email.send()
 
 
 @login_required(login_url='login')
 def home(request):
     return render(request, 'home.html')
-
-# def login(request):
-#     return render(request, 'login.html')
-
-# def register(request):
-#     return render(request, 'register.html')
-
-
-# def user_login(request):
-#     if request.method == "POST":
-#         username = request.POST.get("username")
-#         password = request.POST.get("password")
-#         usuario = authenticate(request, username=username, password=password)
-#         if usuario is not None:
-#             login(request, usuario)           
-#             messages.success(request, "Login feito com sucesso")
-
-#             return redirect('home')
-#         else:
-
-#             form_login = AuthenticationForm()
-#     else:
-#         form_login = AuthenticationForm()
-#     return render(request, 'login.html', {'form_login': form_login})
 
 
 def user_login(request):
@@ -68,6 +55,7 @@ def register(request):
         form_usuario = CustomUserCreationForm()
     return render(request, 'register.html', {'form_usuario': form_usuario})
 
+@login_required(login_url='login')
 def logout_view(request):
     logout(request)
     return redirect('login')

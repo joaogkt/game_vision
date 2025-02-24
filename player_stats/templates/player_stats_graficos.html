@@ -1,9 +1,82 @@
 {% extends 'base.html' %}
-{% load widget_tweaks %}
-
 {% block content %}
-{% csrf_token %}
 
-Tem q fazer
+<div class="container mt-5">
+    <h2 class="text-center">📊 Desempenho dos Jogadores</h2>
+
+    <div class="chart-container">
+        <canvas id="barChart"></canvas>
+    </div>
+    <div class="chart-container">
+        <canvas id="lineChart"></canvas>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    var estatisticasJogadores = {{ estatisticas_jogadores|safe }};
+    var jogadores = Object.keys(estatisticasJogadores);
+    var cores = ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0", "#9966FF", "#FF9F40"];
+
+    // Gráfico de Barras (Resumo Estatístico)
+    var ctxBar = document.getElementById('barChart').getContext('2d');
+    var datasetsBar = [
+        { label: "Gols", key: "gols", bg: "rgba(255, 99, 132, 0.6)" },
+        { label: "Assistências", key: "assistencias", bg: "rgba(54, 162, 235, 0.6)" },
+        { label: "Passes Certos", key: "passes_certos", bg: "rgba(75, 192, 192, 0.6)" },
+        { label: "Desarmes", key: "desarmes", bg: "rgba(153, 102, 255, 0.6)" },
+    ].map((stat, i) => ({
+        label: stat.label,
+        data: jogadores.map(jogador => estatisticasJogadores[jogador][stat.key].reduce((a, b) => a + b, 0)),
+        backgroundColor: stat.bg,
+        borderColor: stat.bg.replace("0.6", "1"),
+        borderWidth: 1
+    }));
+
+    new Chart(ctxBar, {
+        type: 'bar',
+        data: {
+            labels: jogadores,
+            datasets: datasetsBar
+        },
+        options: { responsive: true, scales: { y: { beginAtZero: true } } }
+    });
+
+    // Gráfico de Linha (Evolução das Notas)
+    var ctxLine = document.getElementById('lineChart').getContext('2d');
+    var datasetsLine = jogadores.map((jogador, index) => ({
+        label: jogador,
+        data: estatisticasJogadores[jogador].notas,
+        borderColor: cores[index % cores.length],
+        backgroundColor: cores[index % cores.length] + "33",
+        fill: true,
+        tension: 0.3
+    }));
+
+    new Chart(ctxLine, {
+        type: 'line',
+        data: {
+            labels: estatisticasJogadores[jogadores[0]].partidas,
+            datasets: datasetsLine
+        },
+        options: { responsive: true, scales: { y: { beginAtZero: true } } }
+    });
+</script>
+
+<style>
+    .chart-container {
+        width: 80%;
+        margin: 20px auto;
+        background: white;
+        padding: 10px;
+        border-radius: 10px;
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+</style>
 
 {% endblock %}

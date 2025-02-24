@@ -1,0 +1,23 @@
+
+# Ignore todos os arquivos de texto
+*.txt
+
+# Ignore arquivos relacionados às chaves de API
+.env
+
+# Ignore arquivos de configuração de SASS
+.sass-cache
+
+venv
+
+core/__pycache__
+
+matches/__pycache__
+
+player_stats/__pycache__
+
+players/__pycache__
+
+tcc_futebol/__pycache__
+
+teams/__pycache__
