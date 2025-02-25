@@ -39,6 +39,7 @@
         <th>Partida</th>
         <th>Competição</th>
         <th>Local</th>
+        <th>Data da Partida</th>
         <th class="text-center">Ações</th>
       </tr>
     </thead>
@@ -48,6 +49,7 @@
         <td>{{ match.time_casa }} {{ match.placar_casa }} x {{ match.placar_fora }} {{ match.time_fora }}</td>
         <td>{{ match.tipo_competicao }}</td>
         <td>{{ match.local }}</td>
+        <td>{{ match.data_partida }}</td>
         <td class="text-center">
           <a href="{% url 'matches_detail' match.id %}" class="btn btn-info btn-sm">Detalhes</a>
           <a href="{% url 'matches_update' match.id %}" class="btn btn-warning btn-sm">Editar</a>
