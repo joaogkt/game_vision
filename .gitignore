@@ -1,10 +1,9 @@
 
 
 
-# Ignore arquivos relacionados às chaves de API
+# Ignore arquivos relacionados a config de banco
 .env
 
-# Ignore arquivos de configuração de SASS
 .sass-cache
 
 venv
