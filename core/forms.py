@@ -18,3 +18,5 @@ class CustomUserCreationForm(UserCreationForm):
             except ValidationError as e:
                 raise forms.ValidationError(e.messages)
         return password
+
+

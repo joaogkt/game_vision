@@ -1,0 +1,110 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="{% static 'img/favicon.ico' %}">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'style.css' %}">
+  <title>Verificação | Game Vision</title>
+</head>
+<body>
+  <div class="conteudo">
+    <style>
+      html, body {
+        height: auto !important;
+        overflow: hidden;
+      }
+      body {
+        background: url("{% static 'img/soccer-bg.jpg' %}") no-repeat center center fixed !important;
+        background-size: cover !important;
+      }
+      .hero {
+        position: relative;
+        height: calc(100vh - 56px);
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        text-align: center;
+        margin: 0;
+        padding: 0;
+      }
+      .hero-content {
+        position: relative;
+        z-index: 2;
+        max-width: 100%;
+        margin-top: 50px;
+      }
+      .btn-custom {
+        background: #28a745;
+        color: white;
+        padding: 12px 20px;
+        font-size: 18px;
+        margin: 10px auto;
+        border-radius: 30px;
+        transition: 0.3s ease-in-out;
+        display: block;
+      }
+      .btn-custom:hover {
+        background: #218838;
+        transform: scale(1.1);
+      }
+      input[type="text"] {
+        padding: 10px;
+        margin: 10px 0;
+        border: 2px solid #28a745;
+        border-radius: 8px;
+        width: 100%;
+        max-width: 400px;
+        box-sizing: border-box;
+        transition: 0.3s;
+        display: block;
+      }
+      input:focus {
+        border-color: #218838;
+        box-shadow: 0 0 8px rgba(33, 136, 56, 0.6);
+        outline: none;
+      }
+      a {
+        color: white;
+        text-decoration: none;
+        margin-top: 10px;
+      }
+      a:hover {
+        color: #28a745;
+      }
+    </style>
+    
+    <div class="hero">
+      <div class="hero-content">
+        <h1 class="display-3 fw-bold">Verifique seu <span class="text-warning">Código</span></h1>
+        <p class="lead">Insira o código de verificação enviado para seu email.</p>
+        <hr class="my-4" style="border-color: white;">
+        
+        {% if messages %}
+        <div class="messages">
+          {% for message in messages %}
+            <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %}">
+              {{ message }}
+            </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+        
+        <div style="display: flex; flex-direction: column; align-items: center;">
+          <form method="post" style="width: 100%; max-width: 400px; text-align: center;">
+            {% csrf_token %}
+            <label for="verification_code">Código de Verificação:</label>
+            <input type="text" id="verification_code" name="verification_code" required>
+            <button type="submit" class="btn btn-custom">Verificar</button>
+            <a href="/accounts/resend-code">Reenviar código</a>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
