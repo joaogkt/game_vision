@@ -75,6 +75,10 @@ def register(request):
                 print("Redirecionando para a página de verificação...")
 
                 return render(request, 'register.html', {'form_usuario': form_usuario})
+        
+        else:
+            for error in form_usuario.errors.get("password1", []):
+                messages.error(request, error)
 
     else:
         form_usuario = CustomUserCreationForm()
