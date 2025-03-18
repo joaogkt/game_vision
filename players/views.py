@@ -3,8 +3,8 @@ from .models import Player
 from .forms import PlayerForm
 import os
 from django.contrib.auth.decorators import login_required
-from player_stats.models import PlayerDesempenhoGeral
-
+from player_stats.models import PlayerDesempenhoGeral, PlayerStats
+from matches.models import Matches
 
 
 @login_required(login_url='login')
@@ -17,7 +17,9 @@ def player_list(request):
 def player_detail(request, pk):
     player = get_object_or_404(Player, pk=pk)
     desempenho = PlayerDesempenhoGeral.objects.filter(jogador=player).first()
-    return render(request, 'player_detail.html', {'player': player, 'desempenho': desempenho})
+    partidas_jogadas = Matches.objects.filter(id__in=PlayerStats.objects.filter(jogador=player).values_list('jogo', flat=True))
+
+    return render(request, 'player_detail.html', {'player': player, 'desempenho': desempenho, 'partidas': partidas_jogadas})
 
 @login_required(login_url='login')
 def player_create(request):
