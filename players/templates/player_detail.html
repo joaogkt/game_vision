@@ -1,60 +1,125 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} 
 {% load static %}
+
 {% block title %}Detalhes de {{ player.first_name }} {{ player.last_name }}{% endblock %}
 
 {% block content %}
 <style>
-  .details-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 60px 0;
-  }
-  .card-details {
-    width: 100%;
-    max-width: 900px;
-    padding: 40px;
-    border-radius: 20px;
-  }
-  .player-photo {
-    width: 250px;
-    height: auto;
-    border-radius: 15px;
-  }
-  .player-info p {
-    margin-bottom: 10px;
-    font-size: 1.1rem;
-  }
+    body {
+        background: #632778;
+        color: black;
+    }
+    .container {
+        background: white;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    }
+    .profile-pic {
+        width: 150px;
+        height: auto;
+        object-fit: cover;
+        border-radius: 10px;
+    }
+    .player-info {
+        font-size: 0.9rem;
+        text-align: justify;
+    }
+    .stats-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+    .stats-table th, .stats-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+        color: black;
+    }
+    .stats-table th {
+        background-color: rgb(43, 89, 175);
+        font-weight: bold;
+        color: white;
+    }
+    h1, h2, h3, h4, p, span, li {
+        color: black;
+    }
+    .btn-container {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-bottom: 15px;
+    }
 </style>
 
-<div class="container details-container">
-  <div class="card shadow-lg card-details">
-    <div class="row g-4 align-items-center">
-      <div class="col-md-5 text-center">
-        {% if player.photo %}
-          <img src="{{ player.photo.url }}" class="img-fluid player-photo shadow-sm" alt="Foto de {{ player.first_name }}">
-        {% else %}
-          <img src="https://via.placeholder.com/250x350?text=Sem+Foto" class="img-fluid player-photo shadow-sm" alt="Sem foto disponível">
-        {% endif %}
-      </div>
-      <div class="col-md-7 player-info">
-        <h2 class="fw-bold mb-3 text-center">{{ player.first_name }} {{ player.last_name }}</h2>
-        <p><strong>🎂 Data de Nascimento:</strong> {{ player.birth_date|date:"d/m/Y" }}</p>
-        <p><strong>📅 Idade:</strong> {{ player.age }} anos</p>
-        <p><strong>🌍 Nacionalidade:</strong> {{ player.nationality.name }}</p>
-        <p><strong>⚽ Posição:</strong> {{ player.get_position_display }}</p>
-        <h4 class="mt-4 fw-bold text-center">🏟️ Time</h4>
-        <p><strong>🔹 Nome:</strong> {{ player.team.name }}</p>
-        <p><strong>📍 Cidade:</strong> {{ player.team.city }}</p>
-        <p><strong>🌎 País:</strong> {{ player.team.country.name }}</p>
-        <p><strong>🏆 Fundação:</strong> {{ player.team.founded_year }}</p>
-        <div class="mt-4 d-flex justify-content-center gap-2 flex-wrap">
-          <a href="{% url 'player_update' player.pk %}" class="btn btn-warning">✏️ Editar</a>
-          <a href="{% url 'player_delete' player.pk %}" class="btn btn-danger">🗑️ Excluir</a>
-          <a href="{% url 'player_list' %}" class="btn btn-secondary">🔙 Voltar</a>
+
+
+
+<div class="container mt-4 mb-5">
+    <div class="row">
+        <div class="col-md-4 text-center">
+            {% if player.photo %}
+                <img src="{{ player.photo.url }}" class="profile-pic shadow-sm" alt="Foto de {{ player.first_name }}">
+            {% else %}
+                <img src="https://via.placeholder.com/250x350?text=Sem+Foto" class="profile-pic shadow-sm" alt="Sem foto disponível">
+            {% endif %}
+            <h3 class="fw-bold mt-2">{{ player.first_name }} {{ player.last_name }}</h3>
+            <p>Time: {{ player.team.name }}<br> 
+               Posição: {{ player.get_position_display }}<br>
+               Nascimento: {{ player.birth_date|date:"d/m/Y" }}, atualmente tem {{ player.age }} anos<br>
+               Nacionalidade: {{ player.nationality.name }}</p>
         </div>
-      </div>
+
+        <div class="col-md-8 player-info">
+            <h4 class="text-center">📊 Estatísticas da Temporada</h4>
+            <table class="stats-table">
+              <thead>
+                  <tr>
+                      <th>Gols</th>
+                      <th>Assistências</th>
+                      <th>Passes Certos</th>
+                      <th>Passes Errados</th>
+                      <th>Desarmes</th>
+                      <th>Cartões Amarelos</th>
+                      <th>Cartões Vermelhos</th>
+                      <th>Nota Média</th>
+                      <th>Partidas</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  {% if desempenho %}
+                      <tr>
+                          <td>{{ desempenho.total_gols }}</td>
+                          <td>{{ desempenho.total_assistencias }}</td>
+                          <td>{{ desempenho.total_passes_certos }}</td>
+                          <td>{{ desempenho.total_passes_errados }}</td>
+                          <td>{{ desempenho.total_desarmes }}</td>
+                          <td>{{ desempenho.total_cartoes_amarelos }}</td>
+                          <td>{{ desempenho.total_cartoes_vermelhos }}</td>
+                          <td>{{ desempenho.media_nota|floatformat:2 }}</td>
+                          <td>{{ desempenho.total_partidas }}</td>
+                      </tr>
+                  {% else %}
+                      <tr>
+                          <td colspan="9">Nenhum dado disponível para este jogador.</td>
+                      </tr>
+                  {% endif %}
+              </tbody>
+          </table>
+
+          <div class="mt-4">
+            <h4 class="text-center"><i class="fa fa-soccer-ball-o"></i> Partidas jogadas</h4>
+            <ul class="player-list">
+              {% for player in team.player_set.all %}
+                  <li>{{ player.first_name }} {{ player.last_name }} - {{ player.get_position_display }}</li>
+              {% empty %}
+                  <p>Este time ainda não tem jogadores.</p>
+              {% endfor %}
+          </ul>
+          </div>
+        </div>
+        
     </div>
-  </div>
 </div>
 {% endblock %}

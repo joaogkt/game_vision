@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Lista de Times{% endblock %}
+
+{% block content %}
+<style>
+    body {
+        background: #632778;
+        color: black;
+    }
+    .container {
+        background: white;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    }
+    .profile-pic {
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+    }
+    .team-details {
+        text-align: center;
+    }
+    .player-list {
+        list-style: none;
+        padding: 0;
+    }
+    .player-list li {
+        background: #f8f9fa;
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 5px;
+    }
+    h1, h2, h3, h4, p, span, li {
+        color: black;
+    }
+</style>
+
+<div class="container mt-5 mb-5">
+    <div class="row">
+
+        <div class="col-md-3 border-right team-details">
+            {% if team.logo %}
+                <img src="{{ team.logo.url }}" class="profile-pic mt-3" alt="Logo de {{ team.name }}">
+            {% else %}
+                <img src="https://via.placeholder.com/150x150?text=Sem+Logo" class="profile-pic mt-3" alt="Sem logo disponível">
+            {% endif %}
+            <h3 class="mt-3">{{ team.name }}</h3>
+            <p>{{ team.city }}, {{ team.country.name }}<br>
+            Fundado em: {{ team.founded_year }}</p>
+        </div>
+
+        <div class="col-md-6 border-right">
+            <h4 class="mb-3">Jogadores do {{ team.name }}</h4>
+            <ul class="player-list">
+                {% for player in team.player_set.all %}
+                    <li>{{ player.first_name }} {{ player.last_name }} - {{ player.get_position_display }}</li>
+                {% empty %}
+                    <p>Este time ainda não tem jogadores.</p>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="col-md-3">
+            <h4 class="mb-3">Editar Informações</h4>
+            <input type="text" class="form-control mb-3" placeholder="Experiência">
+            <input type="text" class="form-control mb-3" placeholder="Detalhes adicionais">
+        </div>
+    </div>
+</div>
+
+{% endblock %}

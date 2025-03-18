@@ -1,5 +1,6 @@
 from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
 from .models import Team
+from players.models import Player
 from .forms import TeamForm
 from django.contrib.auth.decorators import login_required
 
@@ -9,7 +10,14 @@ from django.contrib.auth.decorators import login_required
 @login_required(login_url='login')
 def team_list(request):
     teams = Team.objects.all()
-    return render(request, 'team_list.html', {'teams': teams})
+    player = Player.objects.all()
+    return render(request, 'team_list.html', {'teams': teams, 'players': player})
+
+
+@login_required(login_url='login')
+def team_detail(request, pk):
+    team = get_object_or_404(Team, pk=pk)
+    return render(request, 'team_detail.html', {'team': team})
 
 
 @login_required(login_url='login')
