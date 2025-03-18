@@ -10,7 +10,8 @@ urlpatterns = [
     path('teams/', include('teams.urls')),
     path('matches/', include('matches.urls')),
     path('stats/', include('player_stats.urls')),
-    path('', include('core.urls'))
+    path('', include('core.urls')),
+     path('api/', include('api.urls')),
 ]
 
 

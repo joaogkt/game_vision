@@ -8,7 +8,18 @@ from django.db.models import Sum, Count, F
 import matplotlib.pyplot as plt
 import io
 import urllib, base64
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from .serializers import PlayerDesempenhoGeralSerializer
 # Create your views here.
+
+
+@api_view(['GET'])
+def api_estatisticas_jogadores(request):
+    desempenhos = PlayerDesempenhoGeral.objects.all()
+    serializer = PlayerDesempenhoGeralSerializer(desempenhos, many=True)
+    return Response(serializer.data)
 
 @login_required(login_url='login')
 def player_stats_list(request):
@@ -143,96 +154,6 @@ def player_stats_detail(request, pk):
     uri = f"data:image/png;base64,{string}"
 
     return render(request, 'player_stats_detail.html', {'player_stat': player_stat, 'player': player, 'chart': uri})
-
-
-# @login_required(login_url='login')
-# def desempenho_graficos(request):
-#     jogadores = Player.objects.all()
-
-#     nomes = []
-#     gols = []
-#     assistencias = []
-#     notas = []
-
-#     for jogador in jogadores:
-#         stats = PlayerDesempenhoGeral.objects.filter(jogador=jogador).aggregate(
-#             total_gols=Sum('total_gols', default=0),
-#             total_assistencias=Sum('total_assistencias', default=0),
-#             media_nota=Sum('media_nota', default=0)
-#         )
-
-#         nomes.append(f"{jogador.first_name} {jogador.last_name}")
-#         gols.append(stats['total_gols'])
-#         assistencias.append(stats['total_assistencias'])
-#         notas.append(stats['media_nota'])
-
-#     plt.figure(figsize=(10, 5))
-#     plt.bar(nomes, gols, color='blue', label="Gols")
-#     plt.bar(nomes, assistencias, color='green', bottom=gols, label="Assistências")
-#     plt.xlabel("Jogadores")
-#     plt.ylabel("Quantidade")
-#     plt.title("Gols e Assistências por Jogador")
-#     plt.xticks(rotation=45)
-#     plt.legend()
-
-#     buf = io.BytesIO()
-#     plt.savefig(buf, format="png")
-#     buf.seek(0)
-#     string = base64.b64encode(buf.read()).decode("utf-8")
-#     chart1 = f"data:image/png;base64,{string}"
-
-#     plt.figure(figsize=(10, 5))
-#     plt.bar(nomes, notas, color='purple')
-#     plt.xlabel("Jogadores")
-#     plt.ylabel("Nota Média")
-#     plt.title("Média de Notas dos Jogadores")
-#     plt.xticks(rotation=45)
-
-#     buf = io.BytesIO()
-#     plt.savefig(buf, format="png")
-#     buf.seek(0)
-#     string = base64.b64encode(buf.read()).decode("utf-8")
-#     chart2 = f"data:image/png;base64,{string}"
-
-#     return render(request, 'player_stats_graficos.html', {'chart1': chart1, 'chart2': chart2})
-
-# @login_required(login_url='login')
-# def desempenho_graficos(request):
-#     jogadores = Player.objects.all()
-#     desempenho_total = []
-#     estatisticas_jogadores = {}
-
-#     for jogador in jogadores:
-#         stats = PlayerDesempenhoGeral.objects.filter(jogador=jogador)
-
-#         estatisticas = {
-#             "gols": [],
-#             "assistencias": [],
-#             "passes_certos": [],
-#             "passes_errados": [],
-#             "desarmes": [],
-#             "cartoes_vermelhos": [],
-#             "cartoes_amarelos": [],
-#             "notas": [],
-#             "partidas": [],
-#         }
-
-#         for stat in stats:
-#             estatisticas["gols"].append(stat.total_gols)
-#             estatisticas["assistencias"].append(stat.total_assistencias)
-#             estatisticas["passes_certos"].append(stat.total_passes_certos)
-#             estatisticas["passes_errados"].append(stat.total_passes_errados)
-#             estatisticas["desarmes"].append(stat.total_desarmes)
-#             estatisticas["cartoes_vermelhos"].append(stat.total_cartoes_vermelhos)
-#             estatisticas["cartoes_amarelos"].append(stat.total_cartoes_amarelos)
-#             estatisticas["notas"].append(stat.media_nota)
-#             estatisticas["partidas"].append(stat.total_partidas)
-
-#         estatisticas_jogadores[f'{jogador.first_name} {jogador.last_name}'] = estatisticas
-
-#     return render(request, 'player_stats_graficos.html', {
-#         'estatisticas_jogadores': estatisticas_jogadores
-#     })
 
 
 @login_required(login_url='login')
