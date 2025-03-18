@@ -126,7 +126,6 @@
                         <th>Cartões Amarelos</th>
                         <th>Cartões Vermelhos</th>
                         <th>Nota Média</th>
-                        <th>Partidas</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -141,7 +140,6 @@
                             <td>{{ desempenho.total_cartoes_amarelos }}</td>
                             <td>{{ desempenho.total_cartoes_vermelhos }}</td>
                             <td>{{ desempenho.media_nota|floatformat:2 }}</td>
-                            <td>{{ desempenho.total_partidas }}</td>
                         </tr>
                     {% else %}
                         <tr>
@@ -184,7 +182,6 @@
     </div>
 </div>
 
-<!-- JavaScript para alternar as tabelas -->
 <script>
     function showTable(tableType) {
         const statsTable = document.getElementById('stats-table');
