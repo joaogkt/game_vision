@@ -18,10 +18,12 @@ schema_view = get_schema_view(
 
 
 urlpatterns = [
-    path('v1/estatisticas/', views.api_player_stats_total, name='api_player_stats_total'),
+    path('v1/estatisticas_total/', views.api_player_stats_total, name='api_player_stats_total'),
     path('v1/jogadores/', views.api_players, name='api_players'),
     path('v1/times/', views.api_teams, name='api_teams'),
     path('v1/partidas/', views.api_matches, name='api_matches'),
+    path('v1/estatisticas/', views.api_player_stats, name='api_player_stats'),
+
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
 
 

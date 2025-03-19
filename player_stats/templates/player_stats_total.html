@@ -31,12 +31,12 @@
     <!-- <a href="{% url 'player_stats_create' %}" class="btn btn-success">Adicionar Estatística</a> -->
   </div>
 
-  <table class="table table-striped table-bordered">
+  <table class="table table-striped table-bordered" id="teams-table">
     <thead class="table-dark">
         <tr>
           <th>Jogador</th>
           <th>Partidas</th>
-          <th><a href="?order={% if current_order == 'total_gols' %}-gols{% else %}gols{% endif %}"></a>Gols</a></th>
+          <th>Gols</a></th>
           <th>Assistências</th>
           <th>Passes Certos</th>
           <th>Passes Errados</th>

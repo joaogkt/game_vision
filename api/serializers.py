@@ -12,7 +12,7 @@ class PlayerDesempenhoGeralSerializer(serializers.ModelSerializer):
         fields = ['jogador_nome', 'total_gols', 'total_assistencias', 'total_passes_certos',
                   'total_passes_errados', 'total_desarmes', 'total_cartoes_vermelhos',
                   'total_cartoes_amarelos', 'media_nota', 'total_partidas']
-        
+
 class TeamSerializer(serializers.ModelSerializer):
     class Meta:
         model = Team
@@ -38,3 +38,9 @@ class MatchesSerializer(serializers.ModelSerializer):
         model = Matches
         fields = ['local', 'time_casa', 'time_fora', 'placar_casa', 'placar_fora', 'data_partida', 'tipo_competicao']
 
+class PlayerStatsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = PlayerStats
+        fields = ['jogador', 'jogo', 'minutos_jogados', 'gols', 'assistencia', 'passes_certos', 'passes_errados', 'desarmes', 
+                  'cartao_vermelho', 'cartao_amarelo', 'nota']

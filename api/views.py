@@ -2,8 +2,8 @@ from django.shortcuts import render
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from .serializers import PlayerDesempenhoGeralSerializer, PlayerSerializer, TeamSerializer, MatchesSerializer
-from player_stats.models import PlayerDesempenhoGeral
+from .serializers import PlayerDesempenhoGeralSerializer, PlayerSerializer, TeamSerializer, MatchesSerializer, PlayerStatsSerializer
+from player_stats.models import PlayerDesempenhoGeral, PlayerStats
 from players.models import Player
 from drf_yasg.utils import swagger_auto_schema
 from teams.models import Team
@@ -21,8 +21,6 @@ def api_player_stats_total(request):
     desempenhos = PlayerDesempenhoGeral.objects.all()
     serializer = PlayerDesempenhoGeralSerializer(desempenhos, many=True)
     return Response(serializer.data)
-
-
 
 @swagger_auto_schema(
     method='get',
@@ -50,11 +48,22 @@ def api_teams(request):
 
 @swagger_auto_schema(
     method='get',
-    operation_description="Obtém todos as partidas cadastradas.",
+    operation_description="Obtém todas as partidas cadastradas.",
     responses={200: MatchesSerializer(many=True)},
 )
 @api_view(["GET"])
 def api_matches(request):
     matches = Matches.objects.all()
     serializer = MatchesSerializer(matches, many=True)
+    return Response(serializer.data)
+
+@swagger_auto_schema(
+    method='get',
+    operation_description="Obtém estatisticas por partida cadastrada.",
+    responses={200: PlayerStatsSerializer(many=True)},
+)
+@api_view(["GET"])
+def api_player_stats(request):
+    player_stats = PlayerStats.objects.all()
+    serializer = PlayerStatsSerializer(player_stats, many=True)
     return Response(serializer.data)
