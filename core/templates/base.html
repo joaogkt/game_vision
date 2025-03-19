@@ -116,16 +116,24 @@
 <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
 <script>
   $(document).ready(function() {
-    $('table').DataTable({
-      "language": {
-        "url": "//cdn.datatables.net/plug-ins/1.13.4/i18n/pt-BR.json"
-      },
-      "dom": 'f',  // Apenas o filtro (campo de pesquisa)
-      "pageLength": 5,
-      "lengthMenu": [5, 10, 25, 50],
-      "order": [[0, 'asc']]  // Ordenar pela primeira coluna por padrão
+    // Inicializar DataTable para qualquer tabela que não tenha a classe 'no-datatable'
+    $('table').each(function() {
+      if (!$(this).hasClass('no-datatable') && !$.fn.dataTable.isDataTable(this)) {
+        $(this).DataTable({
+          "language": {
+            "url": "//cdn.datatables.net/plug-ins/1.13.4/i18n/pt-BR.json",
+            "search": "Pesquisa",
+            "zeroRecords": "Nenhum registro encontrado"
+          },
+          "dom": 'f',
+          "pageLength": 5,
+          "lengthMenu": [5, 10, 25, 50],
+          "order": [[0, 'asc']]
+        });
+      }
     });
   });
+</script>
 </script>
 </body>
 </html>
