@@ -38,7 +38,8 @@
       <div class="row mb-3">
         <div class="col-md-6">
           <label for="id_birth_date" class="form-label">Data de Nascimento</label>
-          {{ form.birth_date|add_class:"form-control" }}
+          {{ form.birth_date|add_class:"form-control"|attr:"type:date" }}
+
         </div>
         <div class="col-md-6">
           <label for="id_nationality" class="form-label">Nacionalidade</label>

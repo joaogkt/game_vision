@@ -9,7 +9,7 @@ schema_view = get_schema_view(
     openapi.Info(
         title="API GameVision",
         default_version='v1',
-        description="API para obter informações sobre jogadores e suas estatísticas de desempenho.",
+        description="API para obter informações sobre os dados cadastrados no sistema GameVision",
         terms_of_service="https://www.google.com/policies/terms/",
         contact=openapi.Contact(email="game.vision.udf@gmail.com"),
     ),

@@ -18,6 +18,9 @@
                     <div class="mb-3">
                         <label for="id_placar_casa" class="form-label">Placar Casa</label>
                         {{ form.placar_casa|add_class:"form-control" }}
+                        <script>
+                            document.getElementById("id_placar_casa").setAttribute("min", "0");
+                        </script>
                     </div>
                     <div class="mb-3">
                         <label for="id_time_fora" class="form-label">Time Fora</label>
@@ -26,6 +29,10 @@
                     <div class="mb-3">
                         <label for="id_placar_fora" class="form-label">Placar Fora</label>
                         {{ form.placar_fora|add_class:"form-control" }}
+                        <script>
+                            document.getElementById("id_placar_fora").setAttribute("min", "0");
+                        </script>
+                    
                     </div>
                 </div>
                 <div class="mb-3">
