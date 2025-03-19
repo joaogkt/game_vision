@@ -51,8 +51,32 @@
         <td class="text-center">
           <a href="{% url 'team_detail' team.pk %}" class="btn btn-info btn-sm">Detalhes</a>
           <a href="{% url 'team_update' team.pk %}" class="btn btn-warning btn-sm">Editar</a>
-          <a href="{% url 'team_delete' team.pk %}" class="btn btn-danger btn-sm">Excluir</a>
+          <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{ team.id }}">
+            Excluir
+            </button>
+          {% comment %} <a href="{% url 'team_delete' team.pk %}" class="btn btn-danger btn-sm">Excluir</a> {% endcomment %}
+
+          <div class="modal fade" id="deleteModal{{ team.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ player.id }}" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="deleteModalLabel{{ team.id }}">Confirmar Exclusão</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  Tem certeza que deseja excluir <strong>{{ team.name }}</strong>?
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                  <a href="{% url 'team_delete' team.id %}" class="btn btn-danger">Excluir</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </td>
+
+        
       </tr>
       {% empty %}
       <tr>

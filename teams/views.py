@@ -3,6 +3,7 @@ from .models import Team
 from players.models import Player
 from .forms import TeamForm
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 # Create your views here.
 
@@ -47,7 +48,6 @@ def team_update(request, pk):
 @login_required(login_url='login')
 def team_delete(request, pk):
     team = get_object_or_404(Team, pk=pk)
-    if request.method == 'POST':
-        team.delete()
-        return redirect('team_list')
-    return render(request, 'team_confirm_delete.html', {'team': team})
+    team.delete()
+    messages.success(request, "Jogador excluído com sucesso!")
+    return redirect('team_list')

@@ -2,7 +2,23 @@
 {% load widget_tweaks %}
 
 {% block content %}
-<div class="container mt-5">
+<style>
+    html, body {
+        overflow: auto;
+      }
+      .form-container {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        margin-top: 200px;
+      }
+      .card-form {
+        width: 100%;
+        max-width: 700px; /* Card mais compacto */
+      }
+
+</style>
+<div class="container form-container">
     <div class="card card-form shadow-lg p-4">
         <h2 class="mb-4 text-center">
             {% if form.instance.pk %}Editar Time{% else %}Adicionar Time{% endif %}

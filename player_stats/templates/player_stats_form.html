@@ -3,17 +3,21 @@
 
 {% block content %}
 <style>
-  /* Container que centraliza o card e adiciona espaçamento vertical */
+  html, body {
+    overflow: auto;
+  }
   .form-container {
     display: flex;
     justify-content: center;
     align-items: flex-start;
     padding: 40px 0;
+    margin-top: 260px;
+    min-height: 100vh; /* Ocupa pelo menos a altura da tela */
   }
-  /* Card com largura máxima definida */
   .card-form {
     width: 100%;
-    max-width: 700px; /* Card mais compacto */
+    max-width: 700px;
+    height: auto;
   }
 </style>
 

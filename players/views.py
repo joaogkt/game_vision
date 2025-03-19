@@ -5,6 +5,7 @@ import os
 from django.contrib.auth.decorators import login_required
 from player_stats.models import PlayerDesempenhoGeral, PlayerStats
 from matches.models import Matches
+from django.contrib import messages
 
 
 @login_required(login_url='login')
@@ -51,7 +52,11 @@ def player_update(request, pk):
 @login_required(login_url='login')
 def player_delete(request, pk):
     player = get_object_or_404(Player, pk=pk)
-    if request.method == "POST":
-        player.delete()
-        return redirect('player_list')
-    return render(request, 'player_confirm_delete.html', {'player': player})
+    player.delete()
+    messages.success(request, "Jogador excluído com sucesso!")
+    return redirect('player_list') 
+    # player = get_object_or_404(Player, pk=pk)
+    # if request.method == "POST":
+    #     player.delete()
+    #     return redirect('player_list')
+    # return render(request, 'player_confirm_delete.html', {'player': player})

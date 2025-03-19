@@ -99,7 +99,7 @@
                 <img src="https://via.placeholder.com/250x350?text=Sem+Foto" class="profile-pic shadow-sm" alt="Sem foto disponível">
             {% endif %}
             <h3 class="fw-bold mt-2">{{ player.first_name }} {{ player.last_name }}</h3>
-            <p>Time: {{ player.team.name }}<br> 
+            <p>Time: {{ player.team.name }}<br>
                Posição: {{ player.get_position_display }}<br>
                Nascimento: {{ player.birth_date|date:"d/m/Y" }}, atualmente tem {{ player.age }} anos<br>
                Nacionalidade: {{ player.nationality.name }}</p>
