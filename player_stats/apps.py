@@ -6,3 +6,5 @@ class PlayerStatsConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'player_stats'
 
+    def ready(self):
+        import player_stats.signals
