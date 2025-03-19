@@ -19,6 +19,8 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path('v1/estatisticas_total/', views.api_player_stats_total, name='api_player_stats_total'),
+    path('v1/estatisticas_total/<int:pk>/', views.api_player_stats_by_id, name='api_player_stats_by_id'),
+
     path('v1/jogadores/', views.api_players, name='api_players'),
     path('v1/times/', views.api_teams, name='api_teams'),
     path('v1/partidas/', views.api_matches, name='api_matches'),

@@ -67,3 +67,19 @@ def api_player_stats(request):
     player_stats = PlayerStats.objects.all()
     serializer = PlayerStatsSerializer(player_stats, many=True)
     return Response(serializer.data)
+
+
+@swagger_auto_schema(
+    method='get',
+    operation_description="Obtém estatísticas de desempenho de um jogador específico pelo ID.",
+    responses={200: PlayerDesempenhoGeralSerializer, 404: 'Desempenho geral não encontrado.'},
+)
+@api_view(['GET'])
+def api_player_stats_by_id(request, pk):
+    try:
+        desempenho = PlayerDesempenhoGeral.objects.get(pk=pk)
+    except PlayerDesempenhoGeral.DoesNotExist:
+        return Response({'detail': 'Desempenho geral não encontrado.'}, status=404)
+
+    serializer = PlayerDesempenhoGeralSerializer(desempenho)
+    return Response(serializer.data)
