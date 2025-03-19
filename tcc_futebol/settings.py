@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'player_stats',
     'rest_framework',
     'api',
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [
