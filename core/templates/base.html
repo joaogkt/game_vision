@@ -13,7 +13,7 @@
 </head>
 <body>
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
-  <nav class="navbar navbar-expand-lg">
+  <nav class="navbar navbar-expand-lg fixed-top">
     <div class="container-fluid">
       <a class="navbar-brand" href="{% url 'home' %}">GameVision</a>
       <a class="navbar-brand" href="#">|</a>
@@ -101,6 +101,17 @@
         background: #0056b3;
         transform: scale(1.1);
       }
+      
+      div.dataTables_length {
+      float: left;  /* Coloca à esquerda */
+      margin-bottom: 10px; /* Adiciona um pequeno espaço abaixo */
+      }
+
+    div.dataTables_length select {
+    font-size: 16px;
+    padding: 5px 10px;
+    margin-right: 20px;
+  }
     </style>
     
     <div class="hero">
@@ -116,7 +127,6 @@
 <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
 <script>
   $(document).ready(function() {
-    // Inicializar DataTable para qualquer tabela que não tenha a classe 'no-datatable'
     $('table').each(function() {
       if (!$(this).hasClass('no-datatable') && !$.fn.dataTable.isDataTable(this)) {
         $(this).DataTable({
@@ -125,7 +135,8 @@
             "search": "Pesquisa",
             "zeroRecords": "Nenhum registro encontrado"
           },
-          "dom": 'f',
+          // "dom": 'f',
+          "dom": '<"top"f>rt<"bottom"ip><"clear">',  // Mantém f, i, p e t sem o l          
           "pageLength": 5,
           "lengthMenu": [5, 10, 25, 50],
           "order": [[0, 'asc']]
