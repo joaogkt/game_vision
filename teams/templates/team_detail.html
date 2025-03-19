@@ -56,7 +56,11 @@
             <h4 class="mb-3">Jogadores do {{ team.name }}</h4>
             <ul class="player-list">
                 {% for player in team.player_set.all %}
-                    <li>{{ player.first_name }} {{ player.last_name }} - {{ player.get_position_display }}</li>
+                    <li>
+                        <a href="{% url 'player_detail' player.pk %}" style="color: black; text-decoration: none;">
+                            {{ player.first_name }} {{ player.last_name }} - {{ player.get_position_display }}
+                        </a>
+                    </li>
                 {% empty %}
                     <p>Este time ainda não tem jogadores.</p>
                 {% endfor %}

@@ -100,8 +100,9 @@ def desempenho_geral(request):
         if total_partidas > 0: 
             media_nota = (
                 PlayerStats.objects.filter(jogador=jogador).aggregate(Sum('nota'))['nota__sum'] or 0
-            ) / max(total_partidas, 1) 
-
+            ) / max(total_partidas, 1)
+            media_nota = "{:.2f}".format(media_nota)
+            
             desempenho, created = PlayerDesempenhoGeral.objects.update_or_create(
                 jogador=jogador,
                 defaults={
