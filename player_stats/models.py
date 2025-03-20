@@ -32,4 +32,4 @@ class PlayerDesempenhoGeral(models.Model):
     media_nota = models.FloatField(default=0.0)
 
     def __str__(self):
-        return f"{self.jogador.nome} - Gols: {self.total_gols}"
+        return f"{self.jogador.first_name} {self.jogador.last_name} - Gols: {self.total_gols}"

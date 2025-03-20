@@ -1,0 +1,268 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Comparação: {{ jogador1.first_name }} x {{ jogador2.first_name }}{% endblock %}
+
+{% block content %}
+<style>
+body {
+    overflow: auto;
+    background: linear-gradient(135deg, rgb(21, 65, 128), rgb(60, 115, 234));
+    color: #fff;
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.container {
+    margin-top: 260px;
+    overflow: auto;
+    width: 100%;
+    max-width: 900px;
+    margin: 30px auto;
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+    box-sizing: border-box;
+}
+
+.profile-pic {
+    width: 100%;
+    max-width: 150px;
+    height: auto;
+    object-fit: cover;
+    border-radius: 20%;
+    border: 2px solid #ddd;
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+.col-md-6 {
+    flex: 1 1 40%;
+    text-align: center;
+    padding: 10px;
+}
+
+h3 {
+    font-size: 1.2rem;
+    margin: 10px 0;
+    color: #333;
+}
+
+p {
+    font-size: 0.9rem;
+    color: #333;
+}
+
+.stats-table, .matches-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 0.9rem;
+    overflow-x: auto;
+    border: 1px solid #ddd;
+}
+
+.stats-table th, .matches-table th,
+.stats-table td, .matches-table td {
+    padding: 10px;
+    text-align: center;
+    color: #333;
+    
+}
+
+.stats-table th, .matches-table th {
+    background: linear-gradient(135deg, #225487, #6985aa);
+    font-weight: bold;
+    color: white;
+    width: 200px;
+}
+
+.stats-table tr:nth-child(even), .matches-table tr:nth-child(even) {
+    background-color: #f1f1f1;
+}
+
+.btn-container {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.btn-custom {
+    padding: 12px 24px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease-in-out;
+}
+
+.btn-stats {
+    background: linear-gradient(135deg, rgb(21, 65, 128), rgb(60, 115, 234));
+    color: white;
+}
+
+.btn-matches {
+    background: #ddd;
+    color: black;
+}
+
+.btn-custom:hover {
+    transform: scale(1.05);
+    filter: brightness(1.1);
+}
+
+.hidden {
+    display: none;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .col-md-6 {
+        flex: 1 1 100%;
+    }
+
+    .profile-pic {
+        max-width: 120px;
+    }
+
+    .stats-table th, .matches-table th,
+    .stats-table td, .matches-table td {
+        font-size: 0.8rem;
+    }
+
+    .btn-custom {
+        padding: 10px 18px;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    h3 {
+        font-size: 1rem;
+    }
+
+    .stats-table th, .matches-table th,
+    .stats-table td, .matches-table td {
+        padding: 8px;
+    }
+
+    .btn-container {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+</style>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6">
+            {% if jogador1.photo %}
+                <img src="{{ jogador1.photo.url }}" class="profile-pic shadow-sm" alt="Foto de {{ jogador1.first_name }}">
+            {% else %}
+                <img src="https://via.placeholder.com/120x180?text=Sem+Foto" class="profile-pic shadow-sm" alt="Sem foto disponível">
+            {% endif %}
+            <h3>{{ jogador1.first_name }} {{ jogador1.last_name }}</h3>
+            <p>Time: {{ jogador1.team.name }}<br>
+               Posição: {{ jogador1.get_position_display }}<br>
+               Nasc.: {{ jogador1.birth_date|date:"d/m/Y" }} ({{ jogador1.age }} anos)<br>
+               Nacionalidade: {{ jogador1.nationality.name }}</p>
+        </div>
+
+        <div class="col-md-6">
+            {% if jogador2.photo %}
+                <img src="{{ jogador2.photo.url }}" class="profile-pic shadow-sm" alt="Foto de {{ jogador2.first_name }}">
+            {% else %}
+                <img src="https://via.placeholder.com/120x180?text=Sem+Foto" class="profile-pic shadow-sm" alt="Sem foto disponível">
+            {% endif %}
+            <h3>{{ jogador2.first_name }} {{ jogador2.last_name }}</h3>
+            <p>Time: {{ jogador2.team.name }}<br>
+               Posição: {{ jogador2.get_position_display }}<br>
+               Nasc.: {{ jogador2.birth_date|date:"d/m/Y" }} ({{ jogador2.age }} anos)<br>
+               Nacionalidade: {{ jogador2.nationality.name }}</p>
+        </div>
+    </div>
+
+    <div class="btn-container">
+        <button id="btn-stats" class="btn-custom btn-stats" onclick="showTable('stats')">Estatísticas</button>
+        <button id="btn-matches" class="btn-custom btn-matches" onclick="showTable('matches')">Partidas</button>
+    </div>
+
+    <table id="stats-table" class="stats-table no-datatable">
+        <thead>
+            <tr>
+                <th>{{ jogador1.last_name }}</th>
+                <th>Estatística</th>
+                <th>{{ jogador2.last_name }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ jogador1_stats.total_gols }}</td>
+                <td>Gols</td>
+                <td>{{ jogador2_stats.total_gols }}</td>
+            </tr>
+            <tr>
+                <td>{{ media_gols_jogador1 }}</td>
+                <td>Média de gols por partida</td>
+                <td>{{ media_gols_jogador2 }}</td>
+            </tr>
+            <tr>
+                <td>{{ jogador1_stats.total_assistencias }}</td>
+                <td>Assistências</td>
+                <td>{{ jogador2_stats.total_assistencias }}</td>
+            </tr>
+    
+
+        </tbody>
+    </table>
+
+    <table id="matches-table" class="stats-table hidden no-datatable">
+        <thead>
+            <tr>
+                <th>Data</th>
+                <th>Partida</th>
+                <th>Desempenho</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>10/03/2025</td>
+                <td>Time A vs Time B</td>
+                <td>8.5 Nota</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+    function showTable(tableType) {
+        const statsTable = document.getElementById('stats-table');
+        const matchesTable = document.getElementById('matches-table');
+        const btnStats = document.getElementById('btn-stats');
+        const btnMatches = document.getElementById('btn-matches');
+
+        if (tableType === 'stats') {
+            statsTable.classList.remove('hidden');
+            matchesTable.classList.add('hidden');
+            btnStats.classList.add('btn-stats');
+            btnMatches.classList.remove('btn-stats');
+        } else {
+            statsTable.classList.add('hidden');
+            matchesTable.classList.remove('hidden');
+            btnStats.classList.remove('btn-stats');
+            btnMatches.classList.add('btn-stats');
+        }
+    }
+</script>
+{% endblock %}

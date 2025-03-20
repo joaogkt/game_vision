@@ -11,4 +11,8 @@ urlpatterns = [
     path('<int:pk>/delete/', views.player_stats_delete, name='player_stats_delete'),
     path('desempenho_geral/', views.desempenho_geral, name='player_stats_total'),
     path('desempenho_geral/graficos', views.desempenho_graficos, name='player_stats_graficos'),
+    path('desempenho_geral/graficos', views.desempenho_graficos, name='player_stats_graficos'),
+    path('desempenho_geral/comparar/<int:pk1>/<int:pk2>', views.comparar_jogadores, name='comparar_jogadores'),
+
+
 ]
