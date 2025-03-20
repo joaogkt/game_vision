@@ -29,7 +29,7 @@
 
   a {
     text-decoration: none;
-    color: white; /* Mantém a cor do texto branca */
+    color: black; /* Mantém a cor do texto branca */
   }
 
 </style>
@@ -75,8 +75,27 @@
         <td class="text-center" style="width: 20%;">
           <a href="{% url 'player_stats_detail' player_stat.id  %}" class="btn btn-info btn-sm">Graficos</a>
           <a href="{% url 'player_stats_update' player_stat.id %}" class="btn btn-warning btn-sm">Editar</a>
-          <a href="{% url 'player_stats_delete' player_stat.id %}" class="btn btn-danger btn-sm">Excluir</a>
+          <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{ player_stat.id }}">
+            Excluir
+            </button>
         </td>
+        <div class="modal fade" id="deleteModal{{ player_stat.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ player.id }}" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel{{ player_stat.id }}" style="color: black;">Confirmar Exclusão </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body" style="color: black;">
+                Tem certeza que deseja excluir <strong>{{ player_stat.jogador }}</strong>?
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <a href="{% url 'player_stats_delete' player_stat.id %}" class="btn btn-danger">Excluir</a>
+              </div>
+            </div>
+          </div>
+        </div>
       </tr>
       {% empty %}
       <tr>

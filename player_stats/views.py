@@ -74,10 +74,9 @@ def player_stats_detail(request, pk):
 @login_required(login_url='login')
 def player_stats_delete(request, pk):
     player_stats = get_object_or_404(PlayerStats, pk=pk)
-    if request.method == "POST":
-        player_stats.delete()
-        return redirect('player_stats_list')
-    return render(request, 'player_stats_confirm_delete.html', {'player_stats': player_stats})
+    player_stats.delete()
+    return redirect('player_stats_list')
+    
 
 @login_required(login_url='login')
 def desempenho_geral(request):
