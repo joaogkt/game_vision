@@ -77,8 +77,9 @@ def register(request):
                 return render(request, 'register.html', {'form_usuario': form_usuario})
         
         else:
-            for error in form_usuario.errors.get("password1", []):
-                messages.error(request, error)
+            for field, errors in form_usuario.errors.items():
+                for error in errors:
+                    messages.error(request, f"{error}")
 
     else:
         form_usuario = CustomUserCreationForm()

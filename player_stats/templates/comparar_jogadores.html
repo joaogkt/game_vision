@@ -17,6 +17,7 @@ body {
 
 .container {
     margin-top: 260px;
+    max-height: 700px;
     overflow: auto;
     width: 100%;
     max-width: 900px;
@@ -31,10 +32,10 @@ body {
 .profile-pic {
     width: 100%;
     max-width: 150px;
-    height: auto;
+    max-height: 150px;
     object-fit: cover;
-    border-radius: 20%;
     border: 2px solid #ddd;
+    border-radius: 10px;
 }
 
 .row {
@@ -166,13 +167,16 @@ p {
 
 <div class="container mt-5">
     <div class="row">
+        <div>
+            <h5 style="color: black;">Tabela comparativa</h5>
+        </div>
         <div class="col-md-6">
             {% if jogador1.photo %}
                 <img src="{{ jogador1.photo.url }}" class="profile-pic shadow-sm" alt="Foto de {{ jogador1.first_name }}">
             {% else %}
                 <img src="https://via.placeholder.com/120x180?text=Sem+Foto" class="profile-pic shadow-sm" alt="Sem foto disponível">
             {% endif %}
-            <h3>{{ jogador1.first_name }} {{ jogador1.last_name }}</h3>
+            <h3><strong>{{ jogador1.first_name }} {{ jogador1.last_name }}</strong></h3>
             <p>Time: {{ jogador1.team.name }}<br>
                Posição: {{ jogador1.get_position_display }}<br>
                Nasc.: {{ jogador1.birth_date|date:"d/m/Y" }} ({{ jogador1.age }} anos)<br>
@@ -185,7 +189,7 @@ p {
             {% else %}
                 <img src="https://via.placeholder.com/120x180?text=Sem+Foto" class="profile-pic shadow-sm" alt="Sem foto disponível">
             {% endif %}
-            <h3>{{ jogador2.first_name }} {{ jogador2.last_name }}</h3>
+            <h3><strong>{{ jogador2.first_name }} {{ jogador2.last_name }}</strong></h3>
             <p>Time: {{ jogador2.team.name }}<br>
                Posição: {{ jogador2.get_position_display }}<br>
                Nasc.: {{ jogador2.birth_date|date:"d/m/Y" }} ({{ jogador2.age }} anos)<br>
@@ -193,12 +197,9 @@ p {
         </div>
     </div>
 
-    <div class="btn-container">
-        <button id="btn-stats" class="btn-custom btn-stats" onclick="showTable('stats')">Estatísticas</button>
-        <button id="btn-matches" class="btn-custom btn-matches" onclick="showTable('matches')">Partidas</button>
-    </div>
 
-    <table id="stats-table" class="stats-table no-datatable">
+
+    <table id="stats-table" class="stats-table">
         <thead>
             <tr>
                 <th>{{ jogador1.last_name }}</th>
@@ -222,47 +223,24 @@ p {
                 <td>Assistências</td>
                 <td>{{ jogador2_stats.total_assistencias }}</td>
             </tr>
+
+            <tr>
+                <td>{{ jogador1_stats.total_partidas }}</td>
+                <td>Partidas</td>
+                <td>{{ jogador2_stats.total_partidas }}</td>
+            </tr>
+
     
 
         </tbody>
     </table>
 
-    <table id="matches-table" class="stats-table hidden no-datatable">
-        <thead>
-            <tr>
-                <th>Data</th>
-                <th>Partida</th>
-                <th>Desempenho</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>10/03/2025</td>
-                <td>Time A vs Time B</td>
-                <td>8.5 Nota</td>
-            </tr>
-        </tbody>
-    </table>
+
 </div>
 
 <script>
-    function showTable(tableType) {
-        const statsTable = document.getElementById('stats-table');
-        const matchesTable = document.getElementById('matches-table');
-        const btnStats = document.getElementById('btn-stats');
-        const btnMatches = document.getElementById('btn-matches');
 
-        if (tableType === 'stats') {
-            statsTable.classList.remove('hidden');
-            matchesTable.classList.add('hidden');
-            btnStats.classList.add('btn-stats');
-            btnMatches.classList.remove('btn-stats');
-        } else {
-            statsTable.classList.add('hidden');
-            matchesTable.classList.remove('hidden');
-            btnStats.classList.remove('btn-stats');
-            btnMatches.classList.add('btn-stats');
-        }
-    }
+
+
 </script>
 {% endblock %}
