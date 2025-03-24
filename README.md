@@ -62,7 +62,7 @@ Desenvolver uma plataforma interativa que permita visualizar, comparar e interpr
     python manage.py runserver   
     ```
 
-6. **Acesse no navegador**
+6. **Acesse no navegador:**
     http://127.0.0.1:8000
 
 
@@ -71,6 +71,14 @@ Desenvolver uma plataforma interativa que permita visualizar, comparar e interpr
 - **Visualização e análise** com foco em usabilidade e clareza.
 
 - **Feedback de especialistas** (treinadores e analistas) para validar as funcionalidades.
+
+## 📚 Referências
+
+- [FBref](https://fbref.com/)
+- [Sofascore](https://www.sofascore.com/)
+- [HLTV](https://www.hltv.org/)
+- Artigos científicos sobre análise de desempenho no futebol.
+
 
 ## 👨‍💻 Autores
 
