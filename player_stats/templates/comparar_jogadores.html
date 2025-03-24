@@ -167,6 +167,10 @@ p {
 
 <div class="container mt-5">
     <div class="row">
+        <div class="d-flex justify-content-between mb-1">
+            <a href="{% url 'player_list' %}" class="btn btn-secondary">Voltar</a>
+        </div>
+    
         <div>
             <h5 style="color: black;">Tabela comparativa</h5>
         </div>
@@ -195,6 +199,7 @@ p {
                Nasc.: {{ jogador2.birth_date|date:"d/m/Y" }} ({{ jogador2.age }} anos)<br>
                Nacionalidade: {{ jogador2.nationality.name }}</p>
         </div>
+
     </div>
 
 
@@ -234,7 +239,6 @@ p {
 
         </tbody>
     </table>
-
 
 </div>
 

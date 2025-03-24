@@ -177,10 +177,18 @@ def desempenho_graficos(request):
 def comparar_jogadores(request, pk1, pk2):
     jogador1 = Player.objects.get(pk=pk1)
     jogador2 = Player.objects.get(pk=pk2)
+
     jogador1_stats = PlayerDesempenhoGeral.objects.filter(jogador=jogador1).first()
     jogador2_stats = PlayerDesempenhoGeral.objects.filter(jogador=jogador2).first()
-    media_gols_jogador1 = jogador1_stats.total_gols / max(jogador1_stats.total_partidas, 1)
-    media_gols_jogador2 = jogador2_stats.total_gols / max(jogador2_stats.total_partidas, 1)
 
+    try:
+        media_gols_jogador1 = jogador1_stats.total_gols / max(jogador1_stats.total_partidas, 1)
+    except:
+        media_gols_jogador1 = 0
+
+    try:
+        media_gols_jogador2 = jogador2_stats.total_gols / max(jogador2_stats.total_partidas, 1)
+    except:
+        media_gols_jogador2 = "N/A"
 
     return render(request, 'comparar_jogadores.html', {'jogador1': jogador1, 'jogador2': jogador2, 'jogador1_stats': jogador1_stats, 'jogador2_stats': jogador2_stats, 'media_gols_jogador1': media_gols_jogador1, 'media_gols_jogador2': media_gols_jogador2 })

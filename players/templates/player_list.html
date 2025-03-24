@@ -28,79 +28,108 @@
   }
 </style>
 
-<form id="compararForm" method="get" action="{% url 'comparar_jogadores' 1 2 %}">
-  <div class="container mt-5">
-    <h1 class="text-center mb-4">Lista de Jogadores</h1>
-    <div class="d-flex justify-content-between mb-3">
-      <a href="{% url 'player_create' %}" class="btn btn-success">Adicionar Novo Jogador</a>
-      <button type="submit" id="compararBtn" class="btn btn-primary">Comparar Selecionados</button>
-    </div>
+<div class="container mt-5">
 
-    <table class="table table-striped table-bordered" id="teams-table">
-      <thead class="table-dark">
-        <tr>
-          <th>Selecionar</th>
-          <th>Nome</th>
-          <th>Posição</th>
-          <th>Idade</th>
-          <th>Time</th>
-          <th>Nacionalidade</th>
-          <th class="text-center">Ações</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for player in players %}
-        <tr>
-          <td class="text-center">
-            <input type="checkbox" class="select-player" value="{{ player.id }}">
-          </td>
-          <td>{{ player.first_name }} {{ player.last_name }}</td>
-          <td>{{ player.position }}</td>
-          <td>{{ player.age }}</td>
-          <td>{{ player.team }}</td>
-          <td>{{ player.nationality.name }}</td>
-          <td class="text-center">
-            <a href="{% url 'player_detail' player.id %}" class="btn btn-info btn-sm">Detalhes</a>
-            <a href="{% url 'player_update' player.id %}" class="btn btn-warning btn-sm">Editar</a>
-            <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{ player.id }}">
-              Excluir
-            </button>
+  <h1 class="text-center mb-4">Lista de Jogadores</h1>
+  <div class="d-flex justify-content-between mb-3">
+    <a href="{% url 'player_create' %}" class="btn btn-success">Adicionar Novo Jogador</a>
+    <button  type="button" id="compararBtn" class="btn btn-primary">Comparar Selecionados</button>
+  </div>
 
-            <!-- Modal Exclusão -->
-            <div class="modal fade" id="deleteModal{{ player.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ player.id }}" aria-hidden="true">
-              <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="deleteModalLabel{{ player.id }}">Confirmar Exclusão</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                  </div>
-                  <div class="modal-body">
-                    Tem certeza que deseja excluir <strong>{{ player.first_name }} {{ player.last_name }}</strong>?
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <a href="{% url 'player_delete' player.id %}" class="btn btn-danger">Excluir</a>
-                  </div>
+  <table class="table table-striped table-bordered" id="teams-table">
+    <thead class="table-dark">
+      <tr>
+        <th>Selecionar</th>
+        <th>Nome</th>
+        <th>Posição</th>
+        <th>Idade</th>
+        <th>Time</th>
+        <th>Nacionalidade</th>
+        <th class="text-center">Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for player in players %}
+      <tr>
+        <td class="text-center">
+          <input type="checkbox" class="select-player" value="{{ player.id }}">
+        </td>
+        <td>{{ player.first_name }} {{ player.last_name }}</td>
+        <td>{{ player.position }}</td>
+        <td>{{ player.age }}</td>
+        <td>{{ player.team }}</td>
+        <td>{{ player.nationality.name }}</td>
+        <td class="text-center">
+          <a href="{% url 'player_detail' player.id %}" class="btn btn-info btn-sm">Detalhes</a>
+          <a href="{% url 'player_update' player.id %}" class="btn btn-warning btn-sm">Editar</a>
+          <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{ player.id }}">
+            Excluir
+          </button>
+
+          <div class="modal fade" id="deleteModal{{ player.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ player.id }}" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="deleteModalLabel{{ player.id }}">Confirmar Exclusão</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  Tem certeza que deseja excluir <strong>{{ player.first_name }} {{ player.last_name }}</strong>?
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                  <a href="{% url 'player_delete' player.id %}" class="btn btn-danger">Excluir</a>
                 </div>
               </div>
             </div>
-          </td>
-        </tr>
-        {% empty %}
-        <tr>
-          <td colspan="7" class="text-center">Nenhum jogador cadastrado.</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
-</form>
-
-
+          </div>
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="7" class="text-center">Nenhum jogador cadastrado.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
+
+try {
+  document.addEventListener('DOMContentLoaded', () => {
+    console.log("DOM carregado");
+    const checkboxes = document.querySelectorAll('.select-player');
+    const compararBtn = document.getElementById('compararBtn');
+    console.log("Botão Comparar:", compararBtn);
+
+    compararBtn.disabled = true;
+
+    checkboxes.forEach(cb => {
+      cb.addEventListener('change', () => {
+        const selected = Array.from(checkboxes).filter(c => c.checked);
+        compararBtn.disabled = selected.length !== 2;
+      });
+    });
+
+    compararBtn.addEventListener('click', () => {
+      const selected = Array.from(checkboxes).filter(c => c.checked);
+      if (selected.length === 2) {
+        const pk1 = selected[0].value;
+        const pk2 = selected[1].value;
+        console.log(`Redirecionando para comparar ${pk1} e ${pk2}`);
+        window.location.href = `/stats/desempenho_geral/comparar/${pk1}/${pk2}`;
+      }
+    });
+  });
+} catch (err) {
+  console.error("Erro no script:", err);
+}
+  console.log("Script carregado");
+  console.log("Botão Comparar:", compararBtn);
+
   var deleteModal = document.getElementById('deleteModal');
   deleteModal.addEventListener('show.bs.modal', function (event) {
     var button = event.relatedTarget;
@@ -109,30 +138,5 @@
     document.getElementById('confirmDeleteBtn').setAttribute('href', deleteUrl);
   });
 
-  document.addEventListener('DOMContentLoaded', () => {
-  const checkboxes = document.querySelectorAll('.select-player');
-  const compararBtn = document.getElementById('compararBtn');
-  const form = document.getElementById('compararForm');
-
-  checkboxes.forEach(cb => {
-    cb.addEventListener('change', () => {
-      const selected = Array.from(checkboxes).filter(c => c.checked);
-      compararBtn.disabled = selected.length !== 2;
-
-      if (selected.length === 2) {
-        const pk1 = selected[0].value;
-        const pk2 = selected[1].value;
-        console.log(pk1, pk2);
-        const baseUrl = `{% url 'comparar_jogadores' 0 0 %}`;
-        form.action = baseUrl.replace('0/0', `${pk1}/${pk2}`);
-      }
-    });
-  });
-});
-
-  
 </script>
-
-
-
 {% endblock %}
