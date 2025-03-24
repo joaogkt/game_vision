@@ -63,5 +63,16 @@ Desenvolver uma plataforma interativa que permita visualizar, comparar e interpr
     ```
 
 6. **Acesse no navegador**
-    - http://127.0.0.1:8000
-    
+    http://127.0.0.1:8000
+
+
+## 📝 Metodologia
+
+- **Visualização e análise** com foco em usabilidade e clareza.
+
+- **Feedback de especialistas** (treinadores e analistas) para validar as funcionalidades.
+
+## 👨‍💻 Autores
+
+- **João Gabriel Torres** – Ciência da Computação  
+  [LinkedIn](https://www.linkedin.com/in/joaogktorres) | [Email](mailto:jgabriel.ktorres@gmail.com)
