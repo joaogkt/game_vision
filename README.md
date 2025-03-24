@@ -85,4 +85,4 @@ Desenvolver uma plataforma interativa que permita visualizar, comparar e interpr
 - **João Gabriel Torres** – Ciência da Computação  
   [LinkedIn](https://www.linkedin.com/in/joaogktorres) | [Email](mailto:jgabriel.ktorres@gmail.com) | [Github](https://github.com/joaogkt)
 - **Luiz Felipe Barbosa de Lucena** – Ciência da Computação
-  [LinkedIn](https://www.linkedin.com/in/luizfelipebarbosa09081/) | [Email](mailto:luizfelipe09081@gmail.com) | [Github](https://github.com/Luiz090811)
+  [LinkedIn](https://www.linkedin.com/in/luizfelipebarbosa09081) | [Email](mailto:luizfelipe09081@gmail.com) | [Github](https://github.com/Luiz090811)
