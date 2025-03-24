@@ -1,6 +1,6 @@
-# ⚽ TCC Futebol – Análise de Desempenho de Jogadores
+# ⚽ GameVision – Análise de Desempenho de Jogadores
 
-Este projeto é parte do Trabalho de Conclusão de Curso (TCC) do curso de Ciência da Computação, e tem como objetivo analisar o desempenho de jogadores de futebol para auxiliar na tomada de decisões estratégicas por parte de equipes, técnicos e analistas.
+Este projeto (Game Vision) é parte do Trabalho de Conclusão de Curso (TCC) do curso de Ciência da Computação, e tem como objetivo analisar o desempenho de jogadores de futebol para auxiliar na tomada de decisões estratégicas por parte de equipes, técnicos e analistas.
 
 ## 📊 Objetivo
 
