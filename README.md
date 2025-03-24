@@ -83,4 +83,5 @@ Desenvolver uma plataforma interativa que permita visualizar, comparar e interpr
 ## 👨‍💻 Autores
 
 - **João Gabriel Torres** – Ciência da Computação  
-  [LinkedIn](https://www.linkedin.com/in/joaogktorres) | [Email](mailto:jgabriel.ktorres@gmail.com)
+  [LinkedIn](https://www.linkedin.com/in/joaogktorres) | [Email](mailto:jgabriel.ktorres@gmail.com) | [Github](https://github.com/joaogkt)
+
