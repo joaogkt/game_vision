@@ -11,6 +11,8 @@ import urllib, base64
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from django.contrib.auth.decorators import user_passes_test
+from core.views import is_admin
 # Create your views here.
 
 
@@ -39,6 +41,8 @@ def player_stats_list(request):
         'new_order': new_order
     })
 
+
+@user_passes_test(is_admin)
 @login_required(login_url='login')
 def player_stats_create(request):
     if request.method == "POST":
@@ -50,7 +54,7 @@ def player_stats_create(request):
         form = PlayerStatsForm()
     return render(request, 'player_stats_form.html', {'form': form})
 
-
+@user_passes_test(is_admin)
 @login_required(login_url='login')
 def player_stats_update(request, pk):
     player_stats = get_object_or_404(PlayerStats, pk=pk)
@@ -70,7 +74,7 @@ def player_stats_detail(request, pk):
     player_stat = get_object_or_404(PlayerStats, pk=pk)
     return render(request, 'player_stats_detail.html', {'player_stat': player_stat})
 
-
+@user_passes_test(is_admin)
 @login_required(login_url='login')
 def player_stats_delete(request, pk):
     player_stats = get_object_or_404(PlayerStats, pk=pk)
@@ -193,3 +197,31 @@ def comparar_jogadores(request, pk1, pk2):
         media_gols_jogador2 = ""
 
     return render(request, 'comparar_jogadores.html', {'jogador1': jogador1, 'jogador2': jogador2, 'jogador1_stats': jogador1_stats, 'jogador2_stats': jogador2_stats, 'media_gols_jogador1': media_gols_jogador1, 'media_gols_jogador2': media_gols_jogador2 })
+
+@login_required(login_url='login')
+def desempenho_gols_grafico(request, pk):
+    jogador = get_object_or_404(Player, id=pk)
+    stats = PlayerStats.objects.filter(jogador=jogador).order_by('jogo__data')
+
+    if not stats.exists():
+        return HttpResponse("Nenhuma estatística disponível para este jogador.", status=404)
+
+    datas = [stat.jogo.data.strftime('%d/%m/%Y') for stat in stats]
+    gols = [stat.gols for stat in stats]
+
+    plt.figure(figsize=(10, 5))
+    plt.plot(datas, gols, marker='o', linestyle='-', color='b', label="Gols por jogo")
+    plt.xlabel("Data da Partida")
+    plt.ylabel("Gols Marcados")
+    plt.title(f"Desempenho de {jogador.first_name} {jogador.last_name}")
+    plt.xticks(rotation=45)
+    plt.legend()
+    plt.grid(True)
+
+    buf = io.BytesIO()
+    plt.savefig(buf, format="png")
+    buf.seek(0)
+    string = base64.b64encode(buf.read()).decode("utf-8")
+    uri = f"data:image/png;base64,{string}"
+
+    return render(request, 'player_stats_gols.html', {'jogador': jogador, 'chart': uri})

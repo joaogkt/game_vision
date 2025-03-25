@@ -4,6 +4,8 @@ from players.models import Player
 from .forms import TeamForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.contrib.auth.decorators import user_passes_test
+from core.views import is_admin
 
 # Create your views here.
 
@@ -20,7 +22,7 @@ def team_detail(request, pk):
     team = get_object_or_404(Team, pk=pk)
     return render(request, 'team_detail.html', {'team': team})
 
-
+@user_passes_test(is_admin)
 @login_required(login_url='login')
 def team_create(request):
     if request.method == 'POST':
@@ -32,6 +34,7 @@ def team_create(request):
         form = TeamForm()
     return render(request, 'team_form.html', {'form': form})
 
+@user_passes_test(is_admin)
 @login_required(login_url='login')
 def team_update(request, pk):
     team = get_object_or_404(Team, pk=pk)
@@ -45,6 +48,8 @@ def team_update(request, pk):
     return render(request, 'team_form.html', {'form': form})
 
 
+
+@user_passes_test(is_admin)
 @login_required(login_url='login')
 def team_delete(request, pk):
     team = get_object_or_404(Team, pk=pk)

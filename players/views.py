@@ -7,6 +7,7 @@ from player_stats.models import PlayerDesempenhoGeral, PlayerStats
 from matches.models import Matches
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
+from core.views import is_admin
 
 @login_required(login_url='login')
 def player_list(request):
@@ -23,9 +24,8 @@ def player_detail(request, pk):
     return render(request, 'player_detail.html', {'player': player, 'desempenho': desempenho, 'partidas': partidas_jogadas})
 
 
-
+@user_passes_test(is_admin)
 @login_required(login_url='login')
-# @user_passes_test(lambda u: u.is_superuser)
 def player_create(request):
     if request.method == "POST":
         form = PlayerForm(request.POST, request.FILES)
@@ -36,6 +36,7 @@ def player_create(request):
         form = PlayerForm()
     return render(request, 'player_form.html', {'form': form})
 
+@user_passes_test(is_admin)
 @login_required(login_url='login')
 def player_update(request, pk):
     player = get_object_or_404(Player, pk=pk)
@@ -52,6 +53,7 @@ def player_update(request, pk):
     return render(request, 'player_form.html', {'form': form})
 
 
+@user_passes_test(is_admin)
 @login_required(login_url='login')
 def player_delete(request, pk):
     player = get_object_or_404(Player, pk=pk)

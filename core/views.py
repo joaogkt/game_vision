@@ -15,6 +15,15 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.header import Header
 from django.contrib.auth.hashers import check_password
+from django.contrib.auth.decorators import user_passes_test
+from django.core.exceptions import PermissionDenied
+
+
+def is_admin(user):
+    if user.is_superuser:
+        return True
+    else:
+        raise PermissionDenied 
 
 @login_required(login_url='login')
 def home(request):
