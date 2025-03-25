@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from player_stats.models import PlayerDesempenhoGeral, PlayerStats
 from matches.models import Matches
 from django.contrib import messages
-
+from django.contrib.auth.decorators import user_passes_test
 
 @login_required(login_url='login')
 def player_list(request):
@@ -22,7 +22,10 @@ def player_detail(request, pk):
 
     return render(request, 'player_detail.html', {'player': player, 'desempenho': desempenho, 'partidas': partidas_jogadas})
 
+
+
 @login_required(login_url='login')
+# @user_passes_test(lambda u: u.is_superuser)
 def player_create(request):
     if request.method == "POST":
         form = PlayerForm(request.POST, request.FILES)

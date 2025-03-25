@@ -29,7 +29,10 @@
 <div class="container mt-5">
   <h1 class="text-center mb-4">Times de Futebol</h1>
   <div class="d-flex justify-content-end mb-3">
+    {% if request.user.is_superuser %}
     <a href="{% url 'team_create' %}" class="btn btn-success">Adicionar Novo Time</a>
+    {% endif %}
+    
   </div>
 
 
@@ -49,12 +52,14 @@
         <td>{{ team.city }}</td>
         <td>{{ team.country.name }}</td>
         <td class="text-center">
+          
           <a href="{% url 'team_detail' team.pk %}" class="btn btn-info btn-sm">Detalhes</a>
+          {% if request.user.is_superuser %}
           <a href="{% url 'team_update' team.pk %}" class="btn btn-warning btn-sm">Editar</a>
           <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{ team.id }}">
             Excluir
             </button>
-          {% comment %} <a href="{% url 'team_delete' team.pk %}" class="btn btn-danger btn-sm">Excluir</a> {% endcomment %}
+            {% endif %}
 
           <div class="modal fade" id="deleteModal{{ team.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ player.id }}" aria-hidden="true">
             <div class="modal-dialog">

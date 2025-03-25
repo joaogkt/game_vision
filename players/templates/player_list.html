@@ -32,7 +32,9 @@
 
   <h1 class="text-center mb-4">Lista de Jogadores</h1>
   <div class="d-flex justify-content-between mb-3">
+    {% if request.user.is_superuser %}
     <a href="{% url 'player_create' %}" class="btn btn-success">Adicionar Novo Jogador</a>
+    {% endif %}
     <button  type="button" id="compararBtn" class="btn btn-primary">Comparar Selecionados</button>
   </div>
 
@@ -61,10 +63,13 @@
         <td>{{ player.nationality.name }}</td>
         <td class="text-center">
           <a href="{% url 'player_detail' player.id %}" class="btn btn-info btn-sm">Detalhes</a>
+          {% if request.user.is_superuser %}
           <a href="{% url 'player_update' player.id %}" class="btn btn-warning btn-sm">Editar</a>
+          
           <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{ player.id }}">
             Excluir
           </button>
+          {% endif %}
 
           <div class="modal fade" id="deleteModal{{ player.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ player.id }}" aria-hidden="true">
             <div class="modal-dialog">
