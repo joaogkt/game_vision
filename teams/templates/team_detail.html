@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Lista de Times{% endblock %}
+{% block title %}Detalhes {{ team.name }}{% endblock %}
 
 {% block content %}
 <style>
@@ -9,47 +9,147 @@
         background: #632778;
         color: black;
     }
+    
     .container {
         background: white;
-        border-radius: 10px;
-        padding: 20px;
-        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        border-radius: 12px;
+        padding: 25px;
+        box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
     }
+
     .profile-pic {
         width: 150px;
         height: 150px;
-        object-fit: cover;
+        border: 4px solid;
+        transition: transform 0.3s ease-in-out;
+        object-fit: contain;
     }
+
+    .profile-pic:hover {
+        transform: scale(1.1);
+    }
+
     .team-details {
         text-align: center;
     }
-    .player-list {
+
+    .player-list, .stats {
+        display: none;
+        animation: fadeIn 0.5s ease-in-out;
+    }
+
+    .active {
+        display: block;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .player-list ul {
         list-style: none;
         padding: 0;
     }
+
     .player-list li {
         background: #f8f9fa;
-        padding: 10px;
-        border-radius: 5px;
-        margin-bottom: 5px;
+        padding: 12px;
+        border-radius: 6px;
+        margin-bottom: 6px;
+        text-align: center;
+        font-weight: bold;
+        transition: background 0.3s ease-in-out;
     }
+
+    .player-list li:hover {
+        background: #e2e6ea;
+    }
+
+    .player-list a {
+        color: #000;
+        text-decoration: none;
+        transition: color 0.3s ease-in-out;
+    }
+
+    .player-list p {
+        background: #f1f1f1;
+        padding: 12px;
+        border-radius: 6px;
+        text-align: center;
+        font-weight: bold;
+
+    }
+
+    .player-list a:hover {
+        color: #5a5c61;
+    }
+
     h1, h2, h3, h4, p, span, li {
         color: black;
     }
+
+    .stats p {
+        background: #f1f1f1;
+        padding: 12px;
+        border-radius: 6px;
+        text-align: center;
+    }
+
+    .btn-primary:hover {
+        background-color: #0084ff;
+    }
+
+    .btn-success:hover {
+        background-color: #218838;
+    }
+
+    .custom-btn {
+        padding: 12px 20px;
+        font-size: 1rem;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: all 0.3s ease-in-out;
+        background: linear-gradient(135deg,rgb(21, 65, 128),rgb(60, 115, 234));
+        color: white;
+    }
+    .custom-btn:hover {
+        transform: scale(1.05);
+        filter: brightness(1.1);
+    }
+
+    .custom-btn-2 {
+        padding: 12px 20px;
+        font-size: 1rem;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: all 0.3s ease-in-out;
+        background: linear-gradient(135deg,rgb(21, 128, 30)rgb(60, 255, 70));
+        color: white;
+    }
+    .custom-btn-2:hover {
+        transform: scale(1.05);
+        filter: brightness(1.1);
+    }
+
+
 </style>
 
 <div class="container mt-5 mb-5">
-    
-    <div class="d-flex justify-content-end mb-3">
-        {% if request.user.is_superuser %}
-        <a href="{% url 'player_create' %}" class="btn btn-success">Adicionar Novo Jogador</a>
-        {% endif %}
-      </div>
-      
+
+
     <div class="row">
+
+        <div class="d-flex flex-column align-items-end">
+        </div>
+
         <div class="col-md-3 border-right team-details">
             {% if team.logo %}
-                <img src="{{ team.logo.url }}" class="profile-pic mt-3" alt="Logo de {{ team.name }}">
+                <img src="{{ team.logo.url }}" class="profile-pic" alt="Logo de {{ team.name }}">
             {% else %}
                 <img src="https://via.placeholder.com/150x150?text=Sem+Logo" class="profile-pic mt-3" alt="Sem logo disponível">
             {% endif %}
@@ -59,25 +159,60 @@
         </div>
 
         <div class="col-md-6 border-right">
-            <h4 class="mb-3">Jogadores do {{ team.name }}</h4>
-            <ul class="player-list">
-                {% for player in team.player_set.all %}
-                    <li>
-                        <a href="{% url 'player_detail' player.pk %}" style="color: black; text-decoration: none;">
-                            {{ player.first_name }} {{ player.last_name }} - {{ player.get_position_display }}
-                        </a>
-                    </li>
-                {% empty %}
-                    <p>Este time ainda não tem jogadores.</p>
-                {% endfor %}
-            </ul>
+            <div id="players" class="player-list active">
+                <h4 class="mb-3">Jogadores do {{ team.name }}</h4>
+                <ul>
+                    {% for player in team.player_set.all %}
+                        <li>
+                            <a href="{% url 'player_detail' player.pk %}">
+                                {{ player.first_name }} {{ player.last_name }} - {{ player.get_position_display }}
+                            </a>
+                        </li>
+                    {% empty %}
+                        <p>Este time ainda não tem jogadores.</p>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div id="stats" class="stats">
+                <h4 class="mb-3">Destaques do {{ team.name }}</h4>
+                
+                {% if top_goleador.total_gols or top_assistencias.total_assistencias or top_passes.total_passes_certos or top_desarmes.total_desarmes or melhor_avaliado.media_nota or mais_partidas.total_partidas %}
+                    <p><strong>Maior Goleador:</strong> {{ top_goleador.jogador }} - {{ top_goleador.total_gols }} gols</p>
+                    <p><strong>Mais Assistências:</strong> {{ top_assistencias.jogador }} - {{ top_assistencias.total_assistencias }} assistências</p>
+                    <p><strong>Mais Passes Certos:</strong> {{ top_passes.jogador }} - {{ top_passes.total_passes_certos }} passes certos</p>
+                    <p><strong>Mais Desarmes:</strong> {{ top_desarmes.jogador }} - {{ top_desarmes.total_desarmes }} desarmes</p>
+                    <p><strong>Melhor Avaliação:</strong> {{ melhor_avaliado.jogador }} - Nota média {{ melhor_avaliado.media_nota }}</p>
+                    <p><strong>Mais partidas:</strong> {{ mais_partidas.jogador }} - {{ mais_partidas.total_partidas }} partidas</p>
+                {% else %}
+                    <p>Não há dados registrados para este time.</p>
+                {% endif %}
+            </div>
         </div>
 
         <div class="col-md-3">
-            <!-- <h4 class="mb-3">Teste</h4>
-                <p>Teste</p> -->
+            
+            <button id="toggleButton" class="btn btn-primary mb-2 custom-btn">📈 Ver Estatísticas</button>       
+            {% if request.user.is_superuser %}
+            <a href="{% url 'player_create' %}" class="btn btn-success custom-btn-2">Adicionar Novo Jogador</a>
+            {% endif %}
         </div>
     </div>
 </div>
 
+<script>
+    document.getElementById("toggleButton").addEventListener("click", function() {
+        var players = document.getElementById("players");
+        var stats = document.getElementById("stats");
+        
+        if (players.classList.contains("active")) {
+            players.classList.remove("active");
+            stats.classList.add("active");
+            this.textContent = "⚽ Ver Jogadores";
+        } else {
+            players.classList.add("active");
+            stats.classList.remove("active");
+            this.textContent = "📈 Ver Estatísticas";
+        }
+    });
+</script>
 {% endblock %}
