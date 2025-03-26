@@ -184,17 +184,17 @@
                     <p><strong>Melhor Avaliação:</strong> {{ melhor_avaliado.jogador }} - Nota média {{ melhor_avaliado.media_nota }}</p>
                     <p><strong>Mais partidas:</strong> {{ mais_partidas.jogador }} - {{ mais_partidas.total_partidas }} partidas</p>
                 {% else %}
-                    <p>Não há dados registrados para este time.</p>
+                    <strong><p>Não há dados registrados para este time.</p></strong>
                 {% endif %}
             </div>
         </div>
 
         <div class="col-md-3">
-            
-            <button id="toggleButton" class="btn btn-primary mb-2 custom-btn">📈 Ver Estatísticas</button>       
             {% if request.user.is_superuser %}
-            <a href="{% url 'player_create' %}" class="btn btn-success custom-btn-2">Adicionar Novo Jogador</a>
+            <a href="{% url 'player_create' %}" class="btn btn-success custom-btn-2 mb-2">Adicionar Novo Jogador</a>
             {% endif %}
+            <button id="toggleButton" class="btn btn-primary mb-2 custom-btn">📈 Ver Estatísticas</button>       
+
         </div>
     </div>
 </div>
