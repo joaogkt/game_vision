@@ -28,6 +28,10 @@ class FeedbackForm(forms.Form):
     email = forms.EmailField(
         widget=forms.EmailInput(attrs={"class": "form-control", "placeholder": "Seu E-mail"})
     )
+    assunto = forms.CharField(
+        max_length=100,
+        widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "Assunto"})
+    )
     mensagem = forms.CharField(
         widget=forms.Textarea(attrs={"class": "form-control", "rows": 4, "placeholder": "Escreva seu feedback..."})
     )

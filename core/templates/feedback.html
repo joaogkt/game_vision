@@ -35,6 +35,10 @@ html, body {
                     {{ form.email|add_class:"form-control"|attr:"type:email" }}
                 </div>
                 <div class="mb-3">
+                    <label for="id_assunto" class="form-label">Assunto</label>
+                    {{ form.assunto|add_class:"form-control" }}
+                </div>
+                <div class="mb-3">
                     <label for="id_mensagem" class="form-label">Mensagem</label>
                     {{ form.mensagem|add_class:"form-control" }}
                 </div>

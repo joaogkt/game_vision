@@ -195,7 +195,10 @@ def feedback(request):
                 server.starttls()
                 server.login(sender_email, password)
 
-                # Criando o e-mail formatado corretamente
+                conteudo = f"""Assunto: {form.cleaned_data['assunto']}
+                Conteudo: {form.cleaned_data['mensagem']}
+                """
+
                 msg = MIMEMultipart()
                 msg["From"] = sender_email
                 msg["To"] = receiver_email
@@ -204,7 +207,7 @@ def feedback(request):
                 body = f"""
                 Nome: {form.cleaned_data['nome']}
                 Email: {form.cleaned_data['email']}
-                Mensagem: {form.cleaned_data['mensagem']}
+                Mensagem: {conteudo}
                 """
                 msg.attach(MIMEText(body, "plain"))
 
