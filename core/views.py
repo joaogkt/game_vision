@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
-from .forms import CustomUserCreationForm
+from .forms import CustomUserCreationForm, FeedbackForm
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from .models import VerificationCode
@@ -178,3 +178,48 @@ def send_email(code, email):
     finally:
         server.quit()
         print("Conexão encerrada com SMTP.")
+
+
+
+def feedback(request):
+    sender_email = "game.vision.udf@gmail.com"
+    receiver_email = "game.vision.udf@gmail.com"
+    password = "ljnv rosa drnr nwwl"
+
+    if request.method == "POST":
+        form = FeedbackForm(request.POST)
+        if form.is_valid():
+            try:
+                print("Conectando ao servidor SMTP...") 
+                server = smtplib.SMTP("smtp.gmail.com", 587)
+                server.starttls()
+                server.login(sender_email, password)
+
+                # Criando o e-mail formatado corretamente
+                msg = MIMEMultipart()
+                msg["From"] = sender_email
+                msg["To"] = receiver_email
+                msg["Subject"] = "Novo Feedback Recebido"
+
+                body = f"""
+                Nome: {form.cleaned_data['nome']}
+                Email: {form.cleaned_data['email']}
+                Mensagem: {form.cleaned_data['mensagem']}
+                """
+                msg.attach(MIMEText(body, "plain"))
+
+                print("Enviando e-mail...")
+                server.sendmail(sender_email, receiver_email, msg.as_string())
+
+                print("E-mail enviado com sucesso!") 
+
+            except Exception as e:
+                print(f"Erro ao enviar e-mail: {e}")
+            finally:
+                server.quit()
+                print("Conexão encerrada com SMTP.")
+
+        return redirect("home")
+    else:
+        form = FeedbackForm()
+    return render(request, "feedback.html", {"form": form})

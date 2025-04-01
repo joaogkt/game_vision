@@ -20,34 +20,32 @@ def team_list(request):
 
 @login_required(login_url='login')
 def team_detail(request, pk):
-        team = get_object_or_404(Team, pk=pk)
-        players = Player.objects.filter(team=team)
+    team = get_object_or_404(Team, pk=pk)
+    players = Player.objects.filter(team=team)
         
-        desempenho_geral = PlayerDesempenhoGeral.objects.filter(jogador__in=players)
+    desempenho_geral = PlayerDesempenhoGeral.objects.filter(jogador__in=players)
 
-        top_goleador = desempenho_geral.order_by('-total_gols').first()
-        top_assistencias = desempenho_geral.order_by('-total_assistencias').first()
-        top_passes = desempenho_geral.order_by('-total_passes_certos').first()
-        top_desarmes = desempenho_geral.order_by('-total_desarmes').first()
-        melhor_avaliado = desempenho_geral.order_by('-media_nota').first()
-        mais_partidas = desempenho_geral.order_by('-total_partidas').first()
+    top_goleador = desempenho_geral.order_by('-total_gols').first()
+    top_assistencias = desempenho_geral.order_by('-total_assistencias').first()
+    top_passes = desempenho_geral.order_by('-total_passes_certos').first()
+    top_desarmes = desempenho_geral.order_by('-total_desarmes').first()
+    melhor_avaliado = desempenho_geral.order_by('-media_nota').first()
+    mais_partidas = desempenho_geral.order_by('-total_partidas').first()
 
-        print(team, players, top_assistencias, top_desarmes, top_goleador, top_passes, melhor_avaliado)
+    print(team, players, top_assistencias, top_desarmes, top_goleador, top_passes, melhor_avaliado)
 
-        context = {
-            'team': team,
-            'players': players,
-            'top_goleador': top_goleador,
-            'top_assistencias': top_assistencias,
-            'top_passes': top_passes,
-            'top_desarmes': top_desarmes,
-            'melhor_avaliado': melhor_avaliado,
-            'mais_partidas': mais_partidas
+    context = {
+       'team': team,
+       'players': players,
+       'top_goleador': top_goleador,
+       'top_assistencias': top_assistencias,
+       'top_passes': top_passes,
+       'top_desarmes': top_desarmes,
+       'melhor_avaliado': melhor_avaliado,
+        'mais_partidas': mais_partidas
         }
 
-        return render(request, 'team_detail.html', context)
-    # team = get_object_or_404(Team, pk=pk)
-    # return render(request, 'team_detail.html', {'team': team})
+    return render(request, 'team_detail.html', context)
 
 @user_passes_test(is_admin)
 @login_required(login_url='login')
@@ -84,29 +82,3 @@ def team_delete(request, pk):
     messages.success(request, "Jogador excluído com sucesso!")
     return redirect('team_list')
 
-
-def team_stats(request, pk):
-    team = get_object_or_404(Team, pk=pk)
-    players = Player.objects.filter(team=team)
-    
-    desempenho_geral = PlayerDesempenhoGeral.objects.filter(jogador__in=players)
-
-    top_goleador = desempenho_geral.order_by('-total_gols').first()
-    top_assistencias = desempenho_geral.order_by('-total_assistencias').first()
-    top_passes = desempenho_geral.order_by('-total_passes_certos').first()
-    top_desarmes = desempenho_geral.order_by('-total_desarmes').first()
-    melhor_avaliado = desempenho_geral.order_by('-media_nota').first()
-
-    print(team, players, top_assistencias, top_desarmes, top_goleador, top_passes, melhor_avaliado)
-
-    context = {
-        'team': team,
-        'players': players,
-        'top_goleador': top_goleador,
-        'top_assistencias': top_assistencias,
-        'top_passes': top_passes,
-        'top_desarmes': top_desarmes,
-        'melhor_avaliado': melhor_avaliado
-    }
-
-    return render(request, 'team_detail.html', context)

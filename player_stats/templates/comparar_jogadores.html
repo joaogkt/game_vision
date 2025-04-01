@@ -184,7 +184,7 @@ p {
             <h3><strong>{{ jogador1.first_name }} {{ jogador1.last_name }}</strong></h3>
             <p>Time: {{ jogador1.team.name }}<br>
                Posição: {{ jogador1.get_position_display }}<br>
-               Nasc.: {{ jogador1.birth_date|date:"d/m/Y" }} ({{ jogador1.age }} anos)<br>
+               Nasc.: {{ jogador1.birth_date|date:"d/m/Y" }}<br>
                Nacionalidade: {{ jogador1.nationality.name }}</p>
         </div>
 
@@ -197,7 +197,7 @@ p {
             <h3><strong>{{ jogador2.first_name }} {{ jogador2.last_name }}</strong></h3>
             <p>Time: {{ jogador2.team.name }}<br>
                Posição: {{ jogador2.get_position_display }}<br>
-               Nasc.: {{ jogador2.birth_date|date:"d/m/Y" }} ({{ jogador2.age }} anos)<br>
+               Nasc.: {{ jogador2.birth_date|date:"d/m/Y" }}<br>
                Nacionalidade: {{ jogador2.nationality.name }}</p>
         </div>
 
@@ -205,8 +205,9 @@ p {
 
 
 
-    <table id="stats-table" class="stats-table">
+    <table id="stats-table" class="stats-table" data-page-length="25">
         <thead>
+
             <tr>
                 <th>{{ jogador1.last_name }}</th>
                 <th>Estatística</th>
@@ -215,14 +216,24 @@ p {
         </thead>
         <tbody>
             <tr>
+                <td>{{ jogador1.age }}</td>
+                <td>Idade</td>
+                <td>{{ jogador2.age }}</td>
+            </tr>
+
                 <td>{{ jogador1_stats.total_gols }}</td>
                 <td>Gols</td>
                 <td>{{ jogador2_stats.total_gols }}</td>
             </tr>
             <tr>
-                <td>{{ media_gols_jogador1 }}</td>
+                <td>{{ context.media_gols_jogador1 }}</td>
                 <td>Média de gols por partida</td>
-                <td>{{ media_gols_jogador2 }}</td>
+                <td>{{ context.media_gols_jogador2 }}</td>
+            </tr>
+            <tr>
+                <td>{{ context.media_assistencias_jogador1 }}</td>
+                <td>Média de assistências por partida</td>
+                <td>{{ context.media_assistencias_jogador2 }}</td>
             </tr>
             <tr>
                 <td>{{ jogador1_stats.total_assistencias }}</td>

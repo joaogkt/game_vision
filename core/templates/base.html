@@ -35,11 +35,17 @@
           <li class="nav-item">
             <a class="nav-link" href="{% url 'matches_list' %}">Partidas</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'player_stats_list' %}">Estatisticas</a>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Estatísticas
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" href="{% url 'player_stats_list' %}">Estatísticas dos Jogadores</a></li>
+              <li><a class="dropdown-item" href="{% url 'player_stats_total' %}">Estatísticas Geral</a></li>
+            </ul>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'player_stats_total' %}">Estatisticas Geral</a>
+            <a class="nav-link" href="{% url 'feedback' %}">Enviar feedback</a>
           </li>
 
         </ul>
@@ -61,7 +67,7 @@
 
     html, body {
       height: auto !important;
-      overflow: hidden;
+      overflow: auto;
     }
 
     body {

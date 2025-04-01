@@ -185,7 +185,7 @@ def comparar_jogadores(request, pk1, pk2):
 
     jogador1_stats = PlayerDesempenhoGeral.objects.filter(jogador=jogador1).first()
     jogador2_stats = PlayerDesempenhoGeral.objects.filter(jogador=jogador2).first()
-
+    #Gols
     try:
         media_gols_jogador1 = jogador1_stats.total_gols / max(jogador1_stats.total_partidas, 1)
     except:
@@ -195,8 +195,26 @@ def comparar_jogadores(request, pk1, pk2):
         media_gols_jogador2 = jogador2_stats.total_gols / max(jogador2_stats.total_partidas, 1)
     except:
         media_gols_jogador2 = ""
+    #Assistencias
+    try:
+        media_assistencias_jogador1 = jogador1_stats.total_assistencias / max(jogador1_stats.total_partidas, 1)
+    except:
+        media_assistencias_jogador1 = ''
 
-    return render(request, 'comparar_jogadores.html', {'jogador1': jogador1, 'jogador2': jogador2, 'jogador1_stats': jogador1_stats, 'jogador2_stats': jogador2_stats, 'media_gols_jogador1': media_gols_jogador1, 'media_gols_jogador2': media_gols_jogador2 })
+    try:
+        media_assistencias_jogador2 = jogador2_stats.total_assistencias / max(jogador2_stats.total_partidas, 1)
+    except:
+        media_assistencias_jogador2 = ""
+
+    context = {
+        'media_gols_jogador1': "{:.2f}".format(media_gols_jogador1),
+        'media_gols_jogador2': "{:.2f}".format(media_gols_jogador2),
+        'media_assistencias_jogador1': "{:.2f}".format(media_assistencias_jogador1),
+        'media_assistencias_jogador2': "{:.2f}".format(media_assistencias_jogador2), 
+
+    }
+
+    return render(request, 'comparar_jogadores.html', {'jogador1': jogador1, 'jogador2': jogador2, 'jogador1_stats': jogador1_stats, 'jogador2_stats': jogador2_stats, 'context': context})
 
 @login_required(login_url='login')
 def desempenho_gols_grafico(request, pk):
