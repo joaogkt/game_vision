@@ -1,82 +1,188 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Gráficos de Estatísticas dos Jogadores{% endblock %}
+
 {% block content %}
+<style>
+  html, body {
+    height: auto !important;
+    overflow: auto !important;
+  }
+  body {
+    background: url("{% static 'img/soccer-bg.jpg' %}") no-repeat center center fixed !important;
+    background-size: cover !important;
+  }
+  .hero {
+    background: transparent !important;
+    height: auto !important;
+    min-height: 100vh !important;
+    display: block !important;
+    padding: 80px 0 !important;
+  }
+  .hero-overlay {
+    display: none !important;
+  }
+  h1 {
+    text-align: center;
+    color: white;
+  }
+  .chart-container {
+    width: 90%;
+    max-width: 900px;
+    margin: 20px auto;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  }
+  .selector {
+    text-align: center;
+    margin: 20px 0;
+  }
+  select {
+    padding: 8px 15px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    background-color: white;
+    font-size: 16px;
+    margin: 0 10px;
+  }
+</style>
 
 <div class="container mt-5">
-    <h2 class="text-center">📊 Desempenho dos Jogadores</h2>
+  <h1 class="mb-4">Gráficos de Estatísticas dos Jogadores</h1>
 
-    <div class="chart-container">
-        <canvas id="barChart"></canvas>
-    </div>
-    <div class="chart-container">
-        <canvas id="lineChart"></canvas>
-    </div>
+  <div class="selector">
+    <select id="chartType">
+      <option value="bar">Gráfico de Barras</option>
+      <option value="line">Gráfico de Linha</option>
+      <option value="radar">Gráfico de Radar</option>
+      <option value="pie">Gráfico de Pizza (Gols)</option>
+    </select>
+    
+    <select id="statType">
+      <option value="gols">Gols</option>
+      <option value="assistencias">Assistências</option>
+      <option value="notas">Notas Médias</option>
+      <option value="desarmes">Desarmes</option>
+    </select>
+  </div>
+
+  <div class="chart-container">
+    <canvas id="statsChart"></canvas>
+  </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    var estatisticasJogadores = {{ estatisticas_jogadores|safe }};
-    var jogadores = Object.keys(estatisticasJogadores);
-    var cores = ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0", "#9966FF", "#FF9F40"];
+  const nomes_jogadores = {{ nomes_jogadores|safe }};
+  const gols = {{ gols|safe }};
+  const assistencias = {{ assistencias|safe }};
+  const notas = {{ notas|safe }};
+  const desarmes = {{ desarmes|safe }};
 
-    // Gráfico de Barras (Resumo Estatístico)
-    var ctxBar = document.getElementById('barChart').getContext('2d');
-    var datasetsBar = [
-        { label: "Gols", key: "gols", bg: "rgba(255, 99, 132, 0.6)" },
-        { label: "Assistências", key: "assistencias", bg: "rgba(54, 162, 235, 0.6)" },
-        { label: "Passes Certos", key: "passes_certos", bg: "rgba(75, 192, 192, 0.6)" },
-        { label: "Desarmes", key: "desarmes", bg: "rgba(153, 102, 255, 0.6)" },
-    ].map((stat, i) => ({
-        label: stat.label,
-        data: jogadores.map(jogador => estatisticasJogadores[jogador][stat.key].reduce((a, b) => a + b, 0)),
-        backgroundColor: stat.bg,
-        borderColor: stat.bg.replace("0.6", "1"),
-        borderWidth: 1
-    }));
+  const backgroundColors = [
+    'rgba(255, 99, 132, 0.2)',
+    'rgba(54, 162, 235, 0.2)',
+    'rgba(255, 206, 86, 0.2)',
+    'rgba(75, 192, 192, 0.2)',
+    'rgba(153, 102, 255, 0.2)',
+    'rgba(255, 159, 64, 0.2)',
+    'rgba(199, 199, 199, 0.2)',
+    'rgba(83, 102, 255, 0.2)',
+    'rgba(40, 159, 64, 0.2)',
+    'rgba(210, 199, 199, 0.2)',
+  ];
 
-    new Chart(ctxBar, {
-        type: 'bar',
-        data: {
-            labels: jogadores,
-            datasets: datasetsBar
+  const borderColors = [
+    'rgba(255, 99, 132, 1)',
+    'rgba(54, 162, 235, 1)',
+    'rgba(255, 206, 86, 1)',
+    'rgba(75, 192, 192, 1)',
+    'rgba(153, 102, 255, 1)',
+    'rgba(255, 159, 64, 1)',
+    'rgba(199, 199, 199, 1)',
+    'rgba(83, 102, 255, 1)',
+    'rgba(40, 159, 64, 1)',
+    'rgba(210, 199, 199, 1)',
+  ];
+
+  let myChart = null;
+
+  function createChart() {
+    const chartType = document.getElementById('chartType').value;
+    const statType = document.getElementById('statType').value;
+
+    let data;
+    let title;
+
+    switch(statType) {
+      case 'gols':
+        data = gols;
+        title = 'Gols por Jogador';
+        break;
+      case 'assistencias':
+        data = assistencias;
+        title = 'Assistências por Jogador';
+        break;
+      case 'notas':
+        data = notas;
+        title = 'Nota Média por Jogador';
+        break;
+      case 'desarmes':
+        data = desarmes;
+        title = 'Desarmes por Jogador';
+        break;
+      default:
+        data = gols;
+        title = 'Gols por Jogador';
+    }
+
+    if (myChart !== null) {
+      myChart.destroy();
+    }
+
+    const config = {
+      type: chartType,
+      data: {
+        labels: nomes_jogadores,
+        datasets: [{
+          label: title,
+          data: data,
+          backgroundColor: chartType === 'pie' ? backgroundColors : backgroundColors[0],
+          borderColor: chartType === 'pie' ? borderColors : borderColors[0],
+          borderWidth: 1,
+          fill: chartType === 'line' ? false : true,
+          tension: 0.4
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+            display: chartType !== 'pie' && chartType !== 'radar'
+          }
         },
-        options: { responsive: true, scales: { y: { beginAtZero: true } } }
-    });
+        plugins: {
+          legend: {
+            position: 'top',
+          },
+          title: {
+            display: true,
+            text: title
+          }
+        }
+      }
+    };
 
-    // Gráfico de Linha (Evolução das Notas)
-    var ctxLine = document.getElementById('lineChart').getContext('2d');
-    var datasetsLine = jogadores.map((jogador, index) => ({
-        label: jogador,
-        data: estatisticasJogadores[jogador].notas,
-        borderColor: cores[index % cores.length],
-        backgroundColor: cores[index % cores.length] + "33",
-        fill: true,
-        tension: 0.3
-    }));
+    const ctx = document.getElementById('statsChart').getContext('2d');
+    myChart = new Chart(ctx, config);
+  }
 
-    new Chart(ctxLine, {
-        type: 'line',
-        data: {
-            labels: estatisticasJogadores[jogadores[0]].partidas,
-            datasets: datasetsLine
-        },
-        options: { responsive: true, scales: { y: { beginAtZero: true } } }
-    });
+  document.addEventListener('DOMContentLoaded', createChart);
+  document.getElementById('chartType').addEventListener('change', createChart);
+  document.getElementById('statType').addEventListener('change', createChart);
 </script>
-
-<style>
-    .chart-container {
-        width: 80%;
-        margin: 20px auto;
-        background: white;
-        padding: 10px;
-        border-radius: 10px;
-        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-    }
-    h2 {
-        font-size: 24px;
-        font-weight: bold;
-        margin-bottom: 20px;
-    }
-</style>
-
 {% endblock %}

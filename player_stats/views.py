@@ -1,6 +1,7 @@
 from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
 from .models import PlayerStats
 from .forms import PlayerStatsForm
+from .models import Matches
 from django.contrib.auth.decorators import login_required
 from players.models import Player
 from .models import PlayerDesempenhoGeral
@@ -13,32 +14,19 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.decorators import user_passes_test
 from core.views import is_admin
+import json
 # Create your views here.
+import logging
 
+logger = logging.getLogger(__name__)
 
 @login_required(login_url='login')
 def player_stats_list(request):
-    order = request.GET.get('order')
-
-    valid_fields = ['jogador', 'gols', 'assistencia', 'passes_certos', 'passes_errados',
-                    'desarmes', 'cartao_vermelho', 'cartao_amarelo', 'nota']
-
-    if order not in valid_fields and order not in [f'-{field}' for field in valid_fields]:
-        order = None  
-
-    if order:
-        new_order = order[1:] if order.startswith('-') else f'-{order}'
-    else:
-        new_order = 'jogador' 
-
     player_stats = PlayerStats.objects.all()
-    if order:
-        player_stats = player_stats.order_by(order)
+
 
     return render(request, 'player_stats_list.html', {
-        'players': player_stats,
-        'current_order': order,
-        'new_order': new_order
+        'players': player_stats
     })
 
 
@@ -124,10 +112,12 @@ def desempenho_geral(request):
 
     return render(request, 'player_stats_total.html', {'desempenho_total': desempenho_total})
 
+    
 
 @login_required(login_url='login')
 def desempenho_graficos(request):
-    return render(request, 'player_stats_graficos.html')
+    raise Exception("Entrou na view!")
+
 
 
 @login_required(login_url='login')
@@ -157,12 +147,29 @@ def player_stats_detail(request, pk):
 def desempenho_graficos(request):
     jogadores = Player.objects.all()
     estatisticas_jogadores = {}
-
+    
+    # Nomes dos jogadores para usar como labels
+    nomes_jogadores = []
+    # Arrays para diferentes estatísticas
+    gols = []
+    assistencias = []
+    notas = []
+    desarmes = []
+    # Adicione outras estatísticas conforme necessário
+    
     for jogador in jogadores:
         stats = PlayerDesempenhoGeral.objects.filter(jogador=jogador).first()
-
+        
         if stats:
-            estatisticas_jogadores[f'{jogador.first_name} {jogador.last_name}'] = {
+            nome_completo = f'{jogador.first_name} {jogador.last_name}'
+            nomes_jogadores.append(nome_completo)
+            gols.append(stats.total_gols)
+            assistencias.append(stats.total_assistencias)
+            notas.append(stats.media_nota)
+            desarmes.append(stats.total_desarmes)
+            
+            # Também mantenha o dicionário original se necessário
+            estatisticas_jogadores[nome_completo] = {
                 "gols": stats.total_gols,
                 "assistencias": stats.total_assistencias,
                 "passes_certos": stats.total_passes_certos,
@@ -173,9 +180,14 @@ def desempenho_graficos(request):
                 "notas": stats.media_nota,
                 "partidas": stats.total_partidas
             }
-
+    
     return render(request, 'player_stats_graficos.html', {
-        'estatisticas_jogadores': estatisticas_jogadores
+        'estatisticas_jogadores': estatisticas_jogadores,
+        'nomes_jogadores': json.dumps(nomes_jogadores),
+        'gols': json.dumps(gols),
+        'assistencias': json.dumps(assistencias),
+        'notas': json.dumps(notas),
+        'desarmes': json.dumps(desarmes)
     })
 
 @login_required(login_url='login')
