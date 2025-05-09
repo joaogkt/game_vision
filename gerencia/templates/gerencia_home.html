@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Gerencia {% endblock %}
+
+{% block content %}
+<style>
+
+    body {
+        background: linear-gradient(135deg,rgb(21, 65, 128),rgb(60, 115, 234));
+        color: black;
+    }
+    .container {
+        background: white;
+        border-radius: 12px;
+        padding: 25px;
+        box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease-in-out;
+    }
+    .profile-pic {
+        width: 150px;
+        height: 150px;
+        border-radius: 10px;
+        border: 3px solid;
+        object-fit: contain;
+
+    }
+    .player-info {
+        font-size: 1rem;
+        text-align: justify;
+    }
+    .stats-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+    .stats-table th, .stats-table td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: center;
+        color: black;
+    }
+    .stats-table th {
+        background: linear-gradient(135deg, #225487, #6985aa);
+        font-weight: bold;
+        color: white;
+        padding: 5px;
+    }
+    h1, h2, h3, h4, p, span, li {
+        color: black;
+    }
+    .btn-container {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-bottom: 15px;
+    }
+    .btn-custom {
+        padding: 12px 20px;
+        font-size: 1rem;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: all 0.3s ease-in-out;
+    }
+    .btn-stats {
+        background: linear-gradient(135deg,rgb(21, 65, 128),rgb(60, 115, 234));
+        color: white;
+    }
+    .btn-matches {
+        background: #ddd;
+        color: black;
+    }
+    .btn-custom:hover {
+        transform: scale(1.05);
+        filter: brightness(1.1);
+    }
+    .hidden {
+        display: none;
+    }
+    .fade-in {
+        animation: fadeIn 0.3s ease-in-out;
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .card-btn {
+        width: 100%;
+        padding: 20px;
+        border-radius: 12px;
+        background: linear-gradient(135deg,rgb(21, 65, 128),rgb(60, 115, 234));
+        color: white;
+        text-align: center;
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin-bottom: 15px;
+        transition: all 0.3s ease-in-out;
+        text-decoration: none;
+        display: block;
+    }
+
+    .card-btn:hover {
+        transform: scale(1.03);
+        filter: brightness(1.1);
+        }
+    </style>
+    
+    <div class="container mt-4 mb-5">
+        <h3 class="text-center mb-4">📊 Painel de Gerenciamento</h3>
+    
+        <div class="row">
+            <div class="col-md-6">
+                <a href="{% url 'gerencia_responsavel' %}" class="card-btn">👨‍👩‍👧‍👦 Responsáveis</a>
+            </div>
+            <div class="col-md-6">
+                <a href="{% url 'player_list' %}" class="card-btn">⚽ Jogadores</a>
+            </div>
+            <div class="col-md-6">
+                <a href="{% url 'gerencia_treinador' %}" class="card-btn">🏋️‍♂️ Treinadores</a>
+            </div>
+            <div class="col-md-6">
+                <a href="{% url 'gerencia_turma' %}" class="card-btn">📚 Turmas</a>
+            </div>
+            <div class="col-md-6">
+                <a href="{% url 'team_list' %}" class="card-btn">📚 Times</a>
+            </div>
+            <div class="col-md-6">
+                <a href="{% url 'team_list' %}" class="card-btn">📚 Times</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

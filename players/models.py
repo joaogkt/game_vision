@@ -5,6 +5,7 @@ from datetime import date
 import os
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
+from gerencia.models import Responsavel, Turma
 # from django.contrib.auth.models import User
 
 # Create your models here.
@@ -15,6 +16,11 @@ class Player(models.Model):
         ('MEI', 'Meio-campo'),
         ('ATA', 'Atacante'),
     ]
+    STATUS_CHOICES = [
+        ('ativo', 'Ativo'),
+        ('espera', 'Em espera'),
+        ('desligado', 'Desligado'),
+    ]
     
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
@@ -23,6 +29,12 @@ class Player(models.Model):
     position = models.CharField(max_length=3, choices=POSITION_CHOICES)
     team = models.ForeignKey(teams.models.Team, on_delete=models.CASCADE)
     photo = models.ImageField(upload_to='players/', blank=True, null=True)
+
+    status = models.CharField("Status", max_length=10, choices=STATUS_CHOICES, default='ativo')
+    responsavel = models.ForeignKey(Responsavel, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Responsável")
+    turma = models.ForeignKey(Turma, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Turma (opcional)")
+
+
     # usuario = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
