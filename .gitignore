@@ -1,6 +1,3 @@
-
-
-
 # Ignore arquivos relacionados a config de banco
 .env
 
@@ -19,6 +16,8 @@ players/__pycache__
 tcc_futebol/__pycache__
 
 teams/__pycache__
+
+gerencia/__pycache__
 
 api/__pycache__
 
