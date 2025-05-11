@@ -5,7 +5,7 @@ from .models import Turma, Responsavel, Treinador
 class TurmaForm(forms.ModelForm):
     class Meta:
         model = Turma
-        fields = ['nome', 'treinador', 'faixa_etaria', 'horario_treino', 'team']
+        fields = ['nome', 'treinador', 'categoria', 'horario_treino', 'team']
 
 class ResponsavelForm(forms.ModelForm):
     class Meta:

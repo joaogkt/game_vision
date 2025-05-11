@@ -43,10 +43,12 @@
     <hr class="my-4" style="border-color: white;">
     <p class="fs-5">Explore estatísticas detalhadas e tome decisões estratégicas com dados precisos.</p>
     <div class="d-flex flex-wrap justify-content-center">
-      <a class="btn btn-custom" href="{% url 'team_list' %}">Ver Times</a>
+      <a class="btn btn-custom" href="{% url 'gerencia_home' %}">Gerenciamento</a>
+
+      {% comment %} <a class="btn btn-custom" href="{% url 'team_list' %}">Ver Times</a>
       <a class="btn btn-custom" href="{% url 'player_list' %}">Ver Jogadores</a>
       <a class="btn btn-custom" href="{% url 'matches_list' %}">Ver Partidas</a>
-      <a class="btn btn-custom" href="{% url 'player_stats_list' %}">Ver Estatísticas</a>
+      <a class="btn btn-custom" href="{% url 'player_stats_list' %}">Ver Estatísticas</a> {% endcomment %}
     </div>
   </div>
 

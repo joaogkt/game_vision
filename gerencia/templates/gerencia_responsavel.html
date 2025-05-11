@@ -112,50 +112,51 @@
 </style>
 
 <div class="container mt-4 mb-5">
-    <h3 class="text-center mb-4">📚 Gerenciar Turmas</h3>
+    <h3 class="text-center mb-4">📚 Gerenciar Responsavel</h3>
 
   <div class="d-flex justify-content-between mb-3">
-    <a href="{% url 'gerencia_turma_create' %}" class="btn btn-success">Nova Turma</a>
+    <a href="{% url 'gerencia_responsavel_create' %}" class="btn btn-success">Novo Responsavel</a>
   </div>
 
     <table class="stats-table fade-in no-datatable">
         <thead>
             <tr>
-                <th>Time</th>
-                <th>Categoria</th>
-                <th>Treinador</th>
-                <th>Horario do treino</th>
+                <th>Nome</th>
+                <th>Email</th>
+                <th>Telefone</th>
+                <th>CPF</th>
+                <th>Data nascimento</th>
                 <th>Ações</th>
             </tr>
         </thead>
         <tbody>
-        {% for turma in turmas %}
+        {% for responsavel in responsaveis %}
             <tr>
-                <td>{{ turma.team.name }}</td>
-                <td>{{ turma.nome }}</td>                
-                <td>{{ turma.treinador.nome }}</td>
-                <td>{{ turma.horario_treino }}</td>
+                <td>{{ responsavel.nome }}</td>
+                <td>{{ responsavel.email }}</td>                
+                <td>{{ responsavel.telefone }}</td>
+                <td>{{ responsavel.cpf }}</td>
+                <td>{{ responsavel.data_nascimento }}</td>
 
                 <td class="text-center">
-                    <a href="{% url 'registrar_presenca' turma.id %}" class="btn btn-success btn-sm">Iniciar Treino</a>
-                    <a href="{% url 'turma_update' turma.id %}" class="btn btn-warning btn-sm">Editar</a>
-                    <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{ turma.id }}">
+                    <a href="{% url 'responsavel_update' responsavel.id %}" class="btn btn-warning btn-sm">Editar</a>
+                    <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{ responsavel.id }}">
                         Excluir
                     </button>
 
-                    <div class="modal fade" id="deleteModal{{ turma.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ turma.id }}" aria-hidden="true">
+                    <div class="modal fade" id="deleteModal{{ responsavel.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ responsavel.id }}" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="deleteModalLabel{{ turma.id }}">Confirmar Exclusão</h5>
+                                    <h5 class="modal-title" id="deleteModalLabel{{ responsavel.id }}">Confirmar Exclusão</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    Tem certeza que deseja excluir <strong>{{ turma.nome }}</strong>?
+                                    Tem certeza que deseja excluir <strong>{{ responsavel.nome }}</strong>?
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                    <a href="{% url 'turma_delete' turma.id %}" class="btn btn-danger">Excluir</a>
+                                    <a href="{% url 'responsavel_delete' responsavel.id %}" class="btn btn-danger">Excluir</a>
                                 </div>
                             </div>
                         </div>
@@ -164,7 +165,7 @@
             </tr>
             {% empty %}
             <tr>
-                <td colspan="4">Nenhuma turma cadastrada.</td>
+                <td colspan="4">Nenhum responsavel cadastradp.</td>
             </tr>
             {% endfor %}
         </tbody>

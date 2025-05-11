@@ -29,10 +29,13 @@ def player_detail(request, pk):
 def player_create(request):
     if request.method == "POST":
         form = PlayerForm(request.POST, request.FILES)
+        print(form)
         if form.is_valid():
+            print("ok")
             form.save()
             return redirect('player_list')
     else:
+        print("Not ok")
         form = PlayerForm()
     return render(request, 'player_form.html', {'form': form})
 

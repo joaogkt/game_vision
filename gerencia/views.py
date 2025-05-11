@@ -2,7 +2,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .forms import TurmaForm, ResponsavelForm, TreinadorForm
 from .models import Turma, Responsavel, Treinador
 from django.contrib.auth.decorators import login_required
-
+from django.contrib import messages
+from datetime import date
+from players.models import Player, Faltas
 # Create your views here.
 #Home
 def gerencia_home(request):
@@ -10,7 +12,8 @@ def gerencia_home(request):
 
 #Responsavel
 def gerencia_responsavel(request):
-    return render(request, 'gerencia_responsavel.html')
+    responsaveis = Responsavel.objects.all()
+    return render(request, 'gerencia_responsavel.html', {'responsaveis': responsaveis})
 
 def gerencia_responsavel_create(request):
     if request.method == 'POST':
@@ -20,9 +23,9 @@ def gerencia_responsavel_create(request):
             return redirect('gerencia_responsavel')
     else:
         form = ResponsavelForm()
-    return render(request, 'gerencia_responsavel_create.html', {'form': form})
+    return render(request, 'gerencia_responsavel_form.html', {'form': form})
 
-def gerencia_responsavel_update(request, pk):
+def responsavel_update(request, pk):
     responsavel = get_object_or_404(Responsavel, pk=pk)
     if request.method == 'POST':
         form = ResponsavelForm(request.POST, instance=responsavel)
@@ -31,21 +34,25 @@ def gerencia_responsavel_update(request, pk):
             return redirect('gerencia_responsavel')
     else:
         form = ResponsavelForm(instance=responsavel)
-    return render(request, 'gerencia_responsavel_update.html', {'form': form, 'responsavel': responsavel})
+    return render(request, 'gerencia_responsavel_form.html', {'form': form, 'responsavel': responsavel})
 
 #Trenador
 def gerencia_treinador(request):
-    return render(request, 'gerencia_treinador.html')
+    treinadores = Treinador.objects.all()
+    return render(request, 'gerencia_treinador.html', {'treinadores': treinadores})
 
 def gerencia_treinador_create(request):
     if request.method == 'POST':
         form = TreinadorForm(request.POST)
+        print(form)
         if form.is_valid():
+            print("ok")
             form.save()
             return redirect('gerencia_treinador')
     else:
+        print("Not ok")
         form = TreinadorForm()
-    return render(request, 'gerencia_treinador_create.html', {'form': form})
+    return render(request, 'gerencia_treinador_form.html', {'form': form})
 
 def gerencia_treinador_update(request, pk):
     treinador = get_object_or_404(Treinador, pk=pk)
@@ -56,24 +63,34 @@ def gerencia_treinador_update(request, pk):
             return redirect('gerencia_treinador')
     else:
         form = TreinadorForm(instance=treinador)
-    return render(request, 'gerencia_treinador_update.html', {'form': form, 'treinador': treinador})
+    return render(request, 'gerencia_treinador_form.html', {'form': form, 'treinador': treinador})
+
+def gerencia_treinador_delete(request, pk):
+    treinador = get_object_or_404(Treinador, pk=pk)
+    treinador.delete()
+    messages.success(request, "Treinador excluído com sucesso!")
+    return redirect('gerencia_treinador')
 
 
 #turmas
-def gerencia_turma(request):
-    return render(request, 'gerencia_turma.html')
+def turma_list(request):
+    turmas = Turma.objects.all()
+    return render(request, 'gerencia_turma.html', {'turmas': turmas})
 
-def gerencia_turma_create(request):
+def turma_create(request):
     if request.method == 'POST':
         form = TurmaForm(request.POST)
+        print(form)
         if form.is_valid():
+            print('ok')
             form.save()
             return redirect('gerencia_turma')
     else:
+        print("Not ok ")
         form = TurmaForm()
-    return render(request, 'gerencia_turma_create.html', {'form': form})
+    return render(request, 'gerencia_turma_form.html', {'form': form})
 
-def gerencia_turma_update(request, pk):
+def turma_update(request, pk):
     turma = get_object_or_404(Turma, pk=pk)
     if request.method == 'POST':
         form = TurmaForm(request.POST, instance=turma)
@@ -82,4 +99,31 @@ def gerencia_turma_update(request, pk):
             return redirect('gerencia_turma')
     else:
         form = TurmaForm(instance=turma)
-    return render(request, 'gerencia_turma_update.html', {'form': form, 'turma': turma})
+    return render(request, 'gerencia_turma_form.html', {'form': form, 'turma': turma})
+
+def turma_delete(request, pk):
+    turma = get_object_or_404(Turma, pk=pk)
+    turma.delete()
+    messages.success(request, "Turma excluído com sucesso!")
+    return redirect('gerencia_turma') 
+
+
+
+
+def registrar_presenca(request, turma_id):
+    turma = get_object_or_404(Turma, id=turma_id)
+    jogadores = Player.objects.filter(turma=turma)
+
+    if request.method == 'POST':
+        presentes_ids = request.POST.getlist('presente')
+        try:
+            for jogador in jogadores:
+                falta = jogador.id not in [int(id) for id in presentes_ids]
+                Faltas.objects.create(aluno=jogador, turma=turma, data=date.today(), falta=falta)
+            messages.success(request, 'Presença registrada com sucesso!')
+        except Exception as e:
+            messages.error(request, f'Ocorreu um erro ao registrar presença: {str(e)}')
+
+        return redirect('registrar_presenca', turma_id=turma.id)
+
+    return render(request, 'registrar_presenca.html', {'turma': turma, 'jogadores': jogadores})

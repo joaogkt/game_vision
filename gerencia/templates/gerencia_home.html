@@ -1,138 +1,124 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Gerencia {% endblock %}
+{% block title %}Gerência{% endblock %}
 
 {% block content %}
+<!-- Font Awesome CDN (adicione no base.html uma vez apenas) -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-...hash..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+
 <style>
+  body {
+    background: linear-gradient(135deg, #154180, #3c73ea);
+  }
 
-    body {
-        background: linear-gradient(135deg,rgb(21, 65, 128),rgb(60, 115, 234));
-        color: black;
-    }
-    .container {
-        background: white;
-        border-radius: 12px;
-        padding: 25px;
-        box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
-        transition: all 0.3s ease-in-out;
-    }
-    .profile-pic {
-        width: 150px;
-        height: 150px;
-        border-radius: 10px;
-        border: 3px solid;
-        object-fit: contain;
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    background: transparent;
+    gap: 20px;
+    margin-top: 30px;
+  }
 
-    }
-    .player-info {
-        font-size: 1rem;
-        text-align: justify;
-    }
-    .stats-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
-        border-radius: 8px;
-        overflow: hidden;
-    }
-    .stats-table th, .stats-table td {
-        border: 1px solid #ddd;
-        padding: 10px;
-        text-align: center;
-        color: black;
-    }
-    .stats-table th {
-        background: linear-gradient(135deg, #225487, #6985aa);
-        font-weight: bold;
-        color: white;
-        padding: 5px;
-    }
-    h1, h2, h3, h4, p, span, li {
-        color: black;
-    }
-    .btn-container {
-        display: flex;
-        justify-content: center;
-        gap: 12px;
-        flex-wrap: wrap;
-        margin-bottom: 15px;
-    }
-    .btn-custom {
-        padding: 12px 20px;
-        font-size: 1rem;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        font-weight: bold;
-        transition: all 0.3s ease-in-out;
-    }
-    .btn-stats {
-        background: linear-gradient(135deg,rgb(21, 65, 128),rgb(60, 115, 234));
-        color: white;
-    }
-    .btn-matches {
-        background: #ddd;
-        color: black;
-    }
-    .btn-custom:hover {
-        transform: scale(1.05);
-        filter: brightness(1.1);
-    }
-    .hidden {
-        display: none;
-    }
-    .fade-in {
-        animation: fadeIn 0.3s ease-in-out;
-    }
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(10px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
+  .card-option {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.15);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    color: #333;
+    text-decoration: none;
+  }
 
-    .card-btn {
-        width: 100%;
-        padding: 20px;
-        border-radius: 12px;
-        background: linear-gradient(135deg,rgb(21, 65, 128),rgb(60, 115, 234));
-        color: white;
-        text-align: center;
-        font-size: 1.2rem;
-        font-weight: bold;
-        margin-bottom: 15px;
-        transition: all 0.3s ease-in-out;
-        text-decoration: none;
-        display: block;
-    }
+  .card-option:hover {
+    transform: scale(1.03);
+    box-shadow: 0px 8px 18px rgba(0, 0, 0, 0.2);
+  }
 
-    .card-btn:hover {
-        transform: scale(1.03);
-        filter: brightness(1.1);
-        }
-    </style>
-    
-    <div class="container mt-4 mb-5">
-        <h3 class="text-center mb-4">📊 Painel de Gerenciamento</h3>
-    
-        <div class="row">
-            <div class="col-md-6">
-                <a href="{% url 'gerencia_responsavel' %}" class="card-btn">👨‍👩‍👧‍👦 Responsáveis</a>
-            </div>
-            <div class="col-md-6">
-                <a href="{% url 'player_list' %}" class="card-btn">⚽ Jogadores</a>
-            </div>
-            <div class="col-md-6">
-                <a href="{% url 'gerencia_treinador' %}" class="card-btn">🏋️‍♂️ Treinadores</a>
-            </div>
-            <div class="col-md-6">
-                <a href="{% url 'gerencia_turma' %}" class="card-btn">📚 Turmas</a>
-            </div>
-            <div class="col-md-6">
-                <a href="{% url 'team_list' %}" class="card-btn">📚 Times</a>
-            </div>
-            <div class="col-md-6">
-                <a href="{% url 'team_list' %}" class="card-btn">📚 Times</a>
-            </div>
-        </div>
-    </div>
+  .card-option i {
+    font-size: 2.5rem;
+    color: #3c73ea;
+    margin-bottom: 15px;
+  }
+
+  .card-option h5 {
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+
+  .card-option p {
+    font-size: 0.95rem;
+    color: #555;
+  }
+
+  .container {
+    background: transparent;
+    border-radius: 12px;
+    padding: 30px;
+    margin-top: 40px;
+    margin-bottom: 60px;
+  }
+
+  h3 {
+    font-weight: bold;
+    color:rgb(255, 255, 255);
+  }
+</style>
+
+<div class="container">
+  <h3 class="text-center"><i class="fa-solid fa-screwdriver-wrench"></i> Painel de Gerenciamento</h3>
+
+  <div class="card-grid">
+
+    <a href="{% url 'gerencia_responsavel' %}" class="card-option">
+      <i class="fas fa-users"></i>
+      <h5>Responsáveis</h5>
+      <p>Gerencie os responsáveis pelos jogadores.</p>
+    </a>
+
+    <a href="{% url 'player_list' %}" class="card-option">
+      <i class="fas fa-futbol"></i>
+      <h5>Jogadores</h5>
+      <p>Veja e edite informações dos atletas.</p>
+    </a>
+
+    <a href="{% url 'gerencia_treinador' %}" class="card-option">
+      <i class="fas fa-dumbbell"></i>
+      <h5>Treinadores</h5>
+      <p>Cadastre e controle os técnicos das turmas.</p>
+    </a>
+
+    <a href="{% url 'gerencia_turma' %}" class="card-option">
+      <i class="fas fa-book-open"></i>
+      <h5>Turmas</h5>
+      <p>Organize as turmas de treino e seus horários.</p>
+    </a>
+
+    <a href="{% url 'team_list' %}" class="card-option">
+      <i class="fas fa-medal"></i>
+      <h5>Times</h5>
+      <p>Gerencie os times e elencos cadastrados.</p>
+    </a>
+
+    <a href="{% url 'team_list' %}" class="card-option">
+      <i class="fa-solid fa-trophy"></i>
+      <h5>Partidas</h5>
+      <p>Gerencie as partidas cadastradas.</p>
+    </a>
+
+    <a href="{% url 'player_stats_total' %}" class="card-option">
+      <i class="fa-solid fa-chart-simple"></i>
+      <h5>Estatisticas Gerais</h5>
+      <p>Gerencie e visualize estatisticas de jogadores cadastrados.</p>
+    </a>
+
+    <a href="{% url 'player_stats_list' %}" class="card-option">
+      <i class="fa-solid fa-chart-simple"></i>
+      <h5>Estatisticas por Partida</h5>
+      <p>Gerencie e visualize estatisticas de jogadores cadastrados.</p>
+    </a>
+
+  </div>
+</div>
 {% endblock %}

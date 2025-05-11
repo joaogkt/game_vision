@@ -63,3 +63,12 @@ def delete_photo_on_player_delete(sender, instance, **kwargs):
     if instance.photo:
         if os.path.isfile(instance.photo.path):
             os.remove(instance.photo.path)
+
+class Faltas(models.Model):
+    aluno = models.ForeignKey(Player, on_delete=models.CASCADE, related_name='faltas')
+    turma = models.ForeignKey(Turma, on_delete=models.CASCADE, related_name='faltas')
+    data = models.DateField()
+    falta = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.aluno} - {self.turma} - {self.data}"

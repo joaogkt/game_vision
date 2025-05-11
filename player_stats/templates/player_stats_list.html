@@ -75,7 +75,7 @@
         <td>{{ player_stat.cartao_amarelo }}</td>
         <td>{{ player_stat.nota }}</td>
         <td class="text-center" style="width: 20%;">
-          <a href="{% url 'player_stats_detail' player_stat.id  %}" class="btn btn-info btn-sm">Graficos</a>
+          {% comment %} <a href="{% url 'player_stats_detail' player_stat.id  %}" class="btn btn-info btn-sm">Graficos</a> {% endcomment %}
           {% if request.user.is_superuser %}
           
           <a href="{% url 'player_stats_update' player_stat.id %}" class="btn btn-warning btn-sm">Editar</a>

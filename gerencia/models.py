@@ -33,11 +33,10 @@ class Turma(models.Model):
         ('LIVRE', 'Livre'),
     ]
     nome = models.CharField(max_length=50)
+    team = models.ForeignKey(Team, on_delete=models.CASCADE, verbose_name="Escola")
     treinador = models.ForeignKey(Treinador, on_delete=models.CASCADE, related_name='turmas')
-    faixa_etaria = models.CharField(max_length=50)
     horario_treino = models.CharField(max_length=50)
     categoria = models.CharField(choices=CATEGORIA_CHOICES, max_length=10, default='LIVRE')
-    team = models.ForeignKey(Team, on_delete=models.CASCADE, verbose_name="Escola")
-
+    
     def __str__(self):
         return self.nome
