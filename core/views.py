@@ -35,37 +35,25 @@ def user_login(request):
         username = request.POST.get("username")
         password = request.POST.get("password")
         usuario = authenticate(request, username=username, password=password)
-        usuario = User.objects.filter(username=username).first()
-        usuario.is_active = True
-        print(f"Usuário encontrado: {usuario}")
 
-        if usuario and usuario.is_active:
-            print(f"Usuário {usuario.username} está ativo")
-
-        else:
-            print("Usuário está inativo")
-
-        if usuario and check_password(password, usuario.password):
-            print("Senha válida")
-        else:
-            print("Senha inválida")
-            
-        print(f"USUÁRIO: {usuario}")
         if usuario is not None:
-            print("Login correto")
-            login(request, usuario)
-            return redirect('home')
+            if usuario.is_active:
+                login(request, usuario)
+                return redirect('home')
+            else:
+                error_message = "Sua conta está desativada. Contate o administrador."
         else:
-            form_login = AuthenticationForm()
             error_message = "Credenciais inválidas. Tente novamente."
-            return render(request, 'login.html', {
-                'form_login': form_login,
-                'error_message': error_message,
-            })
-    else:
-        print("Login errado")
+
         form_login = AuthenticationForm()
-    return render(request, 'login.html', {'form_login': form_login})
+        return render(request, 'login.html', {
+            'form_login': form_login,
+            'error_message': error_message,
+        })
+
+    else:
+        form_login = AuthenticationForm()
+        return render(request, 'login.html', {'form_login': form_login})
 
 
 def generate_code():
