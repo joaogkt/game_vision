@@ -51,7 +51,7 @@ def player_stats_update(request, pk):
         form = PlayerStatsForm(request.POST, request.FILES, instance=player_stats)
         if form.is_valid():
             form.save()
-            return redirect('player_stats_detail', pk=player_stats.pk)
+            return redirect('player_stats_list')
     else:
         form = PlayerStatsForm(instance=player_stats)
     return render(request, 'player_stats_form.html', {'form': form})
