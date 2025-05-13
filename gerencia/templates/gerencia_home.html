@@ -70,13 +70,14 @@
   <h3 class="text-center"><i class="fa-solid fa-screwdriver-wrench"></i> Painel de Gerenciamento</h3>
 
   <div class="card-grid">
-
+    {% if request.user.is_superuser %}
+    
     <a href="{% url 'gerencia_responsavel' %}" class="card-option">
       <i class="fas fa-users"></i>
       <h5>Responsáveis</h5>
       <p>Gerencie os responsáveis pelos jogadores.</p>
     </a>
-
+    {% endif %}
     <a href="{% url 'player_list' %}" class="card-option">
       <i class="fas fa-futbol"></i>
       <h5>Jogadores</h5>

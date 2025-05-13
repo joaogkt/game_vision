@@ -168,7 +168,7 @@ def send_email(code, email):
         print("Conexão encerrada com SMTP.")
 
 
-
+@login_required(login_url='login')
 def feedback(request):
     sender_email = "game.vision.udf@gmail.com"
     receiver_email = "game.vision.udf@gmail.com"
@@ -186,6 +186,8 @@ def feedback(request):
                 conteudo = f"""Assunto: {form.cleaned_data['assunto']}
                 Conteudo: {form.cleaned_data['mensagem']}
                 """
+                user_name = request.user 
+                user_email = request.user.email 
 
                 msg = MIMEMultipart()
                 msg["From"] = sender_email
@@ -193,9 +195,9 @@ def feedback(request):
                 msg["Subject"] = "Novo Feedback Recebido"
 
                 body = f"""
-                Nome: {form.cleaned_data['nome']}
-                Email: {form.cleaned_data['email']}
-                Mensagem: {conteudo}
+                Nome: {user_name}
+                Email: {user_email}
+                {conteudo}
                 """
                 msg.attach(MIMEText(body, "plain"))
 

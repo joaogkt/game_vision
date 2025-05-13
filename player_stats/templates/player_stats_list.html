@@ -52,12 +52,14 @@
         <th>Gols</th>        
         <th>Assistências</th>
         <th>Passes Certos</th>
-        <th>Passes Errados</a></th>
+        <th>Passes Errados</th>
         <th>Desarmes</th>
         <th>Vermelhos</th>
         <th>Amarelos</th>
         <th>Nota</th>
+        {% if request.user.is_superuser %}
         <th class="text-center">Ações</th>
+        {% endif %}
       </tr>
     </thead>
     <tbody>
@@ -74,9 +76,9 @@
         <td>{{ player_stat.cartao_vermelho }}</td>
         <td>{{ player_stat.cartao_amarelo }}</td>
         <td>{{ player_stat.nota }}</td>
+        {% if request.user.is_superuser %}
         <td class="text-center" style="width: 20%;">
-          {% comment %} <a href="{% url 'player_stats_detail' player_stat.id  %}" class="btn btn-info btn-sm">Graficos</a> {% endcomment %}
-          {% if request.user.is_superuser %}
+          <!-- <a href="{% url 'player_stats_detail' player_stat.id  %}" class="btn btn-info btn-sm">Graficos</a> -->
           
           <a href="{% url 'player_stats_update' player_stat.id %}" class="btn btn-warning btn-sm">Editar</a>
           <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{ player_stat.id }}">

@@ -42,7 +42,9 @@
         <th>Competição</th>
         <th>Local</th>
         <th>Data da Partida</th>
+        {% if request.user.is_superuser %}
         <th class="text-center">Ações</th>
+        {% endif %}
       </tr>
     </thead>
     <tbody>
@@ -52,13 +54,15 @@
         <td>{{ match.tipo_competicao }}</td>
         <td>{{ match.local }}</td>
         <td>{{ match.data_partida }}</td>
+        {% if request.user.is_superuser %}
         <td class="text-center">
           <a href="{% url 'matches_detail' match.id %}" class="btn btn-info btn-sm">Detalhes</a>
-          {% if request.user.is_superuser %}
+          
           <a href="{% url 'matches_update' match.id %}" class="btn btn-warning btn-sm">Editar</a>
           <a href="{% url 'matches_delete' match.id %}" class="btn btn-danger btn-sm">Excluir</a>
-          {% endif %}
+          
         </td>
+        {% endif %}
       </tr>
       {% empty %}
       <tr>

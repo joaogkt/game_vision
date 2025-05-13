@@ -21,13 +21,13 @@ class CustomUserCreationForm(UserCreationForm):
 
 
 class FeedbackForm(forms.Form):
-    nome = forms.CharField(
-        max_length=100,
-        widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "Seu Nome"})
-    )
-    email = forms.EmailField(
-        widget=forms.EmailInput(attrs={"class": "form-control", "placeholder": "Seu E-mail"})
-    )
+    # nome = forms.CharField(
+    #     max_length=100,
+    #     widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "Seu Nome"})
+    # )
+    # email = forms.EmailField(
+    #     widget=forms.EmailInput(attrs={"class": "form-control", "placeholder": "Seu E-mail"})
+    # )
     assunto = forms.CharField(
         max_length=100,
         widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "Assunto"})

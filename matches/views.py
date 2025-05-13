@@ -23,6 +23,7 @@ def matches_create(request):
         form = MatchesForm()
     return render(request, 'matches_form.html', {'form': form})
 
+@user_passes_test(is_admin)
 @login_required(login_url='login')
 def matches_detail(request, pk):
     matches = get_object_or_404(Matches, pk=pk)

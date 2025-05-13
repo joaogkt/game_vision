@@ -7,14 +7,17 @@ from datetime import date
 from players.models import Player, Faltas
 # Create your views here.
 #Home
+@login_required(login_url='login')
 def gerencia_home(request):
     return render(request, 'gerencia_home.html')
 
 #Responsavel
+@login_required(login_url='login')
 def gerencia_responsavel(request):
     responsaveis = Responsavel.objects.all()
     return render(request, 'gerencia_responsavel.html', {'responsaveis': responsaveis})
 
+@login_required(login_url='login')
 def gerencia_responsavel_create(request):
     if request.method == 'POST':
         form = ResponsavelForm(request.POST)
@@ -25,6 +28,7 @@ def gerencia_responsavel_create(request):
         form = ResponsavelForm()
     return render(request, 'gerencia_responsavel_form.html', {'form': form})
 
+@login_required(login_url='login')
 def responsavel_update(request, pk):
     responsavel = get_object_or_404(Responsavel, pk=pk)
     if request.method == 'POST':
@@ -37,10 +41,12 @@ def responsavel_update(request, pk):
     return render(request, 'gerencia_responsavel_form.html', {'form': form, 'responsavel': responsavel})
 
 #Trenador
+@login_required(login_url='login')
 def gerencia_treinador(request):
     treinadores = Treinador.objects.all()
     return render(request, 'gerencia_treinador.html', {'treinadores': treinadores})
 
+@login_required(login_url='login')
 def gerencia_treinador_create(request):
     if request.method == 'POST':
         form = TreinadorForm(request.POST)
@@ -54,6 +60,7 @@ def gerencia_treinador_create(request):
         form = TreinadorForm()
     return render(request, 'gerencia_treinador_form.html', {'form': form})
 
+@login_required(login_url='login')
 def gerencia_treinador_update(request, pk):
     treinador = get_object_or_404(Treinador, pk=pk)
     if request.method == 'POST':
@@ -65,6 +72,7 @@ def gerencia_treinador_update(request, pk):
         form = TreinadorForm(instance=treinador)
     return render(request, 'gerencia_treinador_form.html', {'form': form, 'treinador': treinador})
 
+@login_required(login_url='login')
 def gerencia_treinador_delete(request, pk):
     treinador = get_object_or_404(Treinador, pk=pk)
     treinador.delete()
@@ -73,10 +81,12 @@ def gerencia_treinador_delete(request, pk):
 
 
 #turmas
+@login_required(login_url='login')
 def turma_list(request):
     turmas = Turma.objects.all()
     return render(request, 'gerencia_turma.html', {'turmas': turmas})
 
+@login_required(login_url='login')
 def turma_create(request):
     if request.method == 'POST':
         form = TurmaForm(request.POST)
@@ -90,6 +100,7 @@ def turma_create(request):
         form = TurmaForm()
     return render(request, 'gerencia_turma_form.html', {'form': form})
 
+@login_required(login_url='login')
 def turma_update(request, pk):
     turma = get_object_or_404(Turma, pk=pk)
     if request.method == 'POST':
@@ -101,6 +112,7 @@ def turma_update(request, pk):
         form = TurmaForm(instance=turma)
     return render(request, 'gerencia_turma_form.html', {'form': form, 'turma': turma})
 
+@login_required(login_url='login')
 def turma_delete(request, pk):
     turma = get_object_or_404(Turma, pk=pk)
     turma.delete()
@@ -109,7 +121,8 @@ def turma_delete(request, pk):
 
 
 
-
+#presenca
+@login_required(login_url='login')
 def registrar_presenca(request, turma_id):
     turma = get_object_or_404(Turma, id=turma_id)
     jogadores = Player.objects.filter(turma=turma)

@@ -113,10 +113,11 @@
 
 <div class="container mt-4 mb-5">
     <h3 class="text-center mb-4">🏋️‍♂️ Gerenciar Treinador</h3>
-
+    {% if request.user.is_superuser %}
   <div class="d-flex justify-content-between mb-3">
-    <a href="{% url 'gerencia_responsavel_create' %}" class="btn btn-success">Nova Treinador</a>
+    <a href="{% url 'gerencia_responsavel_create' %}" class="btn btn-success">Novo Treinador</a>
   </div>
+  {% endif %}
 
     <table class="stats-table fade-in no-datatable">
         <thead>
@@ -126,7 +127,9 @@
                 <th>Telefone</th>
                 <th>Data Nascimento</th>
                 <th>CPF</th>
+                {% if request.user.is_superuser %}
                 <th>Ações</th>
+                {% endif %}
             </tr>
         </thead>
         <tbody>
@@ -137,7 +140,7 @@
                 <td>{{ treinador.telefone }}</td>
                 <td>{{ treinador.data_nascimento }}</td>
                 <td>{{ treinador.cpf }}</td>
-
+                {% if request.user.is_superuser %}
                 <td>
                 <a href="{% url 'gerencia_treinador_update' treinador.id %}" class="btn btn-warning btn-sm">Editar</a>
                 <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{ treinador.id }}">
@@ -162,6 +165,7 @@
                         </div>
                     </div>
                 </td>
+                {% endif %}
             </tr>
             {% empty %}
             <tr>

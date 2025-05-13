@@ -102,7 +102,17 @@
 </style>
 
 <h1>Estatísticas dos Jogadores</h1>
-
+<form method="get" style="text-align:center;">
+  <label for="turma">Turma:</label>
+  <select name="turma" id="turma" onchange="this.form.submit()">
+    <option value="">Todas</option>
+    {% for turma in turmas %}
+      <option value="{{ turma.id }}" {% if turma.id|stringformat:"s" == turma_selecionada %}selected{% endif %}>
+        {{ turma }}
+      </option>
+    {% endfor %}
+  </select>
+</form>
 <div class="selector">
   <label for="chartType">Tipo de Gráfico:</label>
   <select id="chartType">
@@ -143,8 +153,43 @@
   <canvas id="statsChart"></canvas>
 </div>
 
+<div class="selector">
+  <form method="get" action="{% url 'comparar_jogadores' 0 0 %}" id="compareForm">
+    <label for="jogador1">Jogador 1:</label>
+    <select id="jogador1" name="jogador1" onchange="updateCompareUrl()">
+      <option value="">Selecione</option>
+      {% for jogador in jogadores %}
+        <option value="{{ jogador.id }}">{{ jogador.first_name }} {{ jogador.last_name }}</option>
+      {% endfor %}
+    </select>
+
+    <label for="jogador2">Jogador 2:</label>
+    <select id="jogador2" name="jogador2" onchange="updateCompareUrl()">
+      <option value="">Selecione</option>
+      {% for jogador in jogadores %}
+        <option value="{{ jogador.id }}">{{ jogador.first_name }} {{ jogador.last_name }}</option>
+      {% endfor %}
+    </select>
+
+    <button type="submit" class="btn btn-primary">Comparar</button>
+  </form>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
+
+  function updateCompareUrl() {
+      const jogador1 = document.getElementById('jogador1').value;
+      const jogador2 = document.getElementById('jogador2').value;
+      const form = document.getElementById('compareForm');
+
+      if (jogador1 && jogador2) {
+        form.action = `/stats/desempenho_geral/comparar/${jogador1}/${jogador2}`;
+      } else {
+        form.action = '#';
+      }
+    }
+
   const nomes_jogadores = {{ nomes_jogadores|safe }};
   const gols = {{ gols|safe }};
   const assistencias = {{ assistencias|safe }};

@@ -15,6 +15,7 @@ from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.decorators import user_passes_test
 from core.views import is_admin
 import json
+from gerencia.models import Turma
 # Create your views here.
 import logging
 
@@ -116,9 +117,44 @@ def desempenho_geral(request):
 
 @login_required(login_url='login')
 def desempenho_graficos(request):
-    raise Exception("Entrou na view!")
+    turmas = Turma.objects.all()
+    print(turmas)
+    turma_selecionada = request.GET.get('turma')
 
 
+
+    if turma_selecionada:
+        jogadores = Player.objects.filter(turma__id=turma_selecionada)
+    else:
+        jogadores = Player.objects.all()
+
+    # Supondo que você tenha um modelo com os dados agregados:
+    nomes = []
+    gols = []
+    assistencias = []
+    notas = []
+    desarmes = []
+
+    for jogador in jogadores:
+        desempenho = getattr(jogador, 'playerdesempenhogeral', None)
+        if desempenho:
+            nomes.append(f"{jogador.first_name} {jogador.last_name}")
+            gols.append(desempenho.total_gols)
+            assistencias.append(desempenho.total_assistencias)
+            notas.append(desempenho.media_nota)
+            desarmes.append(desempenho.total_desarmes)
+
+    context = {
+        'nomes_jogadores': nomes,
+        'gols': gols,
+        'assistencias': assistencias,
+        'notas': notas,
+        'desarmes': desarmes,
+        'turmas': turmas,
+        'turma_selecionada': turma_selecionada,
+    }
+
+    return render(request, 'nome-do-template.html', context)
 
 @login_required(login_url='login')
 def player_stats_detail(request, pk):
@@ -142,21 +178,24 @@ def player_stats_detail(request, pk):
 
     return render(request, 'player_stats_detail.html', {'player_stat': player_stat, 'player': player, 'chart': uri})
 
-
 @login_required(login_url='login')
 def desempenho_graficos(request):
-    jogadores = Player.objects.all()
+    turma_selecionada = request.GET.get('turma')
+    turmas = Turma.objects.all()
+
+    if turma_selecionada:
+        jogadores = Player.objects.filter(turma__id=turma_selecionada)
+    else:
+        jogadores = Player.objects.all()
+
     estatisticas_jogadores = {}
-    
-    # Nomes dos jogadores para usar como labels
     nomes_jogadores = []
-    # Arrays para diferentes estatísticas
     gols = []
     assistencias = []
     notas = []
     desarmes = []
-    # Adicione outras estatísticas conforme necessário
-    
+
+
     for jogador in jogadores:
         stats = PlayerDesempenhoGeral.objects.filter(jogador=jogador).first()
         
@@ -168,7 +207,6 @@ def desempenho_graficos(request):
             notas.append(stats.media_nota)
             desarmes.append(stats.total_desarmes)
             
-            # Também mantenha o dicionário original se necessário
             estatisticas_jogadores[nome_completo] = {
                 "gols": stats.total_gols,
                 "assistencias": stats.total_assistencias,
@@ -180,14 +218,17 @@ def desempenho_graficos(request):
                 "notas": stats.media_nota,
                 "partidas": stats.total_partidas
             }
-    
+
     return render(request, 'player_stats_graficos.html', {
         'estatisticas_jogadores': estatisticas_jogadores,
         'nomes_jogadores': json.dumps(nomes_jogadores),
         'gols': json.dumps(gols),
         'assistencias': json.dumps(assistencias),
         'notas': json.dumps(notas),
-        'desarmes': json.dumps(desarmes)
+        'desarmes': json.dumps(desarmes),
+        'turmas': turmas,
+        'turma_selecionada': turma_selecionada,
+        'jogadores': jogadores,
     })
 
 @login_required(login_url='login')
@@ -205,8 +246,10 @@ def comparar_jogadores(request, pk1, pk2):
 
     try:
         media_gols_jogador2 = jogador2_stats.total_gols / max(jogador2_stats.total_partidas, 1)
+        print(type(media_gols_jogador2))
     except:
         media_gols_jogador2 = ""
+        print(type(media_gols_jogador2))
     #Assistencias
     try:
         media_assistencias_jogador1 = jogador1_stats.total_assistencias / max(jogador1_stats.total_partidas, 1)
@@ -219,11 +262,10 @@ def comparar_jogadores(request, pk1, pk2):
         media_assistencias_jogador2 = ""
 
     context = {
-        'media_gols_jogador1': "{:.2f}".format(media_gols_jogador1),
-        'media_gols_jogador2': "{:.2f}".format(media_gols_jogador2),
-        'media_assistencias_jogador1': "{:.2f}".format(media_assistencias_jogador1),
-        'media_assistencias_jogador2': "{:.2f}".format(media_assistencias_jogador2), 
-
+        'media_gols_jogador1': "{:.2f}".format(media_gols_jogador1) if isinstance(media_gols_jogador1, (int, float)) else '',
+        'media_gols_jogador2': "{:.2f}".format(media_gols_jogador2) if isinstance(media_gols_jogador2, (int, float)) else '',
+        'media_assistencias_jogador1': "{:.2f}".format(media_assistencias_jogador1) if isinstance(media_assistencias_jogador1, (int, float)) else '',
+        'media_assistencias_jogador2': "{:.2f}".format(media_assistencias_jogador2) if isinstance(media_assistencias_jogador2, (int, float)) else '',
     }
 
     return render(request, 'comparar_jogadores.html', {'jogador1': jogador1, 'jogador2': jogador2, 'jogador1_stats': jogador1_stats, 'jogador2_stats': jogador2_stats, 'context': context})

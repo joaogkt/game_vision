@@ -26,14 +26,14 @@ html, body {
         <form method="post">
             {% csrf_token %}
             <fieldset>
-                <div class="mb-3">
+                <!-- <div class="mb-3">
                     <label for="id_nome" class="form-label">Nome</label>
                     {{ form.nome|add_class:"form-control" }}
                 </div>
                 <div class="mb-3">
                     <label for="id_email" class="form-label">E-mail</label>
                     {{ form.email|add_class:"form-control"|attr:"type:email" }}
-                </div>
+                </div> -->
                 <div class="mb-3">
                     <label for="id_assunto" class="form-label">Assunto</label>
                     {{ form.assunto|add_class:"form-control" }}

@@ -129,7 +129,9 @@
                 <th>Telefone</th>
                 <th>CPF</th>
                 <th>Data nascimento</th>
+                {% if request.user.is_superuser %}
                 <th>Ações</th>
+                {% endif %}
             </tr>
         </thead>
         <tbody>
@@ -140,7 +142,7 @@
                 <td>{{ responsavel.telefone }}</td>
                 <td>{{ responsavel.cpf }}</td>
                 <td>{{ responsavel.data_nascimento }}</td>
-
+                {% if request.user.is_superuser %}
                 <td class="text-center">
                     <a href="{% url 'responsavel_update' responsavel.id %}" class="btn btn-warning btn-sm">Editar</a>
                     <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{ responsavel.id }}">
@@ -165,6 +167,7 @@
                         </div>
                     </div>
                 </td>
+                {% endif %}
             </tr>
             {% empty %}
             <tr>
