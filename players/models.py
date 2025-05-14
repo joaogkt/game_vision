@@ -33,9 +33,10 @@ class Player(models.Model):
     status = models.CharField("Status", max_length=10, choices=STATUS_CHOICES, default='ativo')
     responsavel = models.ForeignKey(Responsavel, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Responsável")
     turma = models.ForeignKey(Turma, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Turma (opcional)")
+    total_faltas = models.PositiveIntegerField(default=0)
 
 
-    # usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+
 
     def __str__(self):
         return f"{self.first_name} {self.last_name} - {self.position}"
@@ -57,6 +58,9 @@ class Player(models.Model):
 
         super().save(*args, **kwargs)
 
+    # def total_faltas(self):
+    #     return self.faltas.filter(falta=True).count()
+
 
 @receiver(post_delete, sender=Player)
 def delete_photo_on_player_delete(sender, instance, **kwargs):
@@ -72,3 +76,7 @@ class Faltas(models.Model):
 
     def __str__(self):
         return f"{self.aluno} - {self.turma} - {self.data}"
+    
+    class Meta:
+        unique_together = ('aluno', 'turma', 'data')
+

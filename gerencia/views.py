@@ -121,22 +121,44 @@ def turma_delete(request, pk):
 
 
 
-#presenca
 @login_required(login_url='login')
 def registrar_presenca(request, turma_id):
     turma = get_object_or_404(Turma, id=turma_id)
-    jogadores = Player.objects.filter(turma=turma)
+    jogadores = turma.player_set.all()
 
     if request.method == 'POST':
         presentes_ids = request.POST.getlist('presente')
-        try:
-            for jogador in jogadores:
-                falta = jogador.id not in [int(id) for id in presentes_ids]
-                Faltas.objects.create(aluno=jogador, turma=turma, data=date.today(), falta=falta)
-            messages.success(request, 'Presença registrada com sucesso!')
-        except Exception as e:
-            messages.error(request, f'Ocorreu um erro ao registrar presença: {str(e)}')
+        print("Presentes IDs:", presentes_ids)
+        print("Jogadores:", jogadores)
+        for jogador in jogadores:
+            falta = str(jogador.id) not in presentes_ids
+            print(f"Jogador: {jogador}, Falta: {falta}")
+            presenca, created = Faltas.objects.update_or_create(
+                aluno=jogador,
+                data=date.today(),
+                defaults={'falta': falta}
+            )
+            print(f"Presença: {presenca}, Criado: {created}")
+            if created:
+                if falta:
+                    print(f"Falta registrada: {jogador} - {jogador.total_faltas}")
+                    jogador.total_faltas += 1
+                    jogador.save()
+            else:
+                print(f"Registro existente: {presenca} - {presenca.falta}")
+                if presenca.falta:
+                    jogador.total_faltas += 1
+                    print(f"Falta registrada: {jogador} - {jogador.total_faltas}")
+                    jogador.save()
 
-        return redirect('registrar_presenca', turma_id=turma.id)
+        messages.success(request, "Presença registrada com sucesso!")
+        return render(request, 'registrar_presenca.html', {
+            'turma': turma,
+            'jogadores': jogadores,
+            'success': True
+        })
 
-    return render(request, 'registrar_presenca.html', {'turma': turma, 'jogadores': jogadores})
+    return render(request, 'registrar_presenca.html', {
+        'turma': turma,
+        'jogadores': jogadores
+    })

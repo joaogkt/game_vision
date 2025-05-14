@@ -95,7 +95,7 @@
         <tr>
           <td>{{ jogador.first_name }} {{ jogador.last_name }}</td>
           <td>
-            <input type="checkbox" name="presente_{{ jogador.id }}" value="1">
+            <input type="checkbox" name="presente" value="{{ jogador.id }}">
           </td>
         </tr>
         {% endfor %}
