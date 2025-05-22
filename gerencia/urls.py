@@ -13,7 +13,7 @@ urlpatterns = [
 
 
     path('responsavel/', views.gerencia_responsavel, name='gerencia_responsavel'),
-    path('<int:pk>/delete', views.responsavel_update, name='responsavel_delete'),
+    path('<int:pk>/delete', views.responsavel_delete, name='responsavel_delete'),
     path('responsavel/<int:pk>', views.responsavel_update, name='responsavel_update'),
 
     path('responsavel/create/', views.gerencia_responsavel_create, name='gerencia_responsavel_create'),
@@ -22,7 +22,7 @@ urlpatterns = [
     path('treinador/', views.gerencia_treinador, name='gerencia_treinador'),
     path('treinador/create/', views.gerencia_treinador_create, name='gerencia_treinador_create'),
     path('treinador/<int:pk>', views.gerencia_treinador_update, name='gerencia_treinador_update'),
-    path('treinador/<int:pk>/delete', views.gerencia_treinador_update, name='gerencia_treinador_delete'),
+    path('treinador/<int:pk>/delete', views.gerencia_treinador_delete, name='gerencia_treinador_delete'),
 
 
     path('turma/<int:turma_id>/presenca/', views.registrar_presenca, name='registrar_presenca'),

@@ -123,13 +123,13 @@
       <h5>Estatisticas por Partida</h5>
       <p>Gerencie e visualize estatisticas de jogadores cadastrados.</p>
     </a>
-
+{% if request.user.is_superuser %}
     <a href="{% url 'gerencia_relatorios' %}" class="card-option">
       <i class="fa-solid fa-file"></i>
       <h5>Relatórios</h5>
       <p>Importe e exporte relatorios do sistema.</p>
     </a>
-
+{% endif %}
   </div>
 </div>
 {% endblock %}

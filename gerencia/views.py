@@ -46,6 +46,12 @@ def responsavel_update(request, pk):
         form = ResponsavelForm(instance=responsavel)
     return render(request, 'gerencia_responsavel_form.html', {'form': form, 'responsavel': responsavel})
 
+def responsavel_delete(request, pk):
+    responsavel = get_object_or_404(Responsavel, pk=pk)
+    responsavel.delete()
+    messages.success(request, "Responsável excluído com sucesso!")
+    return redirect('gerencia_responsavel')
+
 #Trenador
 @login_required(login_url='login')
 def gerencia_treinador(request):
