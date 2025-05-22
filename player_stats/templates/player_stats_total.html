@@ -26,7 +26,10 @@
 
 <div class="container mt-5">
   <h1 class="text-center mb-4">Estatísticas Geral dos Jogadores</h1>
-  
+
+  <div class="d-flex justify-content-end mb-3">
+    <a href="{% url 'player_stats_graficos' %}" class="btn btn-primary">Visualizar desempenho geral</a>
+  </div>
   <div class="d-flex justify-content-end mb-3">
     <!-- <a href="{% url 'player_stats_create' %}" class="btn btn-success">Adicionar Estatística</a> -->
   </div>
@@ -50,7 +53,7 @@
       <tbody>
         {% for desempenho in desempenho_total %}
         <tr>
-          <td>{{ desempenho.jogador }}</td>
+          <td>{{ desempenho.jogador.first_name }} {{ desempenho.jogador.last_name }}</td>
           <td>{{ desempenho.total_partidas }}</td> 
           <td>{{ desempenho.total_gols }}</td>
           <td>{{ desempenho.total_assistencias }}</td>
@@ -61,7 +64,8 @@
           <td>{{ desempenho.total_cartoes_amarelos }}</td>
           <td>{{ desempenho.media_nota }}</td>
           <td class="text-center">
-            <a href="{% url 'player_stats_graficos' %}" class="btn btn-warning btn-sm">Gráficos</a>
+            {% comment %} <a href="{% url 'player_stats_graficos' %}" class="btn btn-warning btn-sm">Gráficos</a> {% endcomment %}
+           <a href="{% url 'desempenho_partida' desempenho.jogador.id %}" class="btn btn-warning btn-sm">Gráficos</a>
           </td>
         </tr>
         {% empty %}

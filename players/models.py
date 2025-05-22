@@ -79,4 +79,3 @@ class Faltas(models.Model):
     
     class Meta:
         unique_together = ('aluno', 'turma', 'data')
-

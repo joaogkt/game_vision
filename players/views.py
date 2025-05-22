@@ -69,3 +69,4 @@ def player_delete(request, pk):
     #     player.delete()
     #     return redirect('player_list')
     # return render(request, 'player_confirm_delete.html', {'player': player})
+

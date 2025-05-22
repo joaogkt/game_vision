@@ -128,7 +128,6 @@ def desempenho_graficos(request):
     else:
         jogadores = Player.objects.all()
 
-    # Supondo que você tenha um modelo com os dados agregados:
     nomes = []
     gols = []
     assistencias = []
@@ -297,3 +296,29 @@ def desempenho_gols_grafico(request, pk):
     uri = f"data:image/png;base64,{string}"
 
     return render(request, 'player_stats_gols.html', {'jogador': jogador, 'chart': uri})
+
+
+def desempenho_jogador(request, jogador_id):
+    jogador = get_object_or_404(Player, id=jogador_id)
+    stats = (
+        PlayerStats.objects.filter(jogador=jogador)
+        .select_related('jogo')
+        .order_by('jogo__data_partida')
+    )
+
+    labels = [stat.jogo.data_partida.strftime('%d/%m/%Y') for stat in stats]
+    notas = [stat.nota for stat in stats]
+    gols = [stat.gols for stat in stats]
+    assistencias = [stat.assistencia for stat in stats]
+    desarmes = [stat.desarmes for stat in stats]
+
+    context = {
+        'jogador': jogador,
+        'labels': labels,
+        'notas': notas,
+        'gols': gols,
+        'assistencias': assistencias,
+        'desarmes': desarmes,
+    }
+
+    return render(request, 'desempenho_partida.html', context)
