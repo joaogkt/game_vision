@@ -406,6 +406,17 @@ def export_data(request):
                     obj.data_partida,
                     obj.tipo_competicao
                 ])
+        elif table == 'faltas':
+            writer.writerow([
+                'jogador', 'turma', 'data', 'falta'
+            ])
+            for obj in Faltas.objects.all():
+                writer.writerow([
+                    f"{obj.aluno.first_name} {obj.aluno.last_name}",
+                    str(obj.turma.nome), 
+                    obj.data,
+                    obj.falta,
+                ])
 
         else:
             response.write('Tabela não encontrada.')
