@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Importar Dados{% endblock %}
+
+{% block content %}
+
+<style>
+  body {
+    background: linear-gradient(135deg, #154180, #3c73ea);
+  }
+
+  .container {
+    background: white;
+    border-radius: 12px;
+    padding: 30px;
+    margin-top: 80px;
+    max-width: 750px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.15);
+  }
+
+  h3 {
+    font-weight: bold;
+    color: #154180;
+  }
+
+  label {
+    margin-top: 15px;
+    font-weight: bold;
+  }
+
+  .btn-primary {
+    background-color: #3c73ea;
+    border: none;
+  }
+
+  .btn-primary:hover {
+    background-color: #2c5ecf;
+  }
+
+  .descricao {
+    background-color: #f5f5f5;
+    padding: 15px;
+    border-radius: 8px;
+    font-size: 0.92rem;
+    color: #333;
+    margin-bottom: 20px;
+  }
+
+  .descricao code {
+    background-color: #e9ecef;
+    padding: 2px 4px;
+    border-radius: 4px;
+  }
+</style>
+
+<div class="container">
+  <h3 class="text-center"><i class="fa-solid fa-file-import"></i> Importar Dados</h3>
+
+  <div class="descricao">
+    <strong>⚠️ Instruções para importação:</strong><br>
+    Para garantir que a importação seja bem-sucedida, o arquivo CSV deve conter exatamente os nomes das colunas listados abaixo, sem acentos ou espaços.<br><br>
+
+    <strong>🗂️ Modelos esperados:</strong>
+    <ul>
+      <strong>Jogadores:</strong> <code>first_name,last_name,birth_date,nationality,position,team,status</code>
+      <strong>Responsáveis:</strong> <code>nome,email,telefone,data_nascimento,cpf</code><br>
+      <strong>Treinadores:</strong> <code>nome,email,telefone,data_nascimento,cpf</code><br>
+      <strong>Turmas:</strong> <code>nome,team,treinador,horario_treino,categoria</code><br>
+      <strong>Times:</strong> <code>name,city,country,founded_year</code><br>
+      <strong>Partidas:</strong> <code>local,time_casa,time_fora,placar_casa,placar_fora,data_partida,tipo_competicao</code>
+    </ul>
+
+    <strong>Observações:</strong>
+    <ul>
+      As colunas que fazem referência a outro cadastro (como <code>team</code> ou <code>treinador</code>) devem ter exatamente o nome cadastrado no sistema.<br>
+      Datas devem estar no formato <code>YYYY-MM-DD</code> (ex.: 2023-05-10).<br>
+      Os arquivos devem estar no formato <strong>.csv</strong>.
+    </ul>
+  </div>
+
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <label for="table">Selecione a Tabela:</label>
+    <select class="form-control" name="table" required>
+      <option value="">-- Selecione --</option>
+      <option value="player">Jogadores</option>
+      <option value="responsavel">Responsáveis</option>
+      <option value="treinador">Treinadores</option>
+      <option value="turma">Turmas</option>
+      <option value="team">Times</option>
+      <option value="matches">Partidas</option>
+      <option value="playerstats">Estatísticas por Partida (PlayerStats)</option>
+    </select>
+
+    <label for="file">Selecione o Arquivo CSV:</label>
+    <input type="file" name="file" class="form-control" accept=".csv" required>
+
+    <button type="submit" class="btn btn-primary btn-block mt-4">
+      <i class="fa-solid fa-upload"></i> Importar
+    </button>
+  </form>
+</div>
+
+{% endblock %}

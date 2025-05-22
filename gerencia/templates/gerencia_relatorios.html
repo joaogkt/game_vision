@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Gerência{% endblock %}
+
+{% block content %}
+<!-- Font Awesome CDN (adicione no base.html uma vez apenas) -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-...hash..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+<style>
+  body {
+    background: linear-gradient(135deg, #154180, #3c73ea);
+  }
+
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    background: transparent;
+    gap: 24px;
+    margin-top: 20px;
+  }
+
+  .card-option {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.15);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    color: #333;
+    text-decoration: none;
+  }
+
+  .card-option:hover {
+    transform: scale(1.03);
+    box-shadow: 0px 8px 18px rgba(0, 0, 0, 0.2);
+  }
+
+  .card-option i {
+    font-size: 2.8rem;
+    color: #3c73ea;
+    margin-bottom: 15px;
+  }
+
+  .card-option h5 {
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+
+  .card-option p {
+    font-size: 0.95rem;
+    color: #555;
+  }
+
+  .container {
+    background: transparent;
+    border-radius: 12px;
+    padding: 30px;
+    margin-top: 40px;
+    margin-bottom: 60px;
+  }
+
+  h3 {
+    font-weight: bold;
+    color:rgb(255, 255, 255);
+  }
+</style>
+
+<div class="container">
+  <h3 class="text-center"><i class="fa-solid fa-file"></i> Painel de Relatorios</h3>
+
+  <div class="card-grid">
+    <a href="{% url 'import_data' %}" class="card-option">
+      <i class="fa-solid fa-upload"></i>
+      <h5>Importar</h5>
+      <p>Importe arquivos CSV para popular tabelas no sistema.</p>
+    </a>
+
+    <a href="{% url 'export_data' %}" class="card-option">
+      <i class="fa-solid fa-download"></i>
+      <h5>Exportar</h5>
+      <p>Exporte relatorios CSV das informações disponiveis no sistema.</p>
+    </a>
+
+  </div>
+</div>
+{% endblock %}

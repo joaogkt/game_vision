@@ -27,5 +27,10 @@ urlpatterns = [
 
     path('turma/<int:turma_id>/presenca/', views.registrar_presenca, name='registrar_presenca'),
 
+    path('relatorios/', views.gerencia_relatorios, name='gerencia_relatorios'),
+    path('importar/', views.import_data, name='import_data'),
+    path('export/', views.export_data, name='export_data'),
+
+
     
 ]

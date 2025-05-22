@@ -1,10 +1,16 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponse
 from .forms import TurmaForm, ResponsavelForm, TreinadorForm
 from .models import Turma, Responsavel, Treinador
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from datetime import date
 from players.models import Player, Faltas
+import csv
+import io
+from player_stats.models import PlayerStats
+from matches.models import Matches
+from teams.models import Team
 # Create your views here.
 #Home
 @login_required(login_url='login')
@@ -162,3 +168,247 @@ def registrar_presenca(request, turma_id):
         'turma': turma,
         'jogadores': jogadores
     })
+
+@login_required(login_url='login')
+def gerencia_relatorios(request):
+    return render(request, 'gerencia_relatorios.html')
+
+
+def import_data(request):
+    if request.method == 'POST':
+        table = request.POST.get('table')
+        csv_file = request.FILES.get('file')
+
+        if not csv_file.name.endswith('.csv'):
+            messages.error(request, 'Por favor, envie um arquivo CSV.')
+            return redirect('import_data')
+
+        try:
+            data_set = csv_file.read().decode('utf-8')
+            io_string = io.StringIO(data_set)
+            reader = csv.DictReader(io_string)
+
+            count = 0
+
+            if table == 'responsavel':
+                for row in reader:
+                    Responsavel.objects.create(
+                        nome=row['nome'],
+                        email=row['email'],
+                        telefone=row['telefone'],
+                        data_nascimento=row.get('data_nascimento') or None,
+                        cpf=row['cpf']
+                    )
+                    count += 1
+
+            elif table == 'treinador':
+                for row in reader:
+                    Treinador.objects.create(
+                        nome=row['nome'],
+                        email=row['email'],
+                        telefone=row['telefone'],
+                        data_nascimento=row.get('data_nascimento') or None,
+                        cpf=row['cpf']
+                    )
+                    count += 1
+
+            elif table == 'team':
+                for row in reader:
+                    Team.objects.create(
+                        name=row['name'],
+                        city=row['city'],
+                        country=row['country'],
+                        founded_year=row.get('founded_year') or 1900
+                    )
+                    count += 1
+
+
+            elif table == 'turma':
+                for row in reader:
+                    Turma.objects.create(
+                        nome=row['nome'],
+                        team=Team.objects.get(name=row['team']),
+                        treinador=Treinador.objects.get(nome=row['treinador']),
+                        horario_treino=row['horario_treino'],
+                        categoria=row.get('categoria') or 'LIVRE'
+                    )
+                    count += 1
+
+            elif table == 'matches':
+                for row in reader:
+                    Matches.objects.create(
+                        local=row['local'],
+                        time_casa=Team.objects.get(name=row['time_casa']),
+                        time_fora=Team.objects.get(name=row['time_fora']),
+                        placar_casa=row['placar_casa'],
+                        placar_fora=row['placar_fora'],
+                        data_partida=row.get('data_partida') or None,
+                        tipo_competicao=row['tipo_competicao']
+                    )
+                    count += 1
+            elif table == 'playerstats':
+                for row in reader:
+                    try:
+                        nome_jogador = row['jogador_nome'].strip()
+                        nome_partida = row['partida'].strip()
+
+                        first_name, last_name = nome_jogador.split(' ', 1)
+                        jogador = Player.objects.get(first_name=first_name, last_name=last_name)
+
+                        partida = None
+                        for match in Matches.objects.all():
+                            if str(match) == nome_partida:
+                                partida = match
+                                break
+                        if not partida:
+                            raise Matches.DoesNotExist(f"Partida '{nome_partida}' não encontrada.")
+
+                        PlayerStats.objects.create(
+                            jogador=jogador,
+                            jogo=partida,
+                            minutos_jogados=int(row['minutos_jogados']),
+                            gols=int(row['gols']),
+                            assistencia=int(row['assistencia']),
+                            passes_certos=int(row['passes_certos']),
+                            passes_errados=int(row['passes_errados']),
+                            desarmes=int(row['desarmes']),
+                            cartao_vermelho=int(row['cartao_vermelho']),
+                            cartao_amarelo=int(row['cartao_amarelo']),
+                            nota=float(row['nota'])
+                        )
+                    except (Player.DoesNotExist, Matches.DoesNotExist) as e:
+                        messages.error(request, f"Erro: {e}")
+                        continue
+
+            elif table == 'player':
+                for row in reader:
+                    Player.objects.create(
+                        first_name=row['first_name'],
+                        last_name=row['last_name'],
+                        birth_date=row['birth_date'],
+                        nationality=row['nationality'],
+                        position=row['position'],
+                        team=Team.objects.get(name=row['team']),
+                        status=row.get('status') or 'ativo'
+                    )
+                    count += 1
+
+            else:
+                messages.error(request, 'Tabela inválida selecionada.')
+                return redirect('import_data')
+
+            messages.success(request, f'{count} registros importados com sucesso!')
+            return redirect('import_data')
+
+        except Exception as e:
+            messages.error(request, f'Erro ao importar dados: {str(e)}')
+            return redirect('import_data')
+
+    return render(request, 'import_data.html')
+
+
+def export_data(request):
+    if request.method == 'POST':
+        table = request.POST.get('table')
+
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = f'attachment; filename="{table}.csv"'
+
+        writer = csv.writer(response)
+
+        if table == 'player':
+            writer.writerow(['first_name', 'last_name', 'birth_date', 'nationality', 'position', 'team', 'status'])
+            for obj in Player.objects.all():
+                writer.writerow([
+                    obj.first_name,
+                    obj.last_name,
+                    obj.birth_date,
+                    obj.nationality.name if obj.nationality else '',
+                    obj.position,
+                    obj.team.name if obj.team else '',
+                    obj.status
+                ])
+                
+        elif table == 'playerstats':
+            writer.writerow([
+                'jogador', 'jogo', 'minutos_jogados', 'gols', 'assistencia', 
+                'passes_certos', 'passes_errados', 'desarmes', 
+                'cartao_vermelho', 'cartao_amarelo', 'nota'
+            ])
+            for obj in PlayerStats.objects.all():
+                writer.writerow([
+                    f"{obj.jogador.first_name} {obj.jogador.last_name}",
+                    str(obj.jogo), 
+                    obj.minutos_jogados,
+                    obj.gols,
+                    obj.assistencia,
+                    obj.passes_certos,
+                    obj.passes_errados,
+                    obj.desarmes,
+                    obj.cartao_vermelho,
+                    obj.cartao_amarelo,
+                    obj.nota
+                ])
+
+        elif table == 'responsavel':
+            writer.writerow(['nome', 'email', 'telefone', 'data_nascimento', 'cpf'])
+            for obj in Responsavel.objects.all():
+                writer.writerow([
+                    obj.nome,
+                    obj.email,
+                    obj.telefone,
+                    obj.data_nascimento,
+                    obj.cpf
+                ])
+
+        elif table == 'treinador':
+            writer.writerow(['nome', 'email', 'telefone', 'data_nascimento', 'cpf'])
+            for obj in Treinador.objects.all():
+                writer.writerow([
+                    obj.nome,
+                    obj.email,
+                    obj.telefone,
+                    obj.data_nascimento,
+                    obj.cpf
+                ])
+
+        elif table == 'turma':
+            writer.writerow(['nome', 'team', 'treinador', 'horario_treino', 'categoria'])
+            for obj in Turma.objects.all():
+                writer.writerow([
+                    obj.nome,
+                    obj.team.name if obj.team else '',
+                    obj.treinador.nome if obj.treinador else '',
+                    obj.horario_treino,
+                    obj.categoria
+                ])
+
+        elif table == 'team':
+            writer.writerow(['name', 'city', 'country', 'founded_year'])
+            for obj in Team.objects.all():
+                writer.writerow([
+                    obj.name,
+                    obj.city,
+                    obj.country.name if obj.country else '',
+                    obj.founded_year
+                ])
+
+        elif table == 'matches':
+            writer.writerow(['local', 'time_casa', 'time_fora', 'placar_casa', 'placar_fora', 'data_partida', 'tipo_competicao'])
+            for obj in Matches.objects.all():
+                writer.writerow([
+                    obj.local,
+                    obj.time_casa.name if obj.time_casa else '',
+                    obj.time_fora.name if obj.time_fora else '',
+                    obj.placar_casa,
+                    obj.placar_fora,
+                    obj.data_partida,
+                    obj.tipo_competicao
+                ])
+
+        else:
+            response.write('Tabela não encontrada.')
+        
+        return response
+
+    return render(request, 'export_data.html')
