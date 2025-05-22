@@ -141,6 +141,7 @@ def registrar_presenca(request, turma_id):
             print(f"Jogador: {jogador}, Falta: {falta}")
             presenca, created = Faltas.objects.update_or_create(
                 aluno=jogador,
+                turma=turma,
                 data=date.today(),
                 defaults={'falta': falta}
             )

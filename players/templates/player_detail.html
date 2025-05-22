@@ -118,6 +118,8 @@
             <div class="btn-container">
                 <button id="btn-stats" class="btn-custom btn-stats" onclick="showTable('stats')">📈 Estatísticas da Temporada</button>
                 <button id="btn-matches" class="btn-custom btn-matches" onclick="showTable('matches')">⚽ Partidas Jogadas</button>
+                <button id="btn-presenca" class="btn-custom btn-matches" onclick="showTable('presenca')">✅ Presenças</button>
+
             </div>
 
 
@@ -185,6 +187,38 @@
                 </tbody>
             </table>
 
+            <table id="presenca-table" class="stats-table hidden fade-in no-datatable">
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Turma</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if presencas %}
+                    {% for presenca in presencas %}
+                        <tr>
+                            <td>{{ presenca.data|date:"d/m/Y" }}</td>
+                            <td>{{ presenca.turma.nome }}</td>
+                            <td>
+                                {% if presenca.falta %}
+                                    ❌ Faltou
+                                {% else %}
+                                    ✅ Presente
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="3">Nenhum registro de presença encontrado.</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+
+
         </div>
     </div>
 </div>
@@ -194,20 +228,32 @@
     function showTable(tableType) {
         const statsTable = document.getElementById('stats-table');
         const matchesTable = document.getElementById('matches-table');
+        const presencaTable = document.getElementById('presenca-table');
         const btnStats = document.getElementById('btn-stats');
         const btnMatches = document.getElementById('btn-matches');
+        const btnPresenca = document.getElementById('btn-presenca');
+
+        statsTable.classList.add('hidden');
+        matchesTable.classList.add('hidden');
+        presencaTable.classList.add('hidden');
+        btnStats.classList.remove('btn-stats');
+        btnMatches.classList.remove('btn-stats');
+        btnPresenca.classList.remove('btn-stats');
 
         if (tableType === 'stats') {
             statsTable.classList.remove('hidden');
             matchesTable.classList.add('hidden');
             btnStats.classList.add('btn-stats');
             btnMatches.classList.remove('btn-stats');
-        } else {
+        } else if (tableType === 'matches') {
             statsTable.classList.add('hidden');
             matchesTable.classList.remove('hidden');
             btnStats.classList.remove('btn-stats');
             btnMatches.classList.add('btn-stats');
-        }
+        } else if (tableType === 'presenca') {
+        presencaTable.classList.remove('hidden');
+        btnPresenca.classList.add('btn-stats');
+    }
     }
 </script>
 {% endblock %}

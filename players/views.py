@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Player
+from .models import Player, Faltas
 from .forms import PlayerForm
 import os
 from django.contrib.auth.decorators import login_required
@@ -18,11 +18,12 @@ def player_list(request):
 @login_required(login_url='login')
 def player_detail(request, pk):
     player = get_object_or_404(Player, pk=pk)
+    presencas = Faltas.objects.filter(aluno=player).order_by('-data')
+
     desempenho = PlayerDesempenhoGeral.objects.filter(jogador=player).first()
     partidas_jogadas = Matches.objects.filter(id__in=PlayerStats.objects.filter(jogador=player).values_list('jogo', flat=True))
 
-    return render(request, 'player_detail.html', {'player': player, 'desempenho': desempenho, 'partidas': partidas_jogadas})
-
+    return render(request, 'player_detail.html', {'player': player, 'desempenho': desempenho, 'partidas': partidas_jogadas, 'presencas': presencas})
 
 @user_passes_test(is_admin)
 @login_required(login_url='login')
