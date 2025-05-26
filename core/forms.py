@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 class CustomUserCreationForm(UserCreationForm):
     class Meta:
         model = User
-        fields = ("username", "password1", "password2")
+        fields = ("username", "email", "password1", "password2")
 
     def clean_password1(self):
         password = self.cleaned_data.get("password1")
@@ -19,6 +19,12 @@ class CustomUserCreationForm(UserCreationForm):
                 raise forms.ValidationError(e.messages)
         return password
 
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.email = self.cleaned_data["email"]
+        if commit:
+            user.save()
+        return user
 
 class FeedbackForm(forms.Form):
     # nome = forms.CharField(

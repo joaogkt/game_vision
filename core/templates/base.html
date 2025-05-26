@@ -131,6 +131,52 @@
     {% endblock %}
   </div>
   </div>
+  <footer class="text-center text-lg-start text-muted mt-5" style="background-color: rgba(0, 0, 0, 0.05);">
+  <section class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
+    <div class="me-5 d-none d-lg-block">
+      <span style="color:white">Conecte-se conosco nas redes sociais:</span>
+    </div>
+    <div>
+      <a href="https://github.com/joaogkt/game_vision" class="me-4 text-reset">
+        <i style="color:white" class="fab fa-github"></i>
+      </a>
+    </div>
+  </section>
+
+  <section class="">
+    <div class="container text-center text-md-start mt-3">
+      <div class="row mt-3">
+        <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+          <h6 style="color:#ffc107" class="text-uppercase fw-bold mb-4">
+            <i style="color:white" class="fas fa-futbol me-3"></i>GameVision
+          </h6>
+          <p style="color:white">
+            Sistema de análise e gestão de jogadores e equipes. Transformando dados em desempenho!
+          </p>
+        </div>
+
+        <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+          <h6 style="color:white" class="text-uppercase fw-bold mb-4">Links</h6>
+          <p style="color:white"><a href="{% url 'home' %}" style="color:white" class="text-reset">Início</a></p>
+          <p style="color:white"><a href="{% url 'gerencia_home' %}" style="color:white"  class="text-reset">Gerencia</a></p>
+          <p style="color:white"><a href="{% url 'feedback' %}" style="color:white" class="text-reset">Feedback</a></p>
+        </div>
+
+        <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+          <h6 style="color:white" class="text-uppercase fw-bold mb-4">Contato</h6>
+          <p style="color:white"><i class="fas fa-home me-3"></i>Brasília - DF</p>
+          <p style="color:white"><i class="fas fa-envelope me-3"></i> game.vision.udf@gmail.com</p>
+          <p style="color:white"><i class="fas fa-phone me-3"></i> +55 (61) 99869-7710</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05); color:white">
+    © {{ now.year }} GameVision. Todos os direitos reservados.
+  </div>
+</footer>
+
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>

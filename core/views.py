@@ -186,8 +186,10 @@ def feedback(request):
                 conteudo = f"""Assunto: {form.cleaned_data['assunto']}
                 Conteudo: {form.cleaned_data['mensagem']}
                 """
+
                 user_name = request.user 
-                user_email = request.user.email 
+                user_email = request.user.email
+                print(user_email, "TESTE")
 
                 msg = MIMEMultipart()
                 msg["From"] = sender_email
