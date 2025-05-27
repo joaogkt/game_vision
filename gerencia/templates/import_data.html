@@ -79,11 +79,16 @@
     </ul>
   </div>
 
-  {% if messages %}
-    {% for message in messages %}
-      <div style="color:red" class="alert alert-{{ message.tags }}">{{ message }}</div>
-    {% endfor %}
-  {% endif %}
+          {% if messages %}
+        <div class="messages">
+
+            {% for message in messages %}
+                <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+          {% endif %}
 
   <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
