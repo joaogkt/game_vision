@@ -19,12 +19,6 @@ class CustomUserCreationForm(UserCreationForm):
                 raise forms.ValidationError(e.messages)
         return password
 
-    def save(self, commit=True):
-        user = super().save(commit=False)
-        user.email = self.cleaned_data["email"]
-        if commit:
-            user.save()
-        return user
 
 class FeedbackForm(forms.Form):
     # nome = forms.CharField(
