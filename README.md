@@ -90,3 +90,5 @@ Desenvolver uma plataforma simples e interativa que permita visualizar, comparar
   [LinkedIn](https://www.linkedin.com/in/luizfelipebarbosa09081) | [Email](mailto:luizfelipe09081@gmail.com) | [Github](https://github.com/Luiz090811)
 - **João Pedro Prado** - Ciência da Computação
   [Email](mailto:jp.pradocosta@gmail.com) | [Github](https://github.com/jotape99)
+- **Rafael Alves de Souza** - Ciência da Computação
+  [Email](mailto:rafael.racs08@gmail.com) | [Github](https://github.com/rafcsouza)
